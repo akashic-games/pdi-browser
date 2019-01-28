@@ -1,0 +1,22 @@
+{
+  "framework": "jasmine2",
+  "before_tests": "npm run testem:before",
+  "src_files": [
+    "./spec/*.js"
+  ],
+  "on_exit": "npm run testem:after",
+  "serve_files": [
+    "node_modules/es5-shim/es5-shim.js",
+    "./script/test-bundle.js"
+  ],
+  "port": "9123",
+  "phantomjs_debug_port": 9128,
+  "launch_in_ci": [
+    "PhantomJS"
+  ],
+  "launch_in_dev": [
+    "PhantomJS",
+    "firefox",
+    "Chrome"
+  ]
+}
