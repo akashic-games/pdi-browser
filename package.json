@@ -1,0 +1,65 @@
+{
+  "name": "@akashic/pdi-browser",
+  "version": "0.10.14",
+  "description": "An akashic-pdi implementatation for Web browsers",
+  "main": "index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "prepublish": "npm run clean && npm run build",
+    "clean": "npm run clean:ts && npm run testem:after",
+    "clean:ts": "shx rm -rf ./lib && shx rm -rf ./build",
+    "build": "npm run compile:ts && npm run compile:bundle && npm run compile:minify",
+    "compile:ts": "tsc -p ./",
+    "compile:bundle": "shx mkdir -p build && browserify -r ./lib/index.js:@akashic/pdi-browser -x @akashic/akashic-engine -d | exorcist ./build/pdi-browser.js.map > ./build/pdi-browser.js",
+    "compile:minify": "uglifyjs ./build/pdi-browser.js --compress --mangle -o ./build/pdi-browser.min.js",
+    "testem:before": "node ./script/makeTestBundle.js > ./script/test-bundle.js",
+    "testem:after": "shx rm -rf ./script/test-bundle.js",
+    "lint": "npm run lint:ts && npm run lint:md",
+    "lint:ts": "tslint --project tsconfig.json -c tslint.json",
+    "lint:md": "remark ./*.md --frail --no-stdout --rc-path ./.remarkrc",
+    "test": "npm run lint && testem"
+  },
+  "author": "DWANGO Co., Ltd.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akashic-games/pdi-browser.git"
+  },
+  "files": [
+    "package.json",
+    "README.md",
+    "lib",
+    "build",
+    "index.js"
+  ],
+  "devDependencies": {
+    "@akashic/akashic-pdi": "~1.10.0",
+    "@akashic/amflow": "~0.2.1",
+    "@akashic/playlog": "~1.3.0",
+    "@types/node": "~9.4.2",
+    "browserify": "~11.0.0",
+    "es5-shim": "^4.5.8",
+    "exorcist": "~1.0.0",
+    "glob": "~5.0.6",
+    "jasmine": "~2.1.1",
+    "jasmine-reporters": "~2.0.4",
+    "jasmine-terminal-reporter": "~0.9.1",
+    "node-static": "~0.7.11",
+    "npm-relative-install": "^1.0.1",
+    "phantomjs": "~1.9.16",
+    "reftest-runner": "~0.4.0",
+    "remark-cli": "~2.0.0",
+    "remark-lint": "~5.0.1",
+    "shx": "~0.2.2",
+    "testem": "~0.9.0",
+    "tslint": "~5.4.3",
+    "typescript": "~2.4.2",
+    "uglify-js": "~3.3.9"
+  },
+  "dependencies": {
+    "@akashic/akashic-engine": "~1.12.0"
+  },
+  "publishConfig": {
+    "@akashic:registry": "https://registry.npmjs.org/"
+  }
+}

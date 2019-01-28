@@ -1,0 +1,11 @@
+node_modules
+script/test-bundle.js
+.DS_Store*
+npm-debug.log
+*.iml
+coverage
+junitresults.xml
+build
+lib
+tmp
+.idea
