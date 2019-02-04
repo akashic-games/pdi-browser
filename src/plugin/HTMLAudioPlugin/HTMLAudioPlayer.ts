@@ -48,6 +48,7 @@ export class HTMLAudioPlayer extends g.AudioPlayer implements AudioPlayer { priv
 
 	stop(): void {
 		if (!this.currentAudio) {
+			super.stop();
 			return;
 		}
 		this._clearEndedEventHandler();

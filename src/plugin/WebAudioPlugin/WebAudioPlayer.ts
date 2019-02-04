@@ -59,6 +59,7 @@ export class WebAudioPlayer extends g.AudioPlayer implements AudioPlayer {
 
 	stop(): void {
 		if (!this.currentAudio) {
+			super.stop();
 			return;
 		}
 		this._clearEndedEventHandler();
