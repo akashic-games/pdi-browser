@@ -16,6 +16,14 @@ export class CanvasSurface extends g.Surface {
 		this._renderer = undefined;
 	}
 
+	destroy(): void {
+		this.canvas.width = 1;
+		this.canvas.height = 1;
+		this.canvas = null;
+		this._renderer = null;
+		super.destroy();
+	}
+
 	renderer(): g.Renderer {
 		if (!this._renderer) {
 			this._renderer = new Context2DRenderer(this, this._context);

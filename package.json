@@ -1,6 +1,6 @@
 {
   "name": "@akashic/pdi-browser",
-  "version": "0.10.14",
+  "version": "0.10.15",
   "description": "An akashic-pdi implementatation for Web browsers",
   "main": "index.js",
   "typings": "lib/index.d.ts",
