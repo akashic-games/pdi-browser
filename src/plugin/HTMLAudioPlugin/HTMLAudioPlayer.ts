@@ -33,7 +33,6 @@ export class HTMLAudioPlayer extends g.AudioPlayer implements AudioPlayer { priv
 			autoPlayHelper.setupChromeMEIWorkaround(audio);
 			audio.volume = this._calculateVolume();
 			audio.play().catch((err) => { /* user interactの前にplay()を呼ぶとエラーになる。これはHTMLAudioAutoplayHelperで吸収する */});
-			audio.play();
 			audio.loop = asset.loop;
 			audio.addEventListener("ended", this._endedEventHandler, false);
 			audio.addEventListener("play", this._onPlayEventHandler, false);
