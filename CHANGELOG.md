@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.10.16
+* `HTMLAudioPlayer#play()` 実行時にエラーが表示されていたので修正
+  * 上記エラーは表示されるだけで動作には影響がなかった
+
 ## 0.10.15
 * `CanvasSurface#destroy()` で `canvas` を解放するように (iOSメモリ対策)
 
