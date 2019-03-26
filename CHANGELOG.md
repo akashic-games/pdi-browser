@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.5.9
+* ゲーム開始前にタッチイベントが発生した場合、エラーになるケースを修正
+
 ## 1.5.8
 * window.location.protocol が `http:`, `https:` 以外の場合はHTMLImageAsset#_load 時に img タグに対して `crossOrigin = "anonymous"` を付加しないように
 
