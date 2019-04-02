@@ -42,9 +42,6 @@ export class HTMLImageAsset extends g.ImageAsset {
 			this.data = image;
 			loader._onAssetLoad(this);
 		};
-		if (window.location.protocol === "http:" || window.location.protocol === "https:") {
-			image.crossOrigin = "anonymous";
-		}
 		image.src = this.path;
 	}
 
