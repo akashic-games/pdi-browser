@@ -16,7 +16,7 @@ export class TouchHandler extends MouseHandler {
 			}
 			if (!this._disablePreventDefault) {
 				e.stopPropagation();
-				e.preventDefault();
+				if (e.cancelable) e.preventDefault();
 			}
 		};
 		this.onTouchMove = (e: TouchEvent) => {
@@ -27,7 +27,7 @@ export class TouchHandler extends MouseHandler {
 			}
 			if (!this._disablePreventDefault) {
 				e.stopPropagation();
-				e.preventDefault();
+				if (e.cancelable) e.preventDefault();
 			}
 		};
 		this.onTouchUp = (e: TouchEvent) => {
@@ -38,7 +38,7 @@ export class TouchHandler extends MouseHandler {
 			}
 			if (!this._disablePreventDefault) {
 				e.stopPropagation();
-				e.preventDefault();
+				if (e.cancelable) e.preventDefault();
 			}
 		};
 	}
