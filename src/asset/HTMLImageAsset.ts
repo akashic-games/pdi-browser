@@ -35,6 +35,10 @@ export class HTMLImageAsset extends g.ImageAsset {
 
 	_load(loader: g.AssetLoadHandler): void {
 		var image = new Image();
+
+		if (this.hint && this.hint.untainted) {
+			image.crossOrigin = "anonymous";
+		}
 		image.onerror = () => {
 			loader._onAssetError(this, g.ExceptionFactory.createAssetLoadError("HTMLImageAsset unknown loading error"));
 		};
