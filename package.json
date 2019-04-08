@@ -1,6 +1,6 @@
 {
   "name": "@akashic/pdi-browser",
-  "version": "1.5.10",
+  "version": "1.5.11",
   "description": "An akashic-pdi implementatation for Web browsers",
   "main": "index.js",
   "typings": "lib/full/index.d.ts",
@@ -66,7 +66,7 @@
     "uglify-js": "~3.3.9"
   },
   "dependencies": {
-    "@akashic/akashic-engine": "~2.4.2"
+    "@akashic/akashic-engine": "~2.4.14"
   },
   "publishConfig": {
     "@akashic:registry": "https://registry.npmjs.org/"

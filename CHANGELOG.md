@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.5.11
+* ImageAsset#hint に `untainted: true` が与えられたときに img タグに対して `crossOrigin = "anonymous"` を付加するように
+
 ## 1.5.10
 * ゲーム開始前にタッチイベントが発生した場合、エラーになるケースを修正
 
