@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.5.12
+* ScriptAsset の最終行が1行コメントの場合にエラーになる問題を修正
+
 ## 1.5.11
 * ImageAsset#hint に `untainted: true` が与えられたときに img タグに対して `crossOrigin = "anonymous"` を付加するように
 
