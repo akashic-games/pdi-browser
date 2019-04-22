@@ -3,7 +3,7 @@ import { XHRLoader } from "../utils/XHRLoader";
 
 export class XHRScriptAsset extends g.ScriptAsset {
 	static PRE_SCRIPT: string = "(function(exports, require, module, __filename, __dirname) {";
-	static POST_SCRIPT: string = "})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);";
+	static POST_SCRIPT: string = "\n})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);";
 
 	constructor(id: string, path: string) {
 		super(id, path);
