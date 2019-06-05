@@ -6,16 +6,33 @@
 // https://github.com/cwilso/webkitAudioContext-MonkeyPatch
 // https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext
 var AudioContext = window.AudioContext || window.webkitAudioContext;
-var singleContext: AudioContext = null;
+
+interface ExtWindow extends Window {
+	__akashic__: {
+		audioContext: AudioContext;
+	};
+}
+
+declare const window: ExtWindow;
+
 module WebAudioHelper {
 	// AudioContextをシングルトンとして取得する
 	// 一つのページに一つのContextが存在すれば良い
 	export function getAudioContext(): AudioContext {
-		if (!singleContext) {
-			singleContext = new AudioContext();
+		if (!window.__akashic__) {
+			Object.defineProperty(window, "__akashic__", {
+				value: {},
+				enumerable: false,
+				configurable: false,
+				writable: false
+			});
+		}
+		let ctx = window.__akashic__.audioContext;
+		if (!(ctx instanceof AudioContext)) {
+			ctx = window.__akashic__.audioContext = new AudioContext();
 			WebAudioHelper._workAroundSafari();
 		}
-		return singleContext;
+		return ctx;
 	}
 
 	export function createGainNode(context: AudioContext): GainNode {
@@ -41,7 +58,7 @@ module WebAudioHelper {
 	export function _workAroundSafari(): void {
 		document.addEventListener("touchstart", function touchInitializeHandler() {
 			document.removeEventListener("touchstart", touchInitializeHandler);
-			singleContext.createBufferSource().start(0);
+			WebAudioHelper.getAudioContext().createBufferSource().start(0);
 		}, true);
 	}
 }
