@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.5.13
+* Edge/Safari でゲームが実行できないことがある (new AudioContext() が null を返すことがある) 問題を修正
+
 ## 1.5.12
 * ScriptAsset の最終行が1行コメントの場合にエラーになる問題を修正
 
