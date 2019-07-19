@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## Unreleased Changes
+* surfaceの削除と音量ミュートを実行する `Platform#destroy()` を追加
+
 ## 0.10.18
 * ScriptAsset の最終行が1行コメントの場合にエラーになる問題を修正
 
