@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## Unreleased Changes
+* surfaceの削除と音量ミュートを実行する `Platform#destroy()` を追加
+
 ## 1.5.13
 * Edge/Safari でゲームが実行できないことがある (new AudioContext() が null を返すことがある) 問題を修正
 

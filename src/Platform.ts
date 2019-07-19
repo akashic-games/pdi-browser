@@ -179,4 +179,9 @@ export class Platform implements pdi.Platform {
 		if (this._audioManager)
 			return this._audioManager.getMasterVolume();
 	}
+
+	destroy(): void {
+		this.setRendererRequirement(undefined);
+		this.setMasterVolume(0);
+	}
 }
