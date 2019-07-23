@@ -19,5 +19,9 @@ import { WebAudioPlugin } from "./plugin/WebAudioPlugin/WebAudioPlugin";
 export { HTMLAudioPlugin };
 export { WebAudioPlugin };
 
+// TODO 削除。誰も使っていない
 import { PostMessageAudioPlugin } from "./plugin/PostMessageAudioPlugin/PostMessageAudioPlugin";
 export { PostMessageAudioPlugin };
+
+import { ProxyAudioPlugin } from "./plugin/ProxyAudioPlugin/ProxyAudioPlugin";
+export { ProxyAudioPlugin };
