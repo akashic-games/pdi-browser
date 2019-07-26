@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased Changes
+## 1.5.14
 * surfaceの削除と音量ミュートを実行する `Platform#destroy()` を追加
 
 ## 1.5.13
