@@ -7,12 +7,11 @@ import { ProxyAudioPlayer } from "./ProxyAudioPlayer";
 import { AudioManager } from "../../AudioManager";
 
 export class ProxyAudioPlugin implements AudioPlugin {
-	supportedFormats: string[] = [];
-
 	static isSupported(): boolean {
 		return true;
 	}
 
+	supportedFormats: string[] = [];
 	private _handlerSet: ProxyAudioHandlerSet;
 
 	constructor(handlerSet: ProxyAudioHandlerSet) {
