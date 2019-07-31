@@ -14,7 +14,7 @@ export interface ProxyAudioHandlerSet {
 	loadAudioAsset: (parameters: LoadAudioAssetParameterObject, handler: (err?: any) => void) => void;
 	unloadAudioAsset: (assetId: string) => void;
 	createAudioPlayer: (assetId: string) => string;
-	destroyAudioPlayer: (audioAssetId: string) => void;
+	destroyAudioPlayer: (audioPlayerId: string) => void;
 	playAudioPlayer: (audioPlayerId: string) => void;
 	stopAudioPlayer: (audioPlayerId: string) => void;
 	changeAudioVolume: (audioPlayerId: string, volume: number) => void;
