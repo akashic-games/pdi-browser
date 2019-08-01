@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.6.0
+* @akashic/amflowのminor更新に伴うバージョンアップ
+
 ## 1.5.14
 * surfaceの削除と音量ミュートを実行する `Platform#destroy()` を追加
 
