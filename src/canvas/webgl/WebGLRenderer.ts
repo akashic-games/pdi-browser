@@ -2,7 +2,7 @@ import * as g from "@akashic/akashic-engine";
 import { WebGLSharedObject, RenderTarget } from "./WebGLSharedObject";
 import { WebGLBackSurface } from "./WebGLBackSurface";
 import { WebGLColor } from "./WebGLColor";
-import { RenderingState } from "./RenderingState";
+import { WebGLRenderingState } from "./WebGLRenderingState";
 
 export class WebGLRenderer extends g.Renderer {
 	static DEFAULT_CAPACITY: number = 16;
@@ -10,7 +10,7 @@ export class WebGLRenderer extends g.Renderer {
 	protected _shared: WebGLSharedObject;
 	protected _renderTarget: RenderTarget;
 	protected _whiteColor: number[];
-	private _stateStack: RenderingState[];
+	private _stateStack: WebGLRenderingState[];
 	private _stateStackPointer: number;
 	private _capacity: number;
 
@@ -57,7 +57,7 @@ export class WebGLRenderer extends g.Renderer {
 		this.currentState().globalCompositeOperation = operation;
 	}
 
-	currentState(): RenderingState {
+	currentState(): WebGLRenderingState {
 		return this._stateStack[this._stateStackPointer];
 	}
 
@@ -183,7 +183,7 @@ export class WebGLRenderer extends g.Renderer {
 				this._capacity = newCapacity;
 			}
 			for (var i = oldCapacity; i < this._capacity; ++i) {
-				this._stateStack.push(new RenderingState());
+				this._stateStack.push(new WebGLRenderingState());
 			}
 		}
 	}

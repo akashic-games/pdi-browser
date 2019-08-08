@@ -1,9 +1,10 @@
 import * as g from "@akashic/akashic-engine";
 import { Context2DSurface } from "./Context2DSurface";
+import { CanvasSurfaceContext } from "./CanvasSurfaceContext";
 
 export class Context2DRenderer extends g.Renderer {
 	private surface: Context2DSurface;
-	private context: CanvasRenderingContext2D;
+	private context: CanvasSurfaceContext;
 
 	constructor(surface: Context2DSurface) {
 		super();
@@ -89,11 +90,7 @@ export class Context2DRenderer extends g.Renderer {
 		}
 		if (!strokeOnly) {
 			context.fillStyle = textColor;
-			if (typeof maxWidth === "undefined") {
-				context.fillText(text, x, y);
-			} else {
-				context.fillText(text, x, y, maxWidth);
-			}
+			context.fillText(text, x, y, maxWidth);
 		}
 		context.restore();
 	}
@@ -103,7 +100,7 @@ export class Context2DRenderer extends g.Renderer {
 	}
 
 	transform(matrix: number[]): void {
-		this.context.transform.apply(this.context, matrix);
+		this.context.transform(matrix);
 	}
 
 	opacity(opacity: number): void {
@@ -120,10 +117,8 @@ export class Context2DRenderer extends g.Renderer {
 	}
 
 	fillRect(x: number, y: number, width: number, height: number, cssColor: string): void {
-		var _fillStyle = this.context.fillStyle;
 		this.context.fillStyle = cssColor;
 		this.context.fillRect(x, y, width, height);
-		this.context.fillStyle = _fillStyle;
 	}
 
 	setCompositeOperation(operation: g.CompositeOperation): void {
@@ -171,7 +166,7 @@ export class Context2DRenderer extends g.Renderer {
 	}
 
 	setTransform(matrix: number[]): void {
-		this.context.setTransform.apply(this.context, matrix);
+		this.context.setTransform(matrix);
 	}
 
 	setShaderProgram(shaderProgram: g.ShaderProgram | null): void {
