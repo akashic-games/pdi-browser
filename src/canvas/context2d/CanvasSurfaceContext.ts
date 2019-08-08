@@ -227,7 +227,7 @@ export class CanvasSurfaceContext {
 			this._currentGlobalCompositeOperation = currentState.globalCompositeOperation;
 		}
 		if (this._modifiedTransform) {
-			const transformer = this.currentState().transformer;
+			const transformer = currentState.transformer;
 			this._context.setTransform(
 				transformer.matrix[0],
 				transformer.matrix[1],
