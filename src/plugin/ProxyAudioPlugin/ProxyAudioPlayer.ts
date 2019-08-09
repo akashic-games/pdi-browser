@@ -5,6 +5,8 @@ import { ProxyAudioAsset } from "./ProxyAudioAsset";
 import { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
 
 export class ProxyAudioPlayer extends g.AudioPlayer implements AudioPlayer {
+	private static _audioPlayerIdCounter: number = 0;
+
 	private _audioPlayerId: string | null;
 	private _handlerSet: ProxyAudioHandlerSet;
 	private _manager: AudioManager;
@@ -30,9 +32,14 @@ export class ProxyAudioPlayer extends g.AudioPlayer implements AudioPlayer {
 		if (this._audioPlayerId != null) {
 			this.stop();
 		}
-		this._audioPlayerId = this._handlerSet.createAudioPlayer(asset.id);
-		this._handlerSet.changeAudioVolume(this._audioPlayerId, this._calculateVolume());
-		this._handlerSet.playAudioPlayer(this._audioPlayerId);
+		this._audioPlayerId = `ap${ProxyAudioPlayer._audioPlayerIdCounter++}`;
+		this._handlerSet.createAudioPlayer({
+			assetId: asset.id,
+			audioPlayerId: this._audioPlayerId,
+			isPlaying: true,
+			volume: this._calculateVolume(),
+			playbackRate: 1  // 未使用
+		});
 		super.play(asset);
 	}
 
