@@ -17,6 +17,10 @@
       "enabled": false
     },
     {
+      "packageNames": ["remark-cli"],
+      "enabled": false
+    },
+    {
       "updateTypes": ["minor"],
       "groupName": "all dependencies"
     },
