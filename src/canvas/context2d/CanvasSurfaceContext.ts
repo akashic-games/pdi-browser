@@ -5,12 +5,6 @@ export class CanvasSurfaceContext {
 	protected _stateStack: CanvasRenderingState[] = [];
 
 	protected _currentFillStyle: string | CanvasGradient | CanvasPattern;
-	protected _currentFont: string;
-	protected _currentTextAlign: string;
-	protected _currentTextBaseline: string;
-	protected _currentLineJoin: string;
-	protected _currentLineWidth: number;
-	protected _currentStrokeStyle: string | CanvasGradient | CanvasPattern;
 	protected _currentGlobalAlpha: number;
 	protected _currentGlobalCompositeOperation: string;
 
@@ -20,12 +14,6 @@ export class CanvasSurfaceContext {
 		this._context = context;
 		const state = new CanvasRenderingState();
 		this._currentFillStyle = state.fillStyle;
-		this._currentFont = state.font;
-		this._currentTextAlign = state.textAlign;
-		this._currentTextBaseline = state.textBaseline;
-		this._currentLineJoin = state.lineJoin;
-		this._currentLineWidth = state.lineWidth;
-		this._currentStrokeStyle = state.strokeStyle;
 		this._currentGlobalAlpha = state.globalAlpha;
 		this._currentGlobalCompositeOperation = state.globalCompositeOperation;
 		this.pushState(state);
@@ -37,54 +25,6 @@ export class CanvasSurfaceContext {
 
 	get fillStyle() {
 		return this.currentState().fillStyle;
-	}
-
-	set font(font: string) {
-		this.currentState().font = font;
-	}
-
-	get font() {
-		return this.currentState().font;
-	}
-
-	set textAlign(textAlign: string) {
-		this.currentState().textAlign = textAlign;
-	}
-
-	get textAlign() {
-		return this.currentState().textAlign;
-	}
-
-	set textBaseline(textBaseline: string) {
-		this.currentState().textBaseline = textBaseline;
-	}
-
-	get textBaseline() {
-		return this.currentState().textBaseline;
-	}
-
-	set lineJoin(lineJoin: string) {
-		this.currentState().lineJoin = lineJoin;
-	}
-
-	get lineJoin() {
-		return this.currentState().lineJoin;
-	}
-
-	set lineWidth(lineWidth: number) {
-		this.currentState().lineWidth = lineWidth;
-	}
-
-	get lineWidth() {
-		return this.currentState().lineWidth;
-	}
-
-	set strokeStyle(strokeStyle: string | CanvasGradient | CanvasPattern) {
-		this.currentState().strokeStyle = strokeStyle;
-	}
-
-	get strokeStyle() {
-		return this.currentState().strokeStyle;
 	}
 
 	set globalAlpha(globalAlpha: number) {
@@ -101,6 +41,10 @@ export class CanvasSurfaceContext {
 
 	get globalCompositeOperation() {
 		return this.currentState().globalCompositeOperation;
+	}
+
+	getCanvasRenderingContext2D(): CanvasRenderingContext2D {
+		return this._context;
 	}
 
 	clearRect(x: number, y: number, width: number, height: number): void {
@@ -148,13 +92,13 @@ export class CanvasSurfaceContext {
 		this._modifiedTransform = true;
 	}
 
-	transform(matrix: number[]): void {
-		this.currentState().transformer.transform(matrix);
+	transform(m11: number, m12: number, m21: number, m22: number, dx: number, dy: number): void {
+		this.currentState().transformer.transform([m11, m12, m21, m22, dx, dy]);
 		this._modifiedTransform = true;
 	}
 
-	setTransform(matrix: number[]) {
-		this.currentState().transformer.setTransform(matrix);
+	setTransform(m11: number, m12: number, m21: number, m22: number, dx: number, dy: number) {
+		this.currentState().transformer.setTransform([m11, m12, m21, m22, dx, dy]);
 		this._modifiedTransform = true;
 	}
 
@@ -193,30 +137,6 @@ export class CanvasSurfaceContext {
 		if (currentState.fillStyle !== this._currentFillStyle) {
 			this._context.fillStyle = currentState.fillStyle;
 			this._currentFillStyle = currentState.fillStyle;
-		}
-		if (currentState.font !== this._currentFont) {
-			this._context.font = currentState.font;
-			this._currentFont = currentState.font;
-		}
-		if (currentState.textAlign !== this._currentTextAlign) {
-			this._context.textAlign = currentState.textAlign;
-			this._currentTextAlign = currentState.textAlign;
-		}
-		if (currentState.textBaseline !== this._currentTextBaseline) {
-			this._context.textBaseline = currentState.textBaseline;
-			this._currentTextBaseline = currentState.textBaseline;
-		}
-		if (currentState.lineJoin !== this._currentLineJoin) {
-			this._context.lineJoin = currentState.lineJoin;
-			this._currentLineJoin = currentState.lineJoin;
-		}
-		if (currentState.lineWidth !== this._currentLineWidth) {
-			this._context.lineWidth = currentState.lineWidth;
-			this._currentLineWidth = currentState.lineWidth;
-		}
-		if (currentState.strokeStyle !== this._currentStrokeStyle) {
-			this._context.strokeStyle = currentState.strokeStyle;
-			this._currentStrokeStyle = currentState.strokeStyle;
 		}
 		if (currentState.globalAlpha !== this._currentGlobalAlpha) {
 			this._context.globalAlpha = currentState.globalAlpha;
