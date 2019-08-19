@@ -1,14 +1,27 @@
 import * as g from "@akashic/akashic-engine";
 import { Context2DSurface } from "./Context2DSurface";
+import { CanvasSurfaceContext } from "./CanvasSurfaceContext";
 
 export class Context2DRenderer extends g.Renderer {
 	private surface: Context2DSurface;
-	private context: CanvasRenderingContext2D;
+	private context: CanvasSurfaceContext;
+	private canvasRenderingContext2D: CanvasRenderingContext2D;
 
 	constructor(surface: Context2DSurface) {
 		super();
 		this.surface = surface;
 		this.context = surface.context();
+		this.canvasRenderingContext2D = this.context.getCanvasRenderingContext2D();
+	}
+
+	begin(): void {
+		super.begin();
+		this.canvasRenderingContext2D.save();
+	}
+
+	end(): void {
+		this.canvasRenderingContext2D.restore();
+		super.end();
 	}
 
 	clear(): void {
@@ -33,7 +46,7 @@ export class Context2DRenderer extends g.Renderer {
 	drawSystemText(text: string, x: number, y: number, maxWidth: number, fontSize: number,
 	               textAlign: g.TextAlign, textBaseline: g.TextBaseline, textColor: string, fontFamily: g.FontFamily,
 	               strokeWidth: number, strokeColor: string, strokeOnly: boolean): void {
-		var context = this.context;
+		var context = this.canvasRenderingContext2D;
 		var fontFamilyValue: string;
 		var textAlignValue: string;
 		var textBaselineValue: string;
@@ -89,11 +102,7 @@ export class Context2DRenderer extends g.Renderer {
 		}
 		if (!strokeOnly) {
 			context.fillStyle = textColor;
-			if (typeof maxWidth === "undefined") {
-				context.fillText(text, x, y);
-			} else {
-				context.fillText(text, x, y, maxWidth);
-			}
+			context.fillText(text, x, y, maxWidth);
 		}
 		context.restore();
 	}
@@ -103,7 +112,7 @@ export class Context2DRenderer extends g.Renderer {
 	}
 
 	transform(matrix: number[]): void {
-		this.context.transform.apply(this.context, matrix);
+		this.context.transform(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
 	}
 
 	opacity(opacity: number): void {
@@ -120,10 +129,8 @@ export class Context2DRenderer extends g.Renderer {
 	}
 
 	fillRect(x: number, y: number, width: number, height: number, cssColor: string): void {
-		var _fillStyle = this.context.fillStyle;
 		this.context.fillStyle = cssColor;
 		this.context.fillRect(x, y, width, height);
-		this.context.fillStyle = _fillStyle;
 	}
 
 	setCompositeOperation(operation: g.CompositeOperation): void {
@@ -171,7 +178,7 @@ export class Context2DRenderer extends g.Renderer {
 	}
 
 	setTransform(matrix: number[]): void {
-		this.context.setTransform.apply(this.context, matrix);
+		this.context.setTransform(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
 	}
 
 	setShaderProgram(shaderProgram: g.ShaderProgram | null): void {

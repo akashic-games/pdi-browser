@@ -1,7 +1,7 @@
 import { WebGLBackSurface } from "./WebGLBackSurface";
 import { WebGLSharedObject } from "./WebGLSharedObject";
 import { WebGLRenderer } from "./WebGLRenderer";
-import { RenderingState } from "./RenderingState";
+import { WebGLRenderingState } from "./WebGLRenderingState";
 
 export class WebGLBackSurfaceRenderer extends WebGLRenderer {
 
@@ -23,7 +23,7 @@ export class WebGLBackSurfaceRenderer extends WebGLRenderer {
 		// Canvas座標系とWebGL座標系の相互変換
 		// height は描画対象の高さを与える
 		this.save();
-		const rs = new RenderingState(this.currentState());
+		const rs = new WebGLRenderingState(this.currentState());
 		const matrix = rs.transformer.matrix;
 		matrix[1] *= -1;
 		matrix[3] *= -1;

@@ -1,13 +1,13 @@
 import * as g from "@akashic/akashic-engine";
-import { AffineTransformer } from "./AffineTransformer";
+import { AffineTransformer } from "../AffineTransformer";
 
-export class RenderingState {
+export class WebGLRenderingState {
 	globalAlpha: number;
 	globalCompositeOperation: g.CompositeOperation;
 	transformer: AffineTransformer;
 	shaderProgram: g.ShaderProgram;
 
-	constructor(rhs?: RenderingState) {
+	constructor(rhs?: WebGLRenderingState) {
 		if (rhs) {
 			this.globalAlpha = rhs.globalAlpha;
 			this.globalCompositeOperation = rhs.globalCompositeOperation;
@@ -21,7 +21,7 @@ export class RenderingState {
 		}
 	}
 
-	copyFrom(rhs: RenderingState): RenderingState {
+	copyFrom(rhs: WebGLRenderingState): WebGLRenderingState {
 		this.globalAlpha = rhs.globalAlpha;
 		this.globalCompositeOperation = rhs.globalCompositeOperation;
 		this.transformer.copyFrom(rhs.transformer);

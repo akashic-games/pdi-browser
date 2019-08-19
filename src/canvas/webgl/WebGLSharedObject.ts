@@ -1,8 +1,8 @@
 import * as g from "@akashic/akashic-engine";
 import { WebGLShaderProgram } from "./WebGLShaderProgram";
 import { WebGLTextureAtlas } from "./WebGLTextureAtlas";
-import { RenderingState } from "./RenderingState";
-import { AffineTransformer } from "./AffineTransformer";
+import { WebGLRenderingState } from "./WebGLRenderingState";
+import { AffineTransformer } from "../AffineTransformer";
 import { WebGLPrimarySurface } from "./WebGLPrimarySurface";
 import { WebGLBackSurface } from "./WebGLBackSurface";
 
@@ -109,7 +109,7 @@ export class WebGLSharedObject {
 	}
 
 	draw(
-		state: RenderingState,
+		state: WebGLRenderingState,
 		surfaceTexture: WebGLSurfaceTexture,
 		offsetX: number,
 		offsetY: number,
