@@ -1,0 +1,32 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "timezone": "Asia/Tokyo",
+  "schedule": ["every weekend"],
+  "labels": ["dependencies"],
+  "assignees": [""],
+  "reviewers": [""],
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
+  "separateMinorPatch": true,
+  "baseBranches": ["master", "ae1x-master"],
+  "packageRules": [
+    {
+      "packagePatterns": ["^@akashic/"],
+      "enabled": false
+    },
+    {
+      "packageNames": ["remark-cli"],
+      "enabled": false
+    },
+    {
+      "updateTypes": ["minor"],
+      "groupName": "all dependencies"
+    },
+    {
+      "updateTypes": ["patch"],
+      "groupName": "all dependencies"
+    }
+  ]
+}

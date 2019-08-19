@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 1.6.1
-* `Context2DRenderer` のパフォーマンスを向上
+* ProxyAudioPlugin 追加
 
 ## 1.6.0
 * @akashic/amflowのminor更新に伴うバージョンアップ
