@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.6.2
+* `Context2DRenderer` のパフォーマンスを向上
+
 ## 1.6.1
 * ProxyAudioPlugin 追加
 
