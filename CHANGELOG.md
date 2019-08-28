@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.7.0
+* @akashic/akashic-engineのminor更新に伴うバージョンアップ
+
 ## 1.6.2
 * `Context2DRenderer` のパフォーマンスを向上
 
