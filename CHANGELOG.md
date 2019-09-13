@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.11.1
+* ProxyAudioPlugin 追加
+
 ## 0.11.0
 * @akashic/amflowのminor更新に伴うバージョンアップ
 
