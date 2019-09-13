@@ -18,3 +18,6 @@ import { HTMLAudioPlugin } from "./plugin/HTMLAudioPlugin/HTMLAudioPlugin";
 import { WebAudioPlugin } from "./plugin/WebAudioPlugin/WebAudioPlugin";
 export { HTMLAudioPlugin };
 export { WebAudioPlugin };
+
+import { ProxyAudioPlugin } from "./plugin/ProxyAudioPlugin/ProxyAudioPlugin";
+export { ProxyAudioPlugin };
