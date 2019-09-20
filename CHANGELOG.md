@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.7.1
+* バックサーフェスの描画時に context の状態が正常に初期化されていなかった問題を修正
+
 ## 1.7.0
 * @akashic/akashic-engineのminor更新に伴うバージョンアップ
 
