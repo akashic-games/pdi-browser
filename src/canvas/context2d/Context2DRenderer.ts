@@ -17,10 +17,12 @@ export class Context2DRenderer extends g.Renderer {
 	begin(): void {
 		super.begin();
 		this.canvasRenderingContext2D.save();
+		this.context.save();
 	}
 
 	end(): void {
 		this.canvasRenderingContext2D.restore();
+		this.context.restore();
 		super.end();
 	}
 
