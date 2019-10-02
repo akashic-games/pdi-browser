@@ -52,6 +52,7 @@ export class Context2DRenderer extends g.Renderer {
 		var fontFamilyValue: string;
 		var textAlignValue: string;
 		var textBaselineValue: string;
+		this.context.prerender();
 		context.save();
 		switch (fontFamily) {
 			case g.FontFamily.Monospace:

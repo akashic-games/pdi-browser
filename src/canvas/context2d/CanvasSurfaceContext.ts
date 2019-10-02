@@ -115,23 +115,7 @@ export class CanvasSurfaceContext {
 		this._context.putImageData(imagedata, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
 	}
 
-	private pushState(state: CanvasRenderingState) {
-		this._stateStack.push(state);
-	}
-
-	private popState() {
-		if (this._stateStack.length <= 1) {
-			return;
-		}
-		this._stateStack.pop();
-		this._modifiedTransform = true;
-	}
-
-	private currentState(): CanvasRenderingState {
-		return this._stateStack[this._stateStack.length - 1];
-	}
-
-	private prerender() {
+	prerender() {
 		const currentState = this.currentState();
 
 		if (currentState.fillStyle !== this._currentFillStyle) {
@@ -158,5 +142,21 @@ export class CanvasSurfaceContext {
 			);
 			this._modifiedTransform = false;
 		}
+	}
+
+	private pushState(state: CanvasRenderingState) {
+		this._stateStack.push(state);
+	}
+
+	private popState() {
+		if (this._stateStack.length <= 1) {
+			return;
+		}
+		this._stateStack.pop();
+		this._modifiedTransform = true;
+	}
+
+	private currentState(): CanvasRenderingState {
+		return this._stateStack[this._stateStack.length - 1];
 	}
 }
