@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.12.0
+* @akashic/akashic-engineのminor更新に伴うバージョンアップ
+
 ## 0.11.1
 * ProxyAudioPlugin 追加
 
