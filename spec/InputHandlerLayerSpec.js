@@ -52,7 +52,7 @@ describe("InputHandlerLayer", function () {
         it("異なるidentifierの場合はonPointMoveは呼ばれない", function (done) {
             var offsetPos = {offsetX: 0, offsetY: 0};
             handler.pointTrigger.add(function (object) {
-                done.fail(new Error("not call!"))
+                done.fail(new Error("not call!"));
             });
             // Move
             handler.pointMove(42, offsetPos);
