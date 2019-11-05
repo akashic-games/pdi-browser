@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.8.0
+* @akashic/akashic-engineのminor更新に伴うバージョンアップ
+
 ## 1.7.2
 * `Renderer#drawSystemLabel()` が正常に描画できていなかった問題を修正
 
