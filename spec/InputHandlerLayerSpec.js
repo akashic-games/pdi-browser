@@ -56,7 +56,8 @@ describe("InputHandlerLayer", function () {
             });
             // Move
             handler.pointMove(42, offsetPos);
-            expect(true).toBeTruthy(); // 意味のないテストだが、テストケース中にexpectによるテストを入れておかないと落ちるため追加
+            // 意味のないテストだが、テストケース中にexpectによるテストを入れておかないとエラーメッセージが表示されるため追加
+            expect(true).toBeTruthy();
             done();
         });
     });
@@ -67,7 +68,8 @@ describe("InputHandlerLayer", function () {
             handler.pointTrigger.handle(function () {
                 done.fail(new Error("not call!"));
             });
-            expect(true).toBeTruthy(); // 意味のないテストだが、テストケース中にexpectによるテストを入れておかないと落ちるため追加
+            // 意味のないテストだが、テストケース中にexpectによるテストを入れておかないとエラーメッセージが表示されるため追加
+            expect(true).toBeTruthy();
             done();
         });
     });
