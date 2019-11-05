@@ -52,10 +52,11 @@ describe("InputHandlerLayer", function () {
         it("異なるidentifierの場合はonPointMoveは呼ばれない", function (done) {
             var offsetPos = {offsetX: 0, offsetY: 0};
             handler.pointTrigger.handle(function (object) {
-                done.fail(new Error("not call!"))
+                done.fail(new Error("not call!"));
             });
             // Move
             handler.pointMove(42, offsetPos);
+            expect(true).toBeTruthy(); // 意味のないテストだが、テストケース中にexpectによるテストを入れておかないと落ちるため追加
             done();
         });
     });
@@ -66,6 +67,7 @@ describe("InputHandlerLayer", function () {
             handler.pointTrigger.handle(function () {
                 done.fail(new Error("not call!"));
             });
+            expect(true).toBeTruthy(); // 意味のないテストだが、テストケース中にexpectによるテストを入れておかないと落ちるため追加
             done();
         });
     });
