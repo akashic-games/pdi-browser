@@ -54,7 +54,7 @@
     "uglify-js": "~3.6.0"
   },
   "dependencies": {
-    "@akashic/akashic-engine": "~1.13.0"
+    "@akashic/akashic-engine": "~1.14.0"
   },
   "publishConfig": {
     "@akashic:registry": "https://registry.npmjs.org/"
