@@ -1,6 +1,6 @@
 {
   "name": "@akashic/pdi-browser",
-  "version": "0.11.1",
+  "version": "0.12.0",
   "description": "An akashic-pdi implementatation for Web browsers",
   "main": "index.js",
   "typings": "lib/index.d.ts",
@@ -17,7 +17,7 @@
     "lint": "npm run lint:ts && npm run lint:md",
     "lint:ts": "tslint --project tsconfig.json -c tslint.json",
     "lint:md": "remark ./*.md --frail --no-stdout --rc-path ./.remarkrc",
-    "test": "npm run lint && testem"
+    "test": "npm run lint && testem ci"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
@@ -33,7 +33,7 @@
     "index.js"
   ],
   "devDependencies": {
-    "@akashic/akashic-pdi": "~1.11.0",
+    "@akashic/akashic-pdi": "~1.12.0",
     "@akashic/amflow": "~0.3.1",
     "@akashic/playlog": "~1.3.0",
     "@types/node": "~9.4.2",
@@ -54,7 +54,7 @@
     "uglify-js": "~3.6.0"
   },
   "dependencies": {
-    "@akashic/akashic-engine": "~1.12.0"
+    "@akashic/akashic-engine": "~1.14.0"
   },
   "publishConfig": {
     "@akashic:registry": "https://registry.npmjs.org/"
