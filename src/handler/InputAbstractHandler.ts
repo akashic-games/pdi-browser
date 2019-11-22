@@ -104,4 +104,14 @@ export class InputAbstractHandler {
 	getScale(): Scale {
 		return { x: this._xScale, y: this._yScale };
 	}
+
+	getOffsetPositionFromInputView(x: number, y: number): OffsetPosition {
+		// windowの左上を0,0とした時のinputViewのoffsetを取得する
+		var bounding = this.inputView.getBoundingClientRect();
+		var scale = this.getScale();
+		return {
+			offsetX: (x - Math.round(window.pageXOffset + bounding.left)) / scale.x,
+			offsetY: (y - Math.round(window.pageYOffset + bounding.top)) / scale.y
+		};
+	}
 }

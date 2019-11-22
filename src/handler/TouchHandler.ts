@@ -58,12 +58,6 @@ export class TouchHandler extends MouseHandler {
 	}
 
 	convertToPagePosition(e: Touch): OffsetPosition {
-		// windowの左上を0,0とした時のinputViewのoffsetを取得する
-		var bounding = this.inputView.getBoundingClientRect();
-		var scale = this.getScale();
-		return {
-			offsetX: (e.pageX - Math.round(window.pageXOffset + bounding.left)) / scale.x,
-			offsetY: (e.pageY - Math.round(window.pageYOffset + bounding.top)) / scale.y
-		};
+		return this.getOffsetPositionFromInputView(e.pageX, e.pageY);
 	}
 }
