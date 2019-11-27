@@ -10,7 +10,7 @@ export class MouseHandler extends InputAbstractHandler {
 		var identifier = 1;
 		this.onMouseDown = (e: MouseEvent) => {
 			if (e.button !== 0) return; // NOTE: 左クリック以外を受け付けない
-			this.pointDown(identifier, this.getOffsetPositionFromInputView(e.pageX, e.pageY));
+			this.pointDown(identifier, this.getOffsetPositionFromInputView(e));
 			window.addEventListener("mousemove", this.onMouseMove, false);
 			window.addEventListener("mouseup", this.onMouseUp, false);
 			if (!this._disablePreventDefault) {
@@ -19,14 +19,14 @@ export class MouseHandler extends InputAbstractHandler {
 			}
 		};
 		this.onMouseMove = (e: MouseEvent) => {
-			this.pointMove(identifier, this.getOffsetPositionFromInputView(e.pageX, e.pageY));
+			this.pointMove(identifier, this.getOffsetPositionFromInputView(e));
 			if (!this._disablePreventDefault) {
 				e.stopPropagation();
 				e.preventDefault();
 			}
 		};
 		this.onMouseUp = (e: MouseEvent) => {
-			this.pointUp(identifier, this.getOffsetPositionFromInputView(e.pageX, e.pageY));
+			this.pointUp(identifier, this.getOffsetPositionFromInputView(e));
 			window.removeEventListener("mousemove", this.onMouseMove, false);
 			window.removeEventListener("mouseup", this.onMouseUp, false);
 			if (!this._disablePreventDefault) {

@@ -8,6 +8,11 @@ export interface Scale {
 	y: number;
 }
 
+export interface PagePosition {
+	pageX: number;
+	pageY: number;
+}
+
 /**
  * 入力ハンドラ。
  *
@@ -105,13 +110,13 @@ export class InputAbstractHandler {
 		return { x: this._xScale, y: this._yScale };
 	}
 
-	getOffsetPositionFromInputView(x: number, y: number): OffsetPosition {
+	getOffsetPositionFromInputView(position: PagePosition): OffsetPosition {
 		// windowの左上を0,0とした時のinputViewのoffsetを取得する
 		var bounding = this.inputView.getBoundingClientRect();
 		var scale = this.getScale();
 		return {
-			offsetX: (x - Math.round(window.pageXOffset + bounding.left)) / scale.x,
-			offsetY: (y - Math.round(window.pageYOffset + bounding.top)) / scale.y
+			offsetX: (position.pageX - Math.round(window.pageXOffset + bounding.left)) / scale.x,
+			offsetY: (position.pageY - Math.round(window.pageYOffset + bounding.top)) / scale.y
 		};
 	}
 }
