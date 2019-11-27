@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## Unchanged releases
+* MouseHandler が画面外でキャンセルされてしまう問題を修正
+
 ## 1.8.0
 * @akashic/akashic-engineのminor更新に伴うバージョンアップ
 
