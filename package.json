@@ -57,7 +57,7 @@
     "remark-cli": "5.0.0",
     "remark-lint": "6.0.5",
     "shx": "0.3.2",
-    "testem": "2.17.0",
+    "testem": "3.0.2",
     "tslint": "5.20.1",
     "typescript": "2.9.2",
     "uglify-js": "3.7.1"
