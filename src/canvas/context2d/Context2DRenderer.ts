@@ -50,8 +50,8 @@ export class Context2DRenderer extends g.Renderer {
 	               strokeWidth: number, strokeColor: string, strokeOnly: boolean): void {
 		var context = this.canvasRenderingContext2D;
 		var fontFamilyValue: string;
-		var textAlignValue: string;
-		var textBaselineValue: string;
+		var textAlignValue: CanvasTextAlign;
+		var textBaselineValue: CanvasTextBaseline;
 		this.context.prerender();
 		context.save();
 		switch (fontFamily) {
