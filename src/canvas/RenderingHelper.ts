@@ -47,8 +47,8 @@ export module RenderingHelper {
 	                                          textBaseline: g.TextBaseline, textColor: string, fontFamily: g.FontFamily,
 	                                          strokeWidth: number, strokeColor: string, strokeOnly: boolean): void {
 		var fontFamilyValue: string;
-		var textAlignValue: string;
-		var textBaselineValue: string;
+		var textAlignValue: CanvasTextAlign;
+		var textBaselineValue: CanvasTextBaseline;
 		context.save();
 		switch (fontFamily) {
 			case g.FontFamily.Monospace:
