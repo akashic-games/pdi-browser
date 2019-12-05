@@ -1,5 +1,4 @@
 import { MouseHandler } from "./MouseHandler";
-import { OffsetPosition } from "./OffsetPosition";
 
 export class TouchHandler extends MouseHandler {
 	private onTouchDown: (e: TouchEvent) => void;
@@ -12,7 +11,7 @@ export class TouchHandler extends MouseHandler {
 			var touches = e.changedTouches;
 			for (var i = 0, len = touches.length; i < len; i++) {
 				var touch = touches[i];
-				this.pointDown(touch.identifier, this.convertToPagePosition(touch));
+				this.pointDown(touch.identifier, this.getOffsetPositionFromInputView(touch));
 			}
 			if (!this._disablePreventDefault) {
 				e.stopPropagation();
@@ -23,7 +22,7 @@ export class TouchHandler extends MouseHandler {
 			var touches = e.changedTouches;
 			for (var i = 0, len = touches.length; i < len; i++) {
 				var touch = touches[i];
-				this.pointMove(touch.identifier, this.convertToPagePosition(touch));
+				this.pointMove(touch.identifier, this.getOffsetPositionFromInputView(touch));
 			}
 			if (!this._disablePreventDefault) {
 				e.stopPropagation();
@@ -34,7 +33,7 @@ export class TouchHandler extends MouseHandler {
 			var touches = e.changedTouches;
 			for (var i = 0, len = touches.length; i < len; i++) {
 				var touch = touches[i];
-				this.pointUp(touch.identifier, this.convertToPagePosition(touch));
+				this.pointUp(touch.identifier, this.getOffsetPositionFromInputView(touch));
 			}
 			if (!this._disablePreventDefault) {
 				e.stopPropagation();
@@ -55,15 +54,5 @@ export class TouchHandler extends MouseHandler {
 		this.inputView.removeEventListener("touchstart", this.onTouchDown);
 		this.inputView.removeEventListener("touchmove", this.onTouchMove);
 		this.inputView.removeEventListener("touchend", this.onTouchUp);
-	}
-
-	convertToPagePosition(e: Touch): OffsetPosition {
-		// windowの左上を0,0とした時のinputViewのoffsetを取得する
-		var bounding = this.inputView.getBoundingClientRect();
-		var scale = this.getScale();
-		return {
-			offsetX: (e.pageX - Math.round(window.pageXOffset + bounding.left)) / scale.x,
-			offsetY: (e.pageY - Math.round(window.pageYOffset + bounding.top)) / scale.y
-		};
 	}
 }
