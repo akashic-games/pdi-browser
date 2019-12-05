@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unchanged releases
+## 1.8.1
 * MouseHandler が画面外でキャンセルされてしまう問題を修正
 
 ## 1.8.0
