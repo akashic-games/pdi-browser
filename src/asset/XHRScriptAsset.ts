@@ -22,7 +22,7 @@ export class XHRScriptAsset extends g.ScriptAsset {
 		});
 	}
 
-	execute(execEnv: g.ScriptAssetExecuteEnvironment): any {
+	execute(execEnv: g.ScriptAssetRuntimeValue): any {
 		// TODO: この方式では読み込んだスクリプトがcookie参照できる等本質的な危険性がある
 		// 信頼できないスクリプトを読み込むようなケースでは、iframeに閉じ込めて実行などの方式を検討する事。
 		var func = this._wrap();
