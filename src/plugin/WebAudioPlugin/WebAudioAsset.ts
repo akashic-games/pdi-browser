@@ -38,11 +38,13 @@ export class WebAudioAsset extends g.AudioAsset {
 			});
 		};
 
-		if (this.path.slice(-4) === ".aac") {
+		const delIndex = this.path.indexOf("?");
+		const basePath = delIndex >= 0 ? this.path.substring(0, delIndex) : this.path;
+		if (basePath.slice(-4) === ".aac") {
 			// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
 			// この対応を止める際には、WebAudioPluginのsupportedExtensionsからaacを除外する必要がある。
 			loadArrayBuffer(this.path, onLoadArrayBufferHandler, (error) => {
-				const altPath = this.path.slice(0, this.path.length - 4) + ".mp4";
+				const altPath = g.PathUtil.addExtname(this.originalPath, "mp4");
 				loadArrayBuffer(altPath, (response) => {
 					this.path = altPath;
 					onLoadArrayBufferHandler(response);
