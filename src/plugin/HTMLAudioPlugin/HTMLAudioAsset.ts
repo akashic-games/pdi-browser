@@ -77,13 +77,15 @@ export class HTMLAudioAsset extends g.AudioAsset {
 		const delIndex = this.path.indexOf("?");
 		const basePath = delIndex >= 0 ? this.path.substring(0, delIndex) : this.path;
 		if (basePath.slice(-4) === ".aac" && HTMLAudioAsset.supportedFormats.indexOf("mp4") !== -1) {
+			console.log("HTMLAudioAsset", basePath, HTMLAudioAsset.supportedFormats);
 			var altHandlers: MediaLoaderEventHandlerSet = {
 				success: handlers.success,
 				error: () => {
+					console.log("error");
 					this._detachAll(audio, altHandlers);
 					window.clearInterval(this._intervalId);
-					const altPath = g.PathUtil.addExtname(this.originalPath, "mp4");
-					startLoadingAudio(altPath, handlers);
+					this.path = g.PathUtil.addExtname(this.originalPath, "mp4");
+					startLoadingAudio(this.path, handlers);
 				}
 			};
 			startLoadingAudio(this.path, altHandlers);

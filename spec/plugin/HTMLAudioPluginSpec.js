@@ -41,7 +41,7 @@ describe("HTMLAudioPlugin", function () {
             };
             asset._load(loader);
         });
-        it("audio assetにクエリパラメータを付与できること", function (done) {
+        it("オーディオアセットの拡張子がファイル名の末尾につく", function (done) {
             var plugin = new HTMLAudioPlugin();
             var system = new g.SoundAudioSystem("voice", game);
             var query = "rev=1234";
@@ -112,7 +112,8 @@ describe("HTMLAudioPlugin", function () {
     });
     describe("HTMLAudioPlayer", function () {
         var seAssetPath = "/spec/fixtures/audio/se";
-        it("#playすると音を再生できる", function (done) {
+        // 音の再生検知はtestemでサポートされていないので無効にしておく
+        xit("#playすると音を再生できる", function (done) {
             var manager = new AudioManager();
             var plugin = new HTMLAudioPlugin();
             var system = new g.SoundAudioSystem("voice", game);
