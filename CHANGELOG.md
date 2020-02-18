@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.8.2
+* Platform#setRendererRequirement() を二度以上呼び出すと例外が発生する問題を修正
+
 ## 1.8.1
 * MouseHandler が画面外でキャンセルされてしまう問題を修正
 

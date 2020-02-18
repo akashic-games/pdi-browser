@@ -124,8 +124,6 @@ export class Platform implements pdi.Platform {
 				this.containerController.pointEventTrigger.add(this._platformEventHandler.onPointEvent, this._platformEventHandler);
 			}
 		} else {
-			const surface = this.getPrimarySurface();
-			if (surface && ! surface.destroyed()) surface.destroy();
 			this.containerController.resetView(requirement);
 		}
 	}

@@ -117,8 +117,10 @@ export class ContainerController {
 			// Note: 操作プラグインに与えた view 情報を削除しないため、 inputHandlerLayer を使いまわしている
 			this.inputHandlerLayer.setViewSize({ width, height });
 			this.inputHandlerLayer.pointEventTrigger.removeAll();
-			this.inputHandlerLayer.view.removeChild(this.surface.canvas);
-			this.surface.destroy();
+			if (this.surface && ! this.surface.destroyed()) {
+				this.inputHandlerLayer.view.removeChild(this.surface.canvas);
+				this.surface.destroy();
+			}
 		}
 
 		// 入力受け付けレイヤー > 描画レイヤー
