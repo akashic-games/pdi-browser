@@ -82,8 +82,8 @@ export class HTMLAudioAsset extends g.AudioAsset {
 				error: () => {
 					this._detachAll(audio, altHandlers);
 					window.clearInterval(this._intervalId);
-					const altPath = g.PathUtil.addExtname(this.originalPath, "mp4");
-					startLoadingAudio(altPath, handlers);
+					this.path = g.PathUtil.addExtname(this.originalPath, "mp4");
+					startLoadingAudio(this.path, handlers);
 				}
 			};
 			startLoadingAudio(this.path, altHandlers);
