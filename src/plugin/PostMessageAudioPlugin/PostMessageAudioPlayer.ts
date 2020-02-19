@@ -33,11 +33,6 @@ export class PostMessageAudioPlayer extends g.AudioPlayer implements AudioPlayer
 		PostMessageAudioPlugin.send("akashic:AudioPlayer#changeVolume", {id: this.id, volume: this._calculateVolume()});
 	}
 
-	_changePlaybackRate(rate: number): void {
-		super._changePlaybackRate(rate);
-		PostMessageAudioPlugin.send("akashic:AudioPlayer#changePlaybackRate", {id: this.id, rate});
-	}
-
 	notifyMasterVolumeChanged(): void {
 		PostMessageAudioPlugin.send("akashic:AudioPlayer#changeVolume", {id: this.id, volume: this._calculateVolume()});
 	}
