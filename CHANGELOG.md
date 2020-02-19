@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.8.3
+* AudioAssetにクエリパラメータを付与できるように修正
+
 ## 1.8.2
 * Platform#setRendererRequirement() を二度以上呼び出すと例外が発生する問題を修正
 
