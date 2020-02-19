@@ -41,6 +41,22 @@ describe("WebAudioPlugin", function () {
             };
             asset._load(loader);
         });
+        it("オーディオアセットの拡張子がファイル名の末尾につく", function (done) {
+            var plugin = new WebAudioPlugin();
+            var system = new g.SoundAudioSystem("voice", game);
+            var query = "rev=1234";
+            var asset = plugin.createAsset("id", audioAssetPath + "?" + query, system, false, {});
+            var loader = {
+                _onAssetLoad: function (asset) {
+                    expect(asset.path).toBe(audioAssetPath + ".ogg?" + query);
+                    done();
+                },
+                _onAssetError: function (asset, error) {
+                    done.fail(error);
+                }
+            };
+            asset._load(loader);
+        });
         it("存在しないファイルを#loadするとonAssetErrorが呼ばれる", function (done) {
             var plugin = new WebAudioPlugin();
             var system = new g.SoundAudioSystem("voice", game);
@@ -74,10 +90,29 @@ describe("WebAudioPlugin", function () {
             };
             asset._load(loader);
         });
+        it("aacファイルが存在しない場合mp4ファイルが読み込まれる", function (done) {
+            var plugin = new WebAudioPlugin();
+            plugin.supportedFormats = ["aac"];
+            var system = new g.SoundAudioSystem("voice", game);
+            var audioAsset2Path = "/spec/fixtures/audio/bgm2"
+            var query = "rev=4321";
+            var asset = plugin.createAsset("id", audioAsset2Path + "?" + query, system, false, {});
+            var loader = {
+                _onAssetLoad: function (asset) {
+                    expect(asset.path).toBe(audioAsset2Path + ".mp4?" + query);
+                    done();
+                },
+                _onAssetError: function (asset, error) {
+                    done.fail(error);
+                }
+            };
+            asset._load(loader);
+        });
     });
     describe("WebAudioPlayer", function () {
         var seAssetPath = "/spec/fixtures/audio/se";
-        it("#playすると音を再生できる", function (done) {
+        // 音の再生検知はtestemでサポートされていないので無効にしておく
+        xit("#playすると音を再生できる", function (done) {
             var manager = new AudioManager();
             var plugin = new WebAudioPlugin();
             var system = new g.SoundAudioSystem("voice", game);

@@ -74,14 +74,16 @@ export class HTMLAudioAsset extends g.AudioAsset {
 
 		// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
 		// この対応を止める際には、HTMLAudioPluginのsupportedExtensionsからaacを除外する必要がある。
-		if (this.path.slice(-4) === ".aac" && HTMLAudioAsset.supportedFormats.indexOf("mp4") !== -1) {
+		const delIndex = this.path.indexOf("?");
+		const basePath = delIndex >= 0 ? this.path.substring(0, delIndex) : this.path;
+		if (basePath.slice(-4) === ".aac" && HTMLAudioAsset.supportedFormats.indexOf("mp4") !== -1) {
 			var altHandlers: MediaLoaderEventHandlerSet = {
 				success: handlers.success,
 				error: () => {
 					this._detachAll(audio, altHandlers);
 					window.clearInterval(this._intervalId);
-					const altPath = this.path.slice(0, this.path.length - 4) + ".mp4";
-					startLoadingAudio(altPath, handlers);
+					this.path = g.PathUtil.addExtname(this.originalPath, "mp4");
+					startLoadingAudio(this.path, handlers);
 				}
 			};
 			startLoadingAudio(this.path, altHandlers);
