@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.9.0
+* @akashic/amflowと@akashic/playlogのmajor更新に伴うバージョンアップ
+
 ## 1.8.3
 * AudioAssetにクエリパラメータを付与できるように修正
 

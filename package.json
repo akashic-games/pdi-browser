@@ -1,6 +1,6 @@
 {
   "name": "@akashic/pdi-browser",
-  "version": "1.8.3",
+  "version": "1.9.0",
   "description": "An akashic-pdi implementatation for Web browsers",
   "main": "index.js",
   "typings": "lib/full/index.d.ts",
@@ -40,9 +40,9 @@
     "index.js"
   ],
   "devDependencies": {
-    "@akashic/akashic-pdi": "~2.7.0",
-    "@akashic/amflow": "~0.3.1",
-    "@akashic/playlog": "~1.3.0",
+    "@akashic/akashic-pdi": "~2.8.0",
+    "@akashic/amflow": "~1.0.0",
+    "@akashic/playlog": "~2.0.0",
     "@types/node": "12.12.27",
     "browserify": "16.5.0",
     "cpx": "1.5.0",
@@ -63,7 +63,7 @@
     "uglify-js": "3.7.7"
   },
   "dependencies": {
-    "@akashic/akashic-engine": "~2.6.0"
+    "@akashic/akashic-engine": "~2.6.1"
   },
   "publishConfig": {
     "@akashic:registry": "https://registry.npmjs.org/"
