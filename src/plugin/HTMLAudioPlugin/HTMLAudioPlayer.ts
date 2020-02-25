@@ -112,6 +112,6 @@ export class HTMLAudioPlayer extends g.AudioPlayer implements AudioPlayer { priv
 	}
 
 	private _calculateVolume(): number {
-		return this._muted ? 0 : this.volume * this._system.volume * this._manager.getMasterVolume();
+		return this._system._muted ? 0 : this.volume * this._system.volume * this._manager.getMasterVolume();
 	}
 }
