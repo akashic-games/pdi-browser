@@ -1,4 +1,4 @@
-# CHANGELOGs
+# CHANGELOG
 
 ## 2.0.0-beta.2
 * 各AudioPlayerの `_calculateVolume()` の計算条件を `AudioPlayer#_muted` から `AudioSystem#_muted`へ変更
