@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 2.0.0-beta.2
+* 各AudioPlayerの `_calculateVolume()` の計算条件を `AudioPlayer#_muted` から `AudioSystem#_muted`へ変更
+* 未使用の `PostMessageAudioPlugin` 関連を削除
+
+## 2.0.0-beta.1
+* AudioAssetにクエリパラメータを付与可能とする対応
+* `Platform#setRendererRequirement()` を2度呼び出したとき、null参照によって例外が発生する問題を修正
+
 ## 1.8.1
 * MouseHandler が画面外でキャンセルされてしまう問題を修正
 
