@@ -169,8 +169,7 @@ function createGlyphLike(
 	surface?: g.SurfaceLike,
 	isSurfaceValid: boolean = !!surface
 ): g.GlyphLike {
-	const _atlas: null = null;
-	const obj = {
+	return {
 		code,
 		x,
 		y,
@@ -181,15 +180,8 @@ function createGlyphLike(
 		offsetY,
 		advanceWidth,
 		isSurfaceValid,
-		_atlas,
-		renderingWidth: (fontSize: number): number => {
-			if (!obj.width || !obj.height) {
-				return 0;
-			}
-			return (fontSize / obj.height) * obj.width;
-		}
+		_atlas: null
 	};
-	return obj;
 }
 
 export class GlyphFactory extends g.GlyphFactory {
