@@ -167,7 +167,7 @@ function createGlyphLike(
 	offsetY: number = 0,
 	advanceWidth: number = width,
 	surface?: g.SurfaceLike,
-	isSurfaceValid: boolean = !!surface
+	isSurfaceValid?: boolean
 ): g.GlyphLike {
 	return {
 		code,
