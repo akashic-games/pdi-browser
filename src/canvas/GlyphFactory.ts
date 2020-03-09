@@ -157,7 +157,7 @@ function fontFamily2CSSFontFamily(fontFamily: g.FontFamily|string|(g.FontFamily|
 	}
 }
 
-function createGlyphLike(
+function createGlyph(
 	code: number,
 	x: number,
 	y: number,
@@ -245,7 +245,7 @@ export class GlyphFactory extends g.GlyphFactory {
 			if (result) {
 				result.surface.destroy();
 			}
-			return createGlyphLike(code, 0, 0, 0, 0, 0, 0, glyphArea.advanceWidth, undefined, true);
+			return createGlyph(code, 0, 0, 0, 0, 0, 0, glyphArea.advanceWidth, undefined, true);
 		} else {
 			// g.GlyphLikeに格納するサーフェスを生成する。
 			// glyphAreaはサーフェスをキャッシュしないため、描画する内容を持つグリフに対しては
@@ -260,7 +260,7 @@ export class GlyphFactory extends g.GlyphFactory {
 					this.strokeColor, this.strokeOnly, this.fontWeight
 				);
 			}
-			return createGlyphLike(
+			return createGlyph(
 				code,
 				glyphArea.x, glyphArea.y,
 				glyphArea.width, glyphArea.height,
