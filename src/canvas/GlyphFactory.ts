@@ -157,6 +157,33 @@ function fontFamily2CSSFontFamily(fontFamily: g.FontFamily|string|(g.FontFamily|
 	}
 }
 
+function createGlyph(
+	code: number,
+	x: number,
+	y: number,
+	width: number,
+	height: number,
+	offsetX: number,
+	offsetY: number,
+	advanceWidth: number,
+	surface: g.SurfaceLike,
+	isSurfaceValid: boolean
+): g.GlyphLike {
+	return {
+		code,
+		x,
+		y,
+		width,
+		height,
+		surface,
+		offsetX,
+		offsetY,
+		advanceWidth,
+		isSurfaceValid,
+		_atlas: null
+	};
+}
+
 export class GlyphFactory extends g.GlyphFactory {
 	/**
 	 * 実行環境が描画可能な最小フォントサイズ
@@ -197,7 +224,7 @@ export class GlyphFactory extends g.GlyphFactory {
 		}
 	}
 
-	create(code: number): g.Glyph {
+	create(code: number): g.GlyphLike {
 		let result: GlyphRenderSurfaceResult;
 		let glyphArea = this._glyphAreas[code];
 
@@ -218,9 +245,9 @@ export class GlyphFactory extends g.GlyphFactory {
 			if (result) {
 				result.surface.destroy();
 			}
-			return new g.Glyph(code, 0, 0, 0, 0, 0, 0, glyphArea.advanceWidth, undefined, true);
+			return createGlyph(code, 0, 0, 0, 0, 0, 0, glyphArea.advanceWidth, undefined, true);
 		} else {
-			// g.Glyphに格納するサーフェスを生成する。
+			// g.GlyphLikeに格納するサーフェスを生成する。
 			// glyphAreaはサーフェスをキャッシュしないため、描画する内容を持つグリフに対しては
 			// サーフェスを生成する。もし前段でcalcGlyphArea()のためのサーフェスを生成して
 			// いればここでは生成せずにそれを利用する。
@@ -233,7 +260,7 @@ export class GlyphFactory extends g.GlyphFactory {
 					this.strokeColor, this.strokeOnly, this.fontWeight
 				);
 			}
-			return new g.Glyph(
+			return createGlyph(
 				code,
 				glyphArea.x, glyphArea.y,
 				glyphArea.width, glyphArea.height,
