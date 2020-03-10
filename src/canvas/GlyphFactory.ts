@@ -163,11 +163,11 @@ function createGlyph(
 	y: number,
 	width: number,
 	height: number,
-	offsetX: number = 0,
-	offsetY: number = 0,
-	advanceWidth: number = width,
-	surface?: g.SurfaceLike,
-	isSurfaceValid?: boolean
+	offsetX: number,
+	offsetY: number,
+	advanceWidth: number,
+	surface: g.SurfaceLike,
+	isSurfaceValid: boolean
 ): g.GlyphLike {
 	return {
 		code,

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.0.0-beta.3
+* `g.Glyph` が deprecated になったので、`g.GlyphLike` に置き換える対応
+
 ## 2.0.0-beta.2
 * 各AudioPlayerの `_calculateVolume()` の計算条件を `AudioPlayer#_muted` から `AudioSystem#_muted`へ変更
 * 未使用の `PostMessageAudioPlugin` 関連を削除
