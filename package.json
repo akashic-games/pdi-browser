@@ -37,7 +37,7 @@
     "@akashic/amflow": "~1.0.0",
     "@akashic/playlog": "~2.0.0",
     "@types/node": "9.6.55",
-    "browserify": "16.5.0",
+    "browserify": "16.5.1",
     "es5-shim": "4.5.14",
     "exorcist": "1.0.1",
     "glob": "7.1.6",
