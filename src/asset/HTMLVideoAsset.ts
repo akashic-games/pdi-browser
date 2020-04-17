@@ -4,7 +4,7 @@ import {HTMLVideoPlayer} from "./HTMLVideoPlayer";
 class VideoAssetSurface extends g.Surface {
 
 	constructor(width: number, height: number, drawable: HTMLVideoElement) {
-		super(width, height, drawable, true);
+		super(width, height, drawable);
 	}
 
 	renderer(): g.Renderer {

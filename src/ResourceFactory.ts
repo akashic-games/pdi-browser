@@ -72,9 +72,9 @@ export class ResourceFactory extends g.ResourceFactory {
 		return this._surfaceFactory.createBackSurface(width, height, this._rendererCandidates);
 	}
 
-	createGlyphFactory(fontFamily: g.FontFamily|string|(g.FontFamily|string)[], fontSize: number, baseline?: number,
+	createGlyphFactory(fontFamily: string|string[], fontSize: number, baseline?: number,
 	                   fontColor?: string, strokeWidth?: number, strokeColor?: string, strokeOnly?: boolean,
-	                   fontWeight?: g.FontWeight): g.GlyphFactory {
+	                   fontWeight?: g.FontWeightString): g.GlyphFactory {
 		return new GlyphFactory(fontFamily, fontSize, baseline, fontColor,
 		                        strokeWidth, strokeColor, strokeOnly, fontWeight);
 	}

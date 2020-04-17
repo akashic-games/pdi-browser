@@ -2,6 +2,20 @@ import * as g from "@akashic/akashic-engine";
 import { Context2DSurface } from "./Context2DSurface";
 import { CanvasSurfaceContext } from "./CanvasSurfaceContext";
 
+const compositeOperationTable: { [P in g.CompositeOperationString]: string } = {
+	"source-over": "source-over",
+	"source-atop": "source-atop",
+	"lighter": "lighter",
+	"copy": "copy",
+	"experimental-source-in": "source-in",
+	"experimental-source-out": "source-out",
+	"experimental-destination-atop": "destination-atop",
+	"experimental-destination-in": "destination-in",
+	"destination-out": "destination-out",
+	"destination-over": "destination-over",
+	"xor": "xor"
+};
+
 export class Context2DRenderer extends g.Renderer {
 	private surface: Context2DSurface;
 	private context: CanvasSurfaceContext;
@@ -136,44 +150,8 @@ export class Context2DRenderer extends g.Renderer {
 		this.context.fillRect(x, y, width, height);
 	}
 
-	setCompositeOperation(operation: g.CompositeOperation): void {
-		var operationText: string;
-		switch (operation) {
-		case g.CompositeOperation.SourceAtop:
-			operationText = "source-atop";
-			break;
-		case g.CompositeOperation.Lighter:
-			operationText = "lighter";
-			break;
-		case g.CompositeOperation.Copy:
-			operationText = "copy";
-			break;
-		case g.CompositeOperation.ExperimentalSourceIn:
-			operationText = "source-in";
-			break;
-		case g.CompositeOperation.ExperimentalSourceOut:
-			operationText = "source-out";
-			break;
-		case g.CompositeOperation.ExperimentalDestinationAtop:
-			operationText = "destination-atop";
-			break;
-		case g.CompositeOperation.ExperimentalDestinationIn:
-			operationText = "destination-in";
-			break;
-		case g.CompositeOperation.DestinationOut:
-			operationText = "destination-out";
-			break;
-		case g.CompositeOperation.DestinationOver:
-			operationText = "destination-over";
-			break;
-		case g.CompositeOperation.Xor:
-			operationText = "xor";
-			break;
-		default:
-			operationText = "source-over";
-			break;
-		}
-		this.context.globalCompositeOperation = operationText;
+	setCompositeOperation(operation: g.CompositeOperationString): void {
+		this.context.globalCompositeOperation = compositeOperationTable[operation] || "source-over";
 	}
 
 	setOpacity(opacity: number): void {

@@ -53,7 +53,7 @@ export class WebGLRenderer extends g.Renderer {
 		this.currentState().globalAlpha *= opacity;
 	}
 
-	setCompositeOperation(operation: g.CompositeOperation): void {
+	setCompositeOperation(operation: g.CompositeOperationString): void {
 		this.currentState().globalCompositeOperation = operation;
 	}
 
