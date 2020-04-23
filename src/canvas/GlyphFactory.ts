@@ -173,9 +173,9 @@ export class GlyphFactory extends g.GlyphFactory {
 			: fontFamily.map(quoteIfNonGeneric).join(",");
 
 		// Akashicエンジンは指定されたフォントに利用可能なものが見つからない時
-		// `g.FontFamily.SansSerif` を利用する、と仕様して定められている。
+		// `"sans-serif"` を利用する、と仕様して定められている。
 		if (this._cssFontFamily.indexOf("sans-serif") === -1) {
-			this._cssFontFamily += "," + "sans-serif";
+			this._cssFontFamily += ",sans-serif";
 		}
 
 		// `this.fontSize`の大きさの文字を描画するためのサーフェスを生成する。
