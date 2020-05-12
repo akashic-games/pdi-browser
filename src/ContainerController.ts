@@ -34,7 +34,7 @@ export class ContainerController {
 	 */
 	useResizeForScaling: boolean;
 
-	pointEventTrigger: g.Trigger<pdi.PointEvent>;
+	pointEventTrigger: g.Trigger<g.PlatformPointEvent>;
 
 	private _rendererReq: pdi.RendererRequirement;
 	private _disablePreventDefault: boolean;
@@ -45,7 +45,7 @@ export class ContainerController {
 		this.inputHandlerLayer = null;
 		this.rootView = null;
 		this.useResizeForScaling = false;
-		this.pointEventTrigger = new g.Trigger<pdi.PointEvent>();
+		this.pointEventTrigger = new g.Trigger<g.PlatformPointEvent>();
 		this._rendererReq = null;
 		this._disablePreventDefault = false;
 		this.resourceFactory = resourceFactory;

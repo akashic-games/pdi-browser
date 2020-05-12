@@ -3,7 +3,7 @@ import { AffineTransformer } from "../AffineTransformer";
 
 export class WebGLRenderingState {
 	globalAlpha: number;
-	globalCompositeOperation: g.CompositeOperation;
+	globalCompositeOperation: g.CompositeOperationString;
 	transformer: AffineTransformer;
 	shaderProgram: g.ShaderProgram;
 
@@ -15,7 +15,7 @@ export class WebGLRenderingState {
 			this.shaderProgram = rhs.shaderProgram;
 		} else {
 			this.globalAlpha = 1.0;
-			this.globalCompositeOperation = g.CompositeOperation.SourceOver;
+			this.globalCompositeOperation = "source-over";
 			this.transformer = new AffineTransformer();
 			this.shaderProgram = null;
 		}
