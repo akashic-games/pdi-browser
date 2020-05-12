@@ -1,6 +1,5 @@
 "use strict";
 import * as g from "@akashic/akashic-engine";
-import * as pdi from "@akashic/akashic-pdi";
 import { OffsetPosition } from "./OffsetPosition";
 
 export interface Scale {
