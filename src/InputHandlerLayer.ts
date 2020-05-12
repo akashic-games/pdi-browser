@@ -20,7 +20,7 @@ export class InputHandlerLayer {
 	view: HTMLDivElement;
 
 	// DOMで起きたイベントを通知するTrigger
-	pointEventTrigger: g.Trigger<pdi.PointEvent>;
+	pointEventTrigger: g.Trigger<g.PlatformPointEvent>;
 
 	_inputHandler: InputAbstractHandler;
 	private _disablePreventDefault: boolean;
@@ -37,7 +37,7 @@ export class InputHandlerLayer {
 	constructor(param: InputHandlerLayerParameterObject) {
 		this.view = this._createInputView(param.width, param.height);
 		this._inputHandler = undefined;
-		this.pointEventTrigger = new g.Trigger<pdi.PointEvent>();
+		this.pointEventTrigger = new g.Trigger<g.PlatformPointEvent>();
 
 		this._disablePreventDefault = !!param.disablePreventDefault;
 	}
@@ -46,7 +46,7 @@ export class InputHandlerLayer {
 	enablePointerEvent(): void {
 		this._inputHandler = new TouchHandler(this.view, this._disablePreventDefault);
 		// 各種イベントのTrigger
-		this._inputHandler.pointTrigger.add((e: pdi.PointEvent) => {
+		this._inputHandler.pointTrigger.add((e: g.PlatformPointEvent) => {
 			this.pointEventTrigger.fire(e);
 		});
 		this._inputHandler.start();

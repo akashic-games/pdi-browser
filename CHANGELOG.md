@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.0.0-beta.4
+* @akashic/akashic-engine@3.0.0-beta.18 までに追従
+
 ## 2.0.0-beta.3
 * `g.Glyph` が deprecated になったので、`g.GlyphLike` に置き換える対応
 
