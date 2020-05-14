@@ -1,10 +1,10 @@
 import * as g from "@akashic/akashic-engine";
+import { AffineTransformer } from "../AffineTransformer";
+import { WebGLBackSurface } from "./WebGLBackSurface";
+import { WebGLPrimarySurface } from "./WebGLPrimarySurface";
+import { WebGLRenderingState } from "./WebGLRenderingState";
 import { WebGLShaderProgram } from "./WebGLShaderProgram";
 import { WebGLTextureAtlas } from "./WebGLTextureAtlas";
-import { WebGLRenderingState } from "./WebGLRenderingState";
-import { AffineTransformer } from "../AffineTransformer";
-import { WebGLPrimarySurface } from "./WebGLPrimarySurface";
-import { WebGLBackSurface } from "./WebGLBackSurface";
 
 export interface WebGLSurfaceTexture {
 	texture: WebGLTexture;
@@ -52,7 +52,7 @@ export class WebGLSharedObject {
 		const surface = new WebGLPrimarySurface(this, width, height);
 		const context = surface.canvas.getContext("webgl", { depth: false, preserveDrawingBuffer: true });
 		if (!context) {
-			throw g.ExceptionFactory.createAssertionError("WebGLSharedObject#constructor: could not initialize WebGLRenderingContext");
+			throw new Error("WebGLSharedObject#constructor: could not initialize WebGLRenderingContext");
 		}
 
 		this._surface = surface;
@@ -208,7 +208,7 @@ export class WebGLSharedObject {
 		}
 	}
 
-	makeTextureForSurface(surface: g.Surface): void {
+	makeTextureForSurface(surface: g.SurfaceLike): void {
 		this._textureAtlas.makeTextureForSurface(this, surface);
 	}
 
@@ -225,7 +225,7 @@ export class WebGLSharedObject {
 		this._context.bindTexture(this._context.TEXTURE_2D, texture);
 
 		if (image instanceof HTMLVideoElement) {
-			throw g.ExceptionFactory.createAssertionError("WebGLRenderer#assignTexture: HTMLVideoElement is not supported.");
+			throw new Error("WebGLRenderer#assignTexture: HTMLVideoElement is not supported.");
 		}
 
 		this._context.texSubImage2D(this._context.TEXTURE_2D, 0, x, y, this._context.RGBA, this._context.UNSIGNED_BYTE, image);

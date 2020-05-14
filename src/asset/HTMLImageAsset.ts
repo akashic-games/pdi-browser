@@ -1,12 +1,11 @@
 import * as g from "@akashic/akashic-engine";
+import { Surface } from "../Surface";
+import { ExceptionFactory } from "../utils/ExceptionFactory";
+import { Asset } from "./Asset";
 
-export class ImageAssetSurface extends g.Surface {
-	constructor(width: number, height: number, drawable: any) {
-		super(width, height, drawable);
-	}
-
-	renderer(): g.Renderer {
-		throw g.ExceptionFactory.createAssertionError("ImageAssetSurface cannot be rendered.");
+export class ImageAssetSurface extends Surface {
+	renderer(): g.RendererLike {
+		throw new Error("ImageAssetSurface cannot be rendered.");
 	}
 
 	isPlaying(): boolean {
@@ -14,14 +13,24 @@ export class ImageAssetSurface extends g.Surface {
 	}
 }
 
-export class HTMLImageAsset extends g.ImageAsset {
+export class HTMLImageAsset extends Asset implements g.ImageAssetLike {
+	type: "image" = "image";
+	width: number;
+	height: number;
+	hint: g.ImageAssetHint;
 	data: any;
-	_surface: g.Surface;
+	_surface: ImageAssetSurface;
 
 	constructor(id: string, path: string, width: number, height: number) {
-		super(id, path, width, height);
+		super(id, path);
+		this.width = width;
+		this.height = height;
 		this.data = undefined;
 		this._surface = undefined;
+	}
+
+	initialize(hint: g.ImageAssetHint): void {
+		this.hint = hint;
 	}
 
 	destroy(): void {
@@ -34,13 +43,13 @@ export class HTMLImageAsset extends g.ImageAsset {
 	}
 
 	_load(loader: g.AssetLoadHandler): void {
-		var image = new Image();
+		const image = new Image();
 
 		if (this.hint && this.hint.untainted) {
 			image.crossOrigin = "anonymous";
 		}
 		image.onerror = () => {
-			loader._onAssetError(this, g.ExceptionFactory.createAssetLoadError("HTMLImageAsset unknown loading error"));
+			loader._onAssetError(this, ExceptionFactory.createAssetLoadError("HTMLImageAsset unknown loading error"));
 		};
 		image.onload = () => {
 			this.data = image;
@@ -49,9 +58,9 @@ export class HTMLImageAsset extends g.ImageAsset {
 		image.src = this.path;
 	}
 
-	asSurface(): g.Surface {
+	asSurface(): ImageAssetSurface {
 		if (!this.data) {
-			throw g.ExceptionFactory.createAssertionError("ImageAssetImpl#asSurface: not yet loaded.");
+			throw new Error("ImageAssetImpl#asSurface: not yet loaded.");
 		}
 		if (this._surface) {
 			return this._surface;

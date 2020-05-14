@@ -152,22 +152,45 @@ function createGlyph(
 	};
 }
 
-export class GlyphFactory extends g.GlyphFactory {
+export class GlyphFactory implements g.GlyphFactoryLike {
 	/**
 	 * 実行環境が描画可能な最小フォントサイズ
 	 */
 	static _environmentMinimumFontSize: number;
 
-	_glyphAreas: {[key: number]: g.GlyphArea};
+	fontFamily: string | string[];
+	fontSize: number;
+	baselineHeight: number;
+	fontColor: string;
+	fontWeight: g.FontWeightString;
+	strokeWidth: number;
+	strokeColor: string;
+	strokeOnly: boolean;
+
+	_glyphAreas: {[key: number]: g.GlyphArea} = Object.create(null);
 	_marginW: number;
 	_marginH: number;
 
 	_cssFontFamily: string;
 
-	constructor(fontFamily: string|string[], fontSize: number, baselineHeight?: number, fontColor?: string,
-	            strokeWidth?: number, strokeColor?: string, strokeOnly?: boolean, fontWeight?: g.FontWeightString) {
-		super(fontFamily, fontSize, baselineHeight, fontColor, strokeWidth, strokeColor, strokeOnly, fontWeight);
-		this._glyphAreas = {};
+	constructor(
+		fontFamily: string|string[],
+		fontSize: number, baselineHeight?: number,
+		fontColor?: string,
+		strokeWidth?: number,
+		strokeColor?: string,
+		strokeOnly?: boolean,
+		fontWeight?: g.FontWeightString
+	) {
+		this.fontFamily = fontFamily;
+		this.fontSize = fontSize;
+		this.baselineHeight = baselineHeight;
+		this.fontColor = fontColor;
+		this.strokeWidth = strokeWidth;
+		this.strokeColor = strokeColor;
+		this.strokeOnly = strokeOnly;
+		this.fontWeight = fontWeight;
+
 		this._cssFontFamily = (typeof fontFamily === "string")
 			? quoteIfNonGeneric(fontFamily)
 			: fontFamily.map(quoteIfNonGeneric).join(",");

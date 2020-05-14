@@ -1,8 +1,8 @@
 node_modules
-script/test-bundle.js
 .DS_Store*
-npm-debug.log
+*.log
 *.iml
+*.tgz
 coverage
 junitresults.xml
 build

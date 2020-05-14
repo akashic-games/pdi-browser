@@ -1,12 +1,19 @@
 import * as g from "@akashic/akashic-engine";
+import { AudioAsset } from "../../asset/AudioAsset";
+import { ExceptionFactory } from "../../utils/ExceptionFactory";
 import { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
 
-export class ProxyAudioAsset extends g.AudioAsset {
+export class ProxyAudioAsset extends AudioAsset {
 	private _handlerSet: ProxyAudioHandlerSet;
 
 	constructor(
-		handlerSet: ProxyAudioHandlerSet, id: string, assetPath: string,
-		duration: number, system: g.AudioSystem, loop: boolean, hint: g.AudioAssetHint
+		handlerSet: ProxyAudioHandlerSet,
+		id: string,
+		assetPath: string,
+		duration: number,
+		system: g.AudioSystemLike,
+		loop: boolean,
+		hint: g.AudioAssetHint
 	) {
 		super(id, assetPath, duration, system, loop, hint);
 		this._handlerSet = handlerSet;
@@ -26,7 +33,7 @@ export class ProxyAudioAsset extends g.AudioAsset {
 			hint: this.hint
 		}, (err?: any) => {
 			if (err) {
-				loader._onAssetError(this, g.ExceptionFactory.createAssetLoadError(err));
+				loader._onAssetError(this, ExceptionFactory.createAssetLoadError(err));
 			} else {
 				loader._onAssetLoad(this);
 			}

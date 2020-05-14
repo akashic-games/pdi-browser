@@ -4,14 +4,14 @@ import { AudioPlayer } from "../AudioPlayer";
 import { ProxyAudioAsset } from "./ProxyAudioAsset";
 import { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
 
-export class ProxyAudioPlayer extends g.AudioPlayer implements AudioPlayer {
+export class ProxyAudioPlayer extends AudioPlayer {
 	private static _audioPlayerIdCounter: number = 0;
 
 	private _audioPlayerId: string | null;
 	private _handlerSet: ProxyAudioHandlerSet;
 	private _manager: AudioManager;
 
-	constructor(handlerSet: ProxyAudioHandlerSet, system: g.AudioSystem, manager: AudioManager) {
+	constructor(handlerSet: ProxyAudioHandlerSet, system: g.AudioSystemLike, manager: AudioManager) {
 		super(system);
 		this._audioPlayerId = null;
 		this._handlerSet = handlerSet;

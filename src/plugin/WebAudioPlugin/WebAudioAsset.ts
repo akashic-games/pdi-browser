@@ -1,8 +1,10 @@
 import * as g from "@akashic/akashic-engine";
+import { AudioAsset } from "../../asset/AudioAsset";
+import { ExceptionFactory } from "../../utils/ExceptionFactory";
 import { XHRLoader } from "../../utils/XHRLoader";
 import * as helper from "./WebAudioHelper";
 
-export class WebAudioAsset extends g.AudioAsset {
+export class WebAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[] = [];
 
@@ -19,7 +21,7 @@ export class WebAudioAsset extends g.AudioAsset {
 			loader._onAssetLoad(this);
 		};
 		var errorHandler = () => {
-			loader._onAssetError(this, g.ExceptionFactory.createAssetLoadError("WebAudioAsset unknown loading error"));
+			loader._onAssetError(this, ExceptionFactory.createAssetLoadError("WebAudioAsset unknown loading error"));
 		};
 
 		var onLoadArrayBufferHandler = (response: any) => {
@@ -32,7 +34,7 @@ export class WebAudioAsset extends g.AudioAsset {
 		};
 
 		var xhrLoader = new XHRLoader();
-		var loadArrayBuffer = (path: string, onSuccess: (response: any) => void, onFailed: (err: any) => void) => {
+		var loadArrayBuffer = (path: string, onSuccess: (response: any) => void, onFailed: (err: g.AssetLoadError) => void) => {
 			xhrLoader.getArrayBuffer(path, (error, response) => {
 				error ? onFailed(error) : onSuccess(response);
 			});
@@ -43,8 +45,8 @@ export class WebAudioAsset extends g.AudioAsset {
 		if (basePath.slice(-4) === ".aac") {
 			// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
 			// この対応を止める際には、WebAudioPluginのsupportedExtensionsからaacを除外する必要がある。
-			loadArrayBuffer(this.path, onLoadArrayBufferHandler, (error) => {
-				const altPath = g.PathUtil.addExtname(this.originalPath, "mp4");
+			loadArrayBuffer(this.path, onLoadArrayBufferHandler, _error => {
+				const altPath = g.PathUtil.addExtname(this.originalPath, "mp4"); // TODO: pdi-browser 側で独自の実装を持つようにする
 				loadArrayBuffer(altPath, (response) => {
 					this.path = altPath;
 					onLoadArrayBufferHandler(response);
@@ -57,10 +59,10 @@ export class WebAudioAsset extends g.AudioAsset {
 
 	_assetPathFilter(path: string): string {
 		if (WebAudioAsset.supportedFormats.indexOf("ogg") !== -1) {
-			return g.PathUtil.addExtname(path, "ogg");
+			return g.PathUtil.addExtname(path, "ogg"); // TODO: pdi-browser 側で独自の実装を持つようにする
 		}
 		if (WebAudioAsset.supportedFormats.indexOf("aac") !== -1) {
-			return g.PathUtil.addExtname(path, "aac");
+			return g.PathUtil.addExtname(path, "aac"); // TODO: pdi-browser 側で独自の実装を持つようにする
 		}
 		// ここで検出されるのは最初にアクセスを試みるオーディオアセットのファイルパスなので、
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない

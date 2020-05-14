@@ -1,5 +1,6 @@
 "use strict";
 import * as g from "@akashic/akashic-engine";
+import { ExceptionFactory } from "./ExceptionFactory";
 import { XHRLoaderOption } from "./XHRLoaderOption";
 export interface XHRRequestObject {
 	url: string;
@@ -35,7 +36,7 @@ export class XHRLoader {
 		request.responseType = requestObject.responseType;
 		request.timeout = this.timeout;
 		request.addEventListener("timeout", () => {
-			callback(g.ExceptionFactory.createAssetLoadError("loading timeout"));
+			callback(ExceptionFactory.createAssetLoadError("loading timeout"));
 		}, false);
 		request.addEventListener("load", () => {
 			if (request.status >= 200 && request.status < 300) {
@@ -43,11 +44,11 @@ export class XHRLoader {
 				var response = requestObject.responseType === "text" ? request.responseText : request.response;
 				callback(null, response);
 			} else {
-				callback(g.ExceptionFactory.createAssetLoadError("loading error. status: " + request.status));
+				callback(ExceptionFactory.createAssetLoadError("loading error. status: " + request.status));
 			}
 		}, false);
 		request.addEventListener("error", () => {
-			callback(g.ExceptionFactory.createAssetLoadError("loading error. status: " + request.status));
+			callback(ExceptionFactory.createAssetLoadError("loading error. status: " + request.status));
 		}, false);
 		request.send();
 	}
