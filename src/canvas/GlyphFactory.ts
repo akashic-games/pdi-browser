@@ -175,12 +175,13 @@ export class GlyphFactory implements g.GlyphFactoryLike {
 
 	constructor(
 		fontFamily: string|string[],
-		fontSize: number, baselineHeight?: number,
-		fontColor?: string,
-		strokeWidth?: number,
-		strokeColor?: string,
-		strokeOnly?: boolean,
-		fontWeight?: g.FontWeightString
+		fontSize: number,
+		baselineHeight: number = fontSize,
+		fontColor: string = "black",
+		strokeWidth: number = 0,
+		strokeColor: string = "black",
+		strokeOnly: boolean = false,
+		fontWeight: g.FontWeightString = "normal"
 	) {
 		this.fontFamily = fontFamily;
 		this.fontSize = fontSize;
