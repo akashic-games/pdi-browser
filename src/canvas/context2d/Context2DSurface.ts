@@ -1,9 +1,9 @@
-import * as g from "@akashic/akashic-engine";
-import { Context2DRenderer } from "./Context2DRenderer";
-import { CanvasSurfaceContext } from "./CanvasSurfaceContext";
 import { CanvasSurface } from "../CanvasSurface";
+import { CanvasSurfaceContext } from "./CanvasSurfaceContext";
+import { Context2DRenderer } from "./Context2DRenderer";
 
 export class Context2DSurface extends CanvasSurface {
+	protected _renderer: Context2DRenderer;
 	protected _context: CanvasSurfaceContext;
 
 	context(): CanvasSurfaceContext {
@@ -13,7 +13,7 @@ export class Context2DSurface extends CanvasSurface {
 		return this._context;
 	}
 
-	renderer(): g.Renderer {
+	renderer(): Context2DRenderer {
 		if (!this._renderer) {
 			this._renderer = new Context2DRenderer(this);
 		}

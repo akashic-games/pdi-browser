@@ -1,14 +1,15 @@
 import * as g from "@akashic/akashic-engine";
-import {HTMLVideoPlayer} from "./HTMLVideoPlayer";
+import { Surface } from "../Surface";
+import { Asset } from "./Asset";
+import { HTMLVideoPlayer } from "./HTMLVideoPlayer";
 
-class VideoAssetSurface extends g.Surface {
-
+class VideoAssetSurface extends Surface {
 	constructor(width: number, height: number, drawable: HTMLVideoElement) {
 		super(width, height, drawable);
 	}
 
-	renderer(): g.Renderer {
-		throw g.ExceptionFactory.createAssertionError("VideoAssetSurface cannot be rendered.");
+	renderer(): g.RendererLike {
+		throw new Error("VideoAssetSurface cannot be rendered.");
 	}
 
 	isPlaying(): boolean {
@@ -16,14 +17,38 @@ class VideoAssetSurface extends g.Surface {
 	}
 }
 
-export class HTMLVideoAsset extends g.VideoAsset {
-	_player: g.VideoPlayer;
-	_surface: g.Surface;
+export class HTMLVideoAsset extends Asset implements g.VideoAssetLike {
+	type: "video" = "video";
+	width: number;
+	height: number;
+	realWidth: number;
+	realHeight: number;
+	_system: g.VideoSystemLike;
+	_loop: boolean;
+	_useRealSize: boolean;
+	_player: HTMLVideoPlayer;
+	_surface: VideoAssetSurface;
 
-	constructor(id: string, assetPath: string, width: number, height: number, system: g.VideoSystem, loop: boolean, useRealSize: boolean) {
-		super(id, assetPath, width, height, system, loop, useRealSize);
+	constructor(id: string, assetPath: string, width: number, height: number, system: g.VideoSystemLike, loop: boolean, useRealSize: boolean) {
+		super(id, assetPath);
+		this.width = width;
+		this.height = height;
+		this.realWidth = 0;
+		this.realHeight = 0;
+		this._system = system;
+		this._loop = loop;
+		this._useRealSize = useRealSize;
 		this._player = new HTMLVideoPlayer();
 		this._surface = new VideoAssetSurface(width, height, null);
+	}
+
+	play(_loop?: boolean): g.VideoPlayerLike {
+		this.getPlayer().play(this);
+		return this.getPlayer();
+	}
+
+	stop(): void {
+		this.getPlayer().stop();
 	}
 
 	inUse(): boolean {
@@ -36,11 +61,11 @@ export class HTMLVideoAsset extends g.VideoAsset {
 		}, 0);
 	}
 
-	getPlayer(): g.VideoPlayer {
+	getPlayer(): HTMLVideoPlayer {
 		return this._player;
 	}
 
-	asSurface(): g.Surface {
+	asSurface(): VideoAssetSurface {
 		return this._surface;
 	}
 }

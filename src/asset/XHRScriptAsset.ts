@@ -1,14 +1,13 @@
 import * as g from "@akashic/akashic-engine";
 import { XHRLoader } from "../utils/XHRLoader";
+import { Asset } from "./Asset";
 
-export class XHRScriptAsset extends g.ScriptAsset {
+export class XHRScriptAsset extends Asset implements g.ScriptAssetLike {
 	static PRE_SCRIPT: string = "(function(exports, require, module, __filename, __dirname) {";
 	static POST_SCRIPT: string = "\n})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);";
 
-	constructor(id: string, path: string) {
-		super(id, path);
-		this.script = undefined;
-	}
+	type: "script" = "script";
+	script: string | undefined;
 
 	_load(handler: g.AssetLoadHandler): void {
 		var loader = new XHRLoader();
@@ -28,6 +27,11 @@ export class XHRScriptAsset extends g.ScriptAsset {
 		var func = this._wrap();
 		func(execEnv);
 		return execEnv.module.exports;
+	}
+
+	destroy(): void {
+		this.script = undefined;
+		super.destroy();
 	}
 
 	_wrap(): Function {

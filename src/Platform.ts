@@ -94,12 +94,12 @@ export class Platform implements pdi.Platform {
 	loadGameConfiguration(url: string, callback: (err: any, configuration: any) => void): void {
 		var a = new XHRTextAsset("(game.json)", url);
 		a._load({
-			_onAssetLoad: (asset: g.Asset) => { callback(null, JSON.parse(a.data)); },
-			_onAssetError: (asset: g.Asset, error: any) => { callback(error, null); }
+			_onAssetLoad: _asset => { callback(null, JSON.parse(a.data)); },
+			_onAssetError: (_asset, error) => { callback(error, null); }
 		});
 	}
 
-	getResourceFactory(): g.ResourceFactory {
+	getResourceFactory(): ResourceFactory {
 		return this._resourceFactory;
 	}
 
@@ -128,7 +128,7 @@ export class Platform implements pdi.Platform {
 		}
 	}
 
-	getPrimarySurface(): g.Surface {
+	getPrimarySurface(): g.SurfaceLike {
 		return this.containerController.surface;
 	}
 

@@ -1,10 +1,12 @@
 "use strict";
 import * as g from "@akashic/akashic-engine";
+import { AudioAsset } from "../../asset/AudioAsset";
+import { AudioManager } from "../../AudioManager";
+import { AudioPlayer } from "../AudioPlayer";
 import { AudioPlugin } from "../AudioPlugin";
 import { WebAudioAsset } from "./WebAudioAsset";
-import { WebAudioPlayer } from "./WebAudioPlayer";
-import { AudioManager } from "../../AudioManager";
 import * as autoPlayHelper from "./WebAudioAutoplayHelper";
+import { WebAudioPlayer } from "./WebAudioPlayer";
 
 export class WebAudioPlugin implements AudioPlugin {
 	// AudioContextが存在するかどうかで判定する
@@ -25,26 +27,28 @@ export class WebAudioPlugin implements AudioPlugin {
 		return this._supportedFormats;
 	}
 
-	// TSLintのバグ - setterはreturn typeを書くとコンパイルエラーとなる
-	/* tslint:disable:typedef */
-	// WebAudioAssetへサポートしているフォーマット一覧を渡す
 	set supportedFormats(supportedFormats: string[]) {
 		this._supportedFormats = supportedFormats;
 		WebAudioAsset.supportedFormats = supportedFormats;
 	}
-
-	/* tslint:enable:typedef */
 
 	constructor() {
 		this.supportedFormats = this._detectSupportedFormats();
 		autoPlayHelper.setupChromeMEIWorkaround();
 	}
 
-	createAsset(id: string, assetPath: string, duration: number, system: g.AudioSystem, loop: boolean, hint: g.AudioAssetHint): g.AudioAsset {
+	createAsset(
+		id: string,
+		assetPath: string,
+		duration: number,
+		system: g.AudioSystemLike,
+		loop: boolean,
+		hint: g.AudioAssetHint
+	): AudioAsset {
 		return new WebAudioAsset(id, assetPath, duration, system, loop, hint);
 	}
 
-	createPlayer(system: g.AudioSystem, manager: AudioManager): g.AudioPlayer {
+	createPlayer(system: g.AudioSystemLike, manager: AudioManager): AudioPlayer {
 		return new WebAudioPlayer(system, manager);
 	}
 

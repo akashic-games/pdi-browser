@@ -77,7 +77,7 @@ export class ContainerController {
 		this._appendToRootView(this.rootView);
 	}
 
-	getRenderer(): g.Renderer {
+	getRenderer(): g.RendererLike {
 		if (!this.surface) {
 			throw new Error("this container has no surface");
 		}

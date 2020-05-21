@@ -176,7 +176,7 @@ export class WebGLShaderProgram {
 				}
 				const update = this._uniformSetterTable[type];
 				if (!update) {
-					throw g.ExceptionFactory.createAssertionError(
+					throw new Error(
 						"WebGLShaderProgram#initializeUniforms: Uniform type '" + type + "' is not supported."
 					);
 				}

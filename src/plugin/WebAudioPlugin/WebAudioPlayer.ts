@@ -1,10 +1,10 @@
 import * as g from "@akashic/akashic-engine";
-import { WebAudioAsset } from "./WebAudioAsset";
 import { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
+import { WebAudioAsset } from "./WebAudioAsset";
 import * as helper from "./WebAudioHelper";
 
-export class WebAudioPlayer extends g.AudioPlayer implements AudioPlayer {
+export class WebAudioPlayer extends AudioPlayer {
 	_endedEventHandler: () => void;
 	private _gainNode: GainNode;
 	private _sourceNode: AudioBufferSourceNode;
@@ -12,7 +12,7 @@ export class WebAudioPlayer extends g.AudioPlayer implements AudioPlayer {
 	private _manager: AudioManager;
 	private _dummyDurationWaitTimer: any;
 
-	constructor(system: g.AudioSystem, manager: AudioManager) {
+	constructor(system: g.AudioSystemLike, manager: AudioManager) {
 		super(system);
 		this._audioContext = helper.getAudioContext();
 		this._manager = manager;
