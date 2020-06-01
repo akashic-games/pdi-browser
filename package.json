@@ -57,10 +57,10 @@
     "remark-cli": "5.0.0",
     "remark-lint": "6.0.6",
     "shx": "0.3.2",
-    "testem": "3.0.4",
+    "testem": "3.1.0",
     "tslint": "5.20.1",
-    "typescript": "3.8.3",
-    "uglify-js": "3.8.1"
+    "typescript": "3.9.3",
+    "uglify-js": "3.9.4"
   },
   "dependencies": {
     "@akashic/akashic-engine": "~2.6.1"
