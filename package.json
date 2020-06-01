@@ -43,7 +43,7 @@
     "@akashic/akashic-pdi": "~2.8.0",
     "@akashic/amflow": "~1.0.0",
     "@akashic/playlog": "~2.0.0",
-    "@types/node": "12.12.35",
+    "@types/node": "12.12.42",
     "browserify": "16.5.1",
     "cpx": "1.5.0",
     "es5-shim": "4.5.14",
@@ -57,7 +57,7 @@
     "remark-cli": "5.0.0",
     "remark-lint": "6.0.6",
     "shx": "0.3.2",
-    "testem": "3.0.3",
+    "testem": "3.0.4",
     "tslint": "5.20.1",
     "typescript": "3.8.3",
     "uglify-js": "3.8.1"
