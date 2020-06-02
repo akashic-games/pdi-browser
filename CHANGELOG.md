@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.0.0-beta.6
+* @akashic/akashic-engine@3.0.0-beta.24 への追従対応
+
 ## 2.0.0-beta.5
 * @akashic/akashic-engine@3 への追従対応
 
