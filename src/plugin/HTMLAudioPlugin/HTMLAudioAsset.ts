@@ -84,7 +84,7 @@ export class HTMLAudioAsset extends AudioAsset {
 				error: () => {
 					this._detachAll(audio, altHandlers);
 					window.clearInterval(this._intervalId);
-					this.path = g.PathUtil.addExtname(this.originalPath, "mp4"); // TODO: pdi-browser 側で独自の実装を持つようにする
+					this.path = g.PdiCommonUtil.addExtname(this.originalPath, "mp4");
 					startLoadingAudio(this.path, handlers);
 				}
 			};
@@ -101,10 +101,10 @@ export class HTMLAudioAsset extends AudioAsset {
 
 	_assetPathFilter(path: string): string {
 		if (HTMLAudioAsset.supportedFormats.indexOf("ogg") !== -1) {
-			return g.PathUtil.addExtname(path, "ogg"); // TODO: pdi-browser 側で独自の実装を持つようにする
+			return g.PdiCommonUtil.addExtname(path, "ogg");
 		}
 		if (HTMLAudioAsset.supportedFormats.indexOf("aac") !== -1) {
-			return g.PathUtil.addExtname(path, "aac"); // TODO: pdi-browser 側で独自の実装を持つようにする
+			return g.PdiCommonUtil.addExtname(path, "aac");
 		}
 		// ここで検出されるのは最初にアクセスを試みるオーディオアセットのファイルパスなので、
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない

@@ -46,7 +46,7 @@ export class WebAudioAsset extends AudioAsset {
 			// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
 			// この対応を止める際には、WebAudioPluginのsupportedExtensionsからaacを除外する必要がある。
 			loadArrayBuffer(this.path, onLoadArrayBufferHandler, _error => {
-				const altPath = g.PathUtil.addExtname(this.originalPath, "mp4"); // TODO: pdi-browser 側で独自の実装を持つようにする
+				const altPath = g.PdiCommonUtil.addExtname(this.originalPath, "mp4");
 				loadArrayBuffer(altPath, (response) => {
 					this.path = altPath;
 					onLoadArrayBufferHandler(response);
@@ -59,10 +59,10 @@ export class WebAudioAsset extends AudioAsset {
 
 	_assetPathFilter(path: string): string {
 		if (WebAudioAsset.supportedFormats.indexOf("ogg") !== -1) {
-			return g.PathUtil.addExtname(path, "ogg"); // TODO: pdi-browser 側で独自の実装を持つようにする
+			return g.PdiCommonUtil.addExtname(path, "ogg");
 		}
 		if (WebAudioAsset.supportedFormats.indexOf("aac") !== -1) {
-			return g.PathUtil.addExtname(path, "aac"); // TODO: pdi-browser 側で独自の実装を持つようにする
+			return g.PdiCommonUtil.addExtname(path, "aac");
 		}
 		// ここで検出されるのは最初にアクセスを試みるオーディオアセットのファイルパスなので、
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない
