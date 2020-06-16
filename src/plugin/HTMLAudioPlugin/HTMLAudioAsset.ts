@@ -1,6 +1,7 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 import { AudioAsset } from "../../asset/AudioAsset";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
+import { addExtname } from "../../PathUtil";
 
 export interface MediaLoaderEventHandlerSet {
 	success: () => void;
@@ -13,7 +14,7 @@ export class HTMLAudioAsset extends AudioAsset {
 	private _intervalId: number;
 	private _intervalCount: number;
 
-	_load(loader: g.AssetLoadHandler): void {
+	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {
 			// 再生可能な形式がない。実際には鳴らない音声としてロード成功しておく
 			this.data = null;
@@ -84,7 +85,7 @@ export class HTMLAudioAsset extends AudioAsset {
 				error: () => {
 					this._detachAll(audio, altHandlers);
 					window.clearInterval(this._intervalId);
-					this.path = g.PdiCommonUtil.addExtname(this.originalPath, "mp4");
+					this.path = addExtname(this.originalPath, "mp4");
 					startLoadingAudio(this.path, handlers);
 				}
 			};
@@ -101,10 +102,10 @@ export class HTMLAudioAsset extends AudioAsset {
 
 	_assetPathFilter(path: string): string {
 		if (HTMLAudioAsset.supportedFormats.indexOf("ogg") !== -1) {
-			return g.PdiCommonUtil.addExtname(path, "ogg");
+			return addExtname(path, "ogg");
 		}
 		if (HTMLAudioAsset.supportedFormats.indexOf("aac") !== -1) {
-			return g.PdiCommonUtil.addExtname(path, "aac");
+			return addExtname(path, "aac");
 		}
 		// ここで検出されるのは最初にアクセスを試みるオーディオアセットのファイルパスなので、
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない

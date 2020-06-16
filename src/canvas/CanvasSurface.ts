@@ -1,4 +1,4 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 import { Surface } from "../Surface";
 
 export abstract class CanvasSurface extends Surface {
@@ -19,7 +19,7 @@ export abstract class CanvasSurface extends Surface {
 		super.destroy();
 	}
 
-	abstract renderer(): g.RendererLike;
+	abstract renderer(): pdi.Renderer;
 
 	getHTMLElement(): HTMLElement {
 		return this.canvas;

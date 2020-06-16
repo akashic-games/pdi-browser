@@ -1,4 +1,4 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 import { HTMLAudioAsset } from "./HTMLAudioAsset";
 import { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
@@ -13,7 +13,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 	private _onPlayEventHandler: () => void;
 	private _dummyDurationWaitTimer: any;
 
-	constructor(system: g.AudioSystemLike, manager: AudioManager) {
+	constructor(system: pdi.AudioSystem, manager: AudioManager) {
 		super(system);
 		this._manager = manager;
 		this._endedEventHandler = () => {

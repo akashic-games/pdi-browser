@@ -1,11 +1,11 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 import { AffineTransformer } from "../AffineTransformer";
 
 export class WebGLRenderingState {
 	globalAlpha: number;
-	globalCompositeOperation: g.CompositeOperationString;
+	globalCompositeOperation: pdi.CompositeOperationString;
 	transformer: AffineTransformer;
-	shaderProgram: g.ShaderProgram;
+	shaderProgram: pdi.ShaderProgram;
 
 	constructor(rhs?: WebGLRenderingState) {
 		if (rhs) {

@@ -1,4 +1,4 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 import { CanvasSurface } from "./CanvasSurface";
 import { Context2DSurface } from "./context2d/Context2DSurface";
 
@@ -11,7 +11,7 @@ interface GlyphRenderSurfaceResult {
 function createGlyphRenderedSurface(code: number, fontSize: number, cssFontFamily: string,
                                     baselineHeight: number, marginW: number, marginH: number,
                                     needImageData: boolean, fontColor: string, strokeWidth: number,
-                                    strokeColor: string, strokeOnly: boolean, fontWeight: g.FontWeightString): GlyphRenderSurfaceResult {
+                                    strokeColor: string, strokeOnly: boolean, fontWeight: pdi.FontWeightString): GlyphRenderSurfaceResult {
 
 	// 要求されたフォントサイズが描画可能な最小フォントサイズ以下だった場合、必要なスケーリング係数
 	const scale = fontSize < GlyphFactory._environmentMinimumFontSize ? fontSize / GlyphFactory._environmentMinimumFontSize : 1;
@@ -67,7 +67,7 @@ function createGlyphRenderedSurface(code: number, fontSize: number, cssFontFamil
 	return result;
 }
 
-function calcGlyphArea(imageData: ImageData): g.GlyphArea {
+function calcGlyphArea(imageData: ImageData): pdi.GlyphArea {
 	let sx = imageData.width;
 	let sy = imageData.height;
 	let ex = 0;
@@ -95,7 +95,7 @@ function calcGlyphArea(imageData: ImageData): g.GlyphArea {
 		}
 	}
 
-	let glyphArea: g.GlyphArea = undefined;
+	let glyphArea: pdi.GlyphArea = undefined;
 	if (sx === imageData.width) { // 空白文字
 		glyphArea = { x: 0, y: 0, width: 0, height: 0 }; // 空の領域に設定
 	} else {
@@ -107,7 +107,7 @@ function calcGlyphArea(imageData: ImageData): g.GlyphArea {
 	return glyphArea;
 }
 
-function isGlyphAreaEmpty(glyphArea: g.GlyphArea): boolean {
+function isGlyphAreaEmpty(glyphArea: pdi.GlyphArea): boolean {
 	return glyphArea.width === 0 || glyphArea.height === 0;
 }
 
@@ -134,9 +134,9 @@ function createGlyph(
 	offsetX: number,
 	offsetY: number,
 	advanceWidth: number,
-	surface: g.SurfaceLike,
+	surface: pdi.Surface,
 	isSurfaceValid: boolean
-): g.GlyphLike {
+): pdi.Glyph {
 	return {
 		code,
 		x,
@@ -152,7 +152,7 @@ function createGlyph(
 	};
 }
 
-export class GlyphFactory implements g.GlyphFactoryLike {
+export class GlyphFactory implements pdi.GlyphFactory {
 	/**
 	 * 実行環境が描画可能な最小フォントサイズ
 	 */
@@ -162,12 +162,12 @@ export class GlyphFactory implements g.GlyphFactoryLike {
 	fontSize: number;
 	baselineHeight: number;
 	fontColor: string;
-	fontWeight: g.FontWeightString;
+	fontWeight: pdi.FontWeightString;
 	strokeWidth: number;
 	strokeColor: string;
 	strokeOnly: boolean;
 
-	_glyphAreas: {[key: number]: g.GlyphArea} = Object.create(null);
+	_glyphAreas: {[key: number]: pdi.GlyphArea} = Object.create(null);
 	_marginW: number;
 	_marginH: number;
 
@@ -181,7 +181,7 @@ export class GlyphFactory implements g.GlyphFactoryLike {
 		strokeWidth: number = 0,
 		strokeColor: string = "black",
 		strokeOnly: boolean = false,
-		fontWeight: g.FontWeightString = "normal"
+		fontWeight: pdi.FontWeightString = "normal"
 	) {
 		this.fontFamily = fontFamily;
 		this.fontSize = fontSize;
@@ -217,7 +217,7 @@ export class GlyphFactory implements g.GlyphFactoryLike {
 		}
 	}
 
-	create(code: number): g.GlyphLike {
+	create(code: number): pdi.Glyph {
 		let result: GlyphRenderSurfaceResult;
 		let glyphArea = this._glyphAreas[code];
 
@@ -240,7 +240,7 @@ export class GlyphFactory implements g.GlyphFactoryLike {
 			}
 			return createGlyph(code, 0, 0, 0, 0, 0, 0, glyphArea.advanceWidth, undefined, true);
 		} else {
-			// g.GlyphLikeに格納するサーフェスを生成する。
+			// pdi.Glyphに格納するサーフェスを生成する。
 			// glyphAreaはサーフェスをキャッシュしないため、描画する内容を持つグリフに対しては
 			// サーフェスを生成する。もし前段でcalcGlyphArea()のためのサーフェスを生成して
 			// いればここでは生成せずにそれを利用する。

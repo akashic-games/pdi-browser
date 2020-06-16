@@ -1,6 +1,5 @@
 "use strict";
 import { AMFlow } from "@akashic/amflow";
-import * as g from "@akashic/akashic-engine";
 import * as pdi from "@akashic/akashic-pdi";
 import { RafLooper } from "./RafLooper";
 import { ResourceFactory } from "./ResourceFactory";
@@ -128,11 +127,11 @@ export class Platform implements pdi.Platform {
 		}
 	}
 
-	getPrimarySurface(): g.SurfaceLike {
+	getPrimarySurface(): pdi.Surface {
 		return this.containerController.surface;
 	}
 
-	getOperationPluginViewInfo(): g.OperationPluginViewInfo {
+	getOperationPluginViewInfo(): pdi.OperationPluginViewInfo {
 		return <any>{
 			type: "pdi-browser", // note: scale情報を付加したため null ではないものを返している。
 			view: this.containerController.inputHandlerLayer.view,

@@ -1,11 +1,11 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 
 export module ExceptionFactory {
 	export function createAssetLoadError(
 		message: string,
 		retriable: boolean = true,
 		cause?: any
-	): g.AssetLoadError {
+	): pdi.AssetLoadError {
 		return {
 			name: "AssetLoadError",
 			message,

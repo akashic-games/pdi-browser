@@ -1,4 +1,5 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
+import { Trigger } from "@akashic/trigger";
 import { InputAbstractHandler } from "./handler/InputAbstractHandler";
 import { TouchHandler } from "./handler/TouchHandler";
 
@@ -19,7 +20,7 @@ export class InputHandlerLayer {
 	view: HTMLDivElement;
 
 	// DOMで起きたイベントを通知するTrigger
-	pointEventTrigger: g.Trigger<g.PlatformPointEvent>;
+	pointEventTrigger: Trigger<pdi.PlatformPointEvent>;
 
 	_inputHandler: InputAbstractHandler;
 	private _disablePreventDefault: boolean;
@@ -36,7 +37,7 @@ export class InputHandlerLayer {
 	constructor(param: InputHandlerLayerParameterObject) {
 		this.view = this._createInputView(param.width, param.height);
 		this._inputHandler = undefined;
-		this.pointEventTrigger = new g.Trigger<g.PlatformPointEvent>();
+		this.pointEventTrigger = new Trigger<pdi.PlatformPointEvent>();
 
 		this._disablePreventDefault = !!param.disablePreventDefault;
 	}
@@ -45,7 +46,7 @@ export class InputHandlerLayer {
 	enablePointerEvent(): void {
 		this._inputHandler = new TouchHandler(this.view, this._disablePreventDefault);
 		// 各種イベントのTrigger
-		this._inputHandler.pointTrigger.add((e: g.PlatformPointEvent) => {
+		this._inputHandler.pointTrigger.add((e: pdi.PlatformPointEvent) => {
 			this.pointEventTrigger.fire(e);
 		});
 		this._inputHandler.start();
@@ -57,12 +58,12 @@ export class InputHandlerLayer {
 			this._inputHandler.stop();
 	}
 
-	setOffset(offset: g.CommonOffset): void {
+	setOffset(offset: pdi.CommonOffset): void {
 		var inputViewStyle = `position:relative; left:${offset.x}px; top:${offset.y}px`;
 		this._inputHandler.inputView.setAttribute("style", inputViewStyle);
 	}
 
-	setViewSize(size: g.CommonSize): void {
+	setViewSize(size: pdi.CommonSize): void {
 		const view = this.view;
 		view.style.width = size.width + "px";
 		view.style.height = size.height + "px";

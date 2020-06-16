@@ -1,5 +1,5 @@
 "use strict";
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 import { AudioManager } from "../../AudioManager";
 import { AudioAsset } from "../../asset/AudioAsset";
 import { AudioPlayer } from "../AudioPlayer";
@@ -39,11 +39,11 @@ export class HTMLAudioPlugin implements AudioPlugin {
 		HTMLAudioAsset.supportedFormats = supportedFormats;
 	}
 
-	createAsset(id: string, path: string, duration: number, system: g.AudioSystem, loop: boolean, hint: g.AudioAssetHint): AudioAsset {
+	createAsset(id: string, path: string, duration: number, system: pdi.AudioSystem, loop: boolean, hint: pdi.AudioAssetHint): AudioAsset {
 		return new HTMLAudioAsset(id, path, duration, system, loop, hint);
 	}
 
-	createPlayer(system: g.AudioSystemLike, manager: AudioManager): AudioPlayer {
+	createPlayer(system: pdi.AudioSystem, manager: AudioManager): AudioPlayer {
 		return new HTMLAudioPlayer(system, manager);
 	}
 

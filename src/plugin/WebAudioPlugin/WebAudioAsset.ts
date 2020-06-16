@@ -1,14 +1,15 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 import { AudioAsset } from "../../asset/AudioAsset";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
 import { XHRLoader } from "../../utils/XHRLoader";
+import { addExtname } from "../../PathUtil";
 import * as helper from "./WebAudioHelper";
 
 export class WebAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[] = [];
 
-	_load(loader: g.AssetLoadHandler): void {
+	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {
 			// 再生可能な形式がない。実際には鳴らない音声としてロード成功しておく
 			this.data = null;
@@ -34,7 +35,7 @@ export class WebAudioAsset extends AudioAsset {
 		};
 
 		var xhrLoader = new XHRLoader();
-		var loadArrayBuffer = (path: string, onSuccess: (response: any) => void, onFailed: (err: g.AssetLoadError) => void) => {
+		var loadArrayBuffer = (path: string, onSuccess: (response: any) => void, onFailed: (err: pdi.AssetLoadError) => void) => {
 			xhrLoader.getArrayBuffer(path, (error, response) => {
 				error ? onFailed(error) : onSuccess(response);
 			});
@@ -46,7 +47,7 @@ export class WebAudioAsset extends AudioAsset {
 			// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
 			// この対応を止める際には、WebAudioPluginのsupportedExtensionsからaacを除外する必要がある。
 			loadArrayBuffer(this.path, onLoadArrayBufferHandler, _error => {
-				const altPath = g.PdiCommonUtil.addExtname(this.originalPath, "mp4");
+				const altPath = addExtname(this.originalPath, "mp4");
 				loadArrayBuffer(altPath, (response) => {
 					this.path = altPath;
 					onLoadArrayBufferHandler(response);
@@ -59,10 +60,10 @@ export class WebAudioAsset extends AudioAsset {
 
 	_assetPathFilter(path: string): string {
 		if (WebAudioAsset.supportedFormats.indexOf("ogg") !== -1) {
-			return g.PdiCommonUtil.addExtname(path, "ogg");
+			return addExtname(path, "ogg");
 		}
 		if (WebAudioAsset.supportedFormats.indexOf("aac") !== -1) {
-			return g.PdiCommonUtil.addExtname(path, "aac");
+			return addExtname(path, "aac");
 		}
 		// ここで検出されるのは最初にアクセスを試みるオーディオアセットのファイルパスなので、
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない

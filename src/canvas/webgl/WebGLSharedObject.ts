@@ -1,4 +1,4 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 import { AffineTransformer } from "../AffineTransformer";
 import { WebGLBackSurface } from "./WebGLBackSurface";
 import { WebGLPrimarySurface } from "./WebGLPrimarySurface";
@@ -42,10 +42,10 @@ export class WebGLSharedObject {
 	private _currentTexture: WebGLTexture;
 	private _currentColor: number[];
 	private _currentAlpha: number;
-	private _currentCompositeOperation: g.CompositeOperationString;
+	private _currentCompositeOperation: pdi.CompositeOperationString;
 	private _currentShaderProgram: WebGLShaderProgram;
 
-	private _compositeOps: {[key in g.CompositeOperationString]: [number, number]; };
+	private _compositeOps: {[key in pdi.CompositeOperationString]: [number, number]; };
 	private _deleteRequestedTargets: RenderTarget[];
 
 	constructor(width: number, height: number) {
@@ -208,7 +208,7 @@ export class WebGLSharedObject {
 		}
 	}
 
-	makeTextureForSurface(surface: g.SurfaceLike): void {
+	makeTextureForSurface(surface: pdi.Surface): void {
 		this._textureAtlas.makeTextureForSurface(this, surface);
 	}
 
@@ -350,7 +350,7 @@ export class WebGLSharedObject {
 		return this._defaultShaderProgram;
 	}
 
-	initializeShaderProgram(shaderProgram: g.ShaderProgram | null): g.ShaderProgram {
+	initializeShaderProgram(shaderProgram: pdi.ShaderProgram | null): pdi.ShaderProgram {
 		if (shaderProgram) {
 			if (!shaderProgram._program) {
 				const program = new WebGLShaderProgram(

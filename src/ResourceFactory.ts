@@ -1,4 +1,4 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 import { AudioAsset } from "./asset/AudioAsset";
 import { HTMLImageAsset } from "./asset/HTMLImageAsset";
 import { HTMLVideoAsset } from "./asset/HTMLVideoAsset";
@@ -10,6 +10,7 @@ import { Platform } from "./Platform";
 import { GlyphFactory } from "./canvas/GlyphFactory";
 import { SurfaceFactory } from "./canvas/shims/SurfaceFactory";
 import { CanvasSurface } from "./canvas/CanvasSurface";
+import { SurfaceAtlas } from "./SurfaceAtlas";
 
 export interface ResourceFactoryParameterObject {
 	audioPluginManager: AudioPluginManager;
@@ -17,7 +18,7 @@ export interface ResourceFactoryParameterObject {
 	platform: Platform;
 }
 
-export class ResourceFactory implements g.ResourceFactoryLike {
+export class ResourceFactory implements pdi.ResourceFactory {
 	_audioPluginManager: AudioPluginManager;
 	_audioManager: AudioManager;
 	_rendererCandidates: string[];
@@ -35,9 +36,9 @@ export class ResourceFactory implements g.ResourceFactoryLike {
 		id: string,
 		assetPath: string,
 		duration: number,
-		system: g.AudioSystemLike,
+		system: pdi.AudioSystem,
 		loop: boolean,
-		hint: g.AudioAssetHint
+		hint: pdi.AudioAssetHint
 	): AudioAsset {
 		const activePlugin = this._audioPluginManager.getActivePlugin();
 		const audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint);
@@ -46,12 +47,12 @@ export class ResourceFactory implements g.ResourceFactoryLike {
 		return audioAsset;
 	}
 
-	createAudioPlayer(system: g.AudioSystemLike): g.AudioPlayerLike {
+	createAudioPlayer(system: pdi.AudioSystem): pdi.AudioPlayer {
 		const activePlugin = this._audioPluginManager.getActivePlugin();
 		return activePlugin.createPlayer(system, this._audioManager);
 	}
 
-	createImageAsset(id: string, assetPath: string, width: number, height: number): g.ImageAssetLike {
+	createImageAsset(id: string, assetPath: string, width: number, height: number): pdi.ImageAsset {
 		return new HTMLImageAsset(id, assetPath, width, height);
 	}
 
@@ -60,18 +61,18 @@ export class ResourceFactory implements g.ResourceFactoryLike {
 		assetPath: string,
 		width: number,
 		height: number,
-		system: g.VideoSystemLike,
+		system: pdi.VideoSystem,
 		loop: boolean,
 		useRealSize: boolean
-	): g.VideoAssetLike {
+	): pdi.VideoAsset {
 		return new HTMLVideoAsset(id, assetPath, width, height, system, loop, useRealSize);
 	}
 
-	createTextAsset(id: string, assetPath: string): g.TextAssetLike {
+	createTextAsset(id: string, assetPath: string): pdi.TextAsset {
 		return new XHRTextAsset(id, assetPath);
 	}
 
-	createScriptAsset(id: string, assetPath: string): g.ScriptAssetLike {
+	createScriptAsset(id: string, assetPath: string): pdi.ScriptAsset {
 		return new XHRScriptAsset(id, assetPath);
 	}
 
@@ -91,13 +92,13 @@ export class ResourceFactory implements g.ResourceFactoryLike {
 		strokeWidth?: number,
 		strokeColor?: string,
 		strokeOnly?: boolean,
-		fontWeight?: g.FontWeightString
-	): g.GlyphFactoryLike {
+		fontWeight?: pdi.FontWeightString
+	): pdi.GlyphFactory {
 		return new GlyphFactory(fontFamily, fontSize, baseline, fontColor, strokeWidth, strokeColor, strokeOnly, fontWeight);
 	}
 
-	createSurfaceAtlas(width: number, height: number): g.SurfaceAtlasLike {
-		return new g.SurfaceAtlas(this.createSurface(width, height)); // TODO: 独自の実装を持つようにする
+	createSurfaceAtlas(width: number, height: number): pdi.SurfaceAtlas {
+		return new SurfaceAtlas(this.createSurface(width, height));
 	}
 
 	_onAudioAssetDestroyed(asset: AudioAsset): void {

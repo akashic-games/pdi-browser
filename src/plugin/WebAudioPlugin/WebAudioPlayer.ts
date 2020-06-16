@@ -1,4 +1,4 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 import { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
 import { WebAudioAsset } from "./WebAudioAsset";
@@ -12,7 +12,7 @@ export class WebAudioPlayer extends AudioPlayer {
 	private _manager: AudioManager;
 	private _dummyDurationWaitTimer: any;
 
-	constructor(system: g.AudioSystemLike, manager: AudioManager) {
+	constructor(system: pdi.AudioSystem, manager: AudioManager) {
 		super(system);
 		this._audioContext = helper.getAudioContext();
 		this._manager = manager;

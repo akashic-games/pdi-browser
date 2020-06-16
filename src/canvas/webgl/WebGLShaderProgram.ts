@@ -1,4 +1,4 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 
 interface UniformCache {
 	name: string;
@@ -41,7 +41,7 @@ export class WebGLShaderProgram {
 	private _uAlpha: WebGLUniformLocation;
 	private _uSampler: WebGLUniformLocation;
 
-	private _uniforms: {[key: string]: g.ShaderUniform};
+	private _uniforms: {[key: string]: pdi.ShaderUniform};
 	private _uniformCaches: UniformCache[];
 	private _uniformSetterTable: { [type: string]: (loc: WebGLUniformLocation, v: number | Int32Array | Float32Array) => void; };
 
@@ -78,7 +78,7 @@ export class WebGLShaderProgram {
 		return program;
 	}
 
-	constructor(context: WebGLRenderingContext, fSrc?: string, uniforms?: {[key: string]: g.ShaderUniform}) {
+	constructor(context: WebGLRenderingContext, fSrc?: string, uniforms?: {[key: string]: pdi.ShaderUniform}) {
 		var vSrc = WebGLShaderProgram._DEFAULT_VERTEX_SHADER;
 		var fSrc = fSrc || WebGLShaderProgram._DEFAULT_FRAGMENT_SHADER;
 

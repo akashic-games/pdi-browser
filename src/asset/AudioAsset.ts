@@ -1,16 +1,16 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 import { Asset } from "./Asset";
 
-export abstract class AudioAsset extends Asset implements g.AudioAssetLike {
+export abstract class AudioAsset extends Asset implements pdi.AudioAsset {
 	type: "audio" = "audio";
 	data: any;
 	duration: number;
 	loop: boolean;
-	hint: g.AudioAssetHint;
-	_system: g.AudioSystemLike;
-	_lastPlayedPlayer: g.AudioPlayerLike;
+	hint: pdi.AudioAssetHint;
+	_system: pdi.AudioSystem;
+	_lastPlayedPlayer: pdi.AudioPlayer;
 
-	constructor(id: string, path: string, duration: number, system: g.AudioSystemLike, loop: boolean, hint: g.AudioAssetHint) {
+	constructor(id: string, path: string, duration: number, system: pdi.AudioSystem, loop: boolean, hint: pdi.AudioAssetHint) {
 		super(id, path);
 		this.duration = duration;
 		this.loop = loop;
@@ -19,7 +19,7 @@ export abstract class AudioAsset extends Asset implements g.AudioAssetLike {
 		this.data = undefined;
 	}
 
-	play(): g.AudioPlayerLike {
+	play(): pdi.AudioPlayer {
 		const player = this._system.createPlayer();
 		player.play(this);
 		this._lastPlayedPlayer = player;
@@ -44,7 +44,7 @@ export abstract class AudioAsset extends Asset implements g.AudioAssetLike {
 		super.destroy();
 	}
 
-	abstract _load(loader: g.AssetLoadHandler): void;
+	abstract _load(loader: pdi.AssetLoadHandler): void;
 
 	abstract _assetPathFilter(path: string): string;
 }

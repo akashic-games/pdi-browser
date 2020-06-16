@@ -1,5 +1,6 @@
 "use strict";
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
+import { Trigger } from "@akashic/trigger";
 import { OffsetPosition } from "./OffsetPosition";
 
 export interface Scale {
@@ -26,7 +27,7 @@ export class InputAbstractHandler {
 	}
 
 	inputView: HTMLElement;
-	pointTrigger: g.Trigger<g.PlatformPointEvent>;
+	pointTrigger: Trigger<pdi.PlatformPointEvent>;
 	_disablePreventDefault: boolean;
 
 	private _xScale: number;
@@ -47,7 +48,7 @@ export class InputAbstractHandler {
 		this._xScale = 1;
 		this._yScale = 1;
 		this._disablePreventDefault = !!disablePreventDefault;
-		this.pointTrigger = new g.Trigger<g.PlatformPointEvent>();
+		this.pointTrigger = new Trigger<pdi.PlatformPointEvent>();
 	}
 
 	// 継承したクラスにおいて、適切なDOMイベントを設定する
@@ -68,7 +69,7 @@ export class InputAbstractHandler {
 
 	pointDown(identifier: number, pagePosition: OffsetPosition): void {
 		this.pointTrigger.fire({
-			type: g.PlatformPointType.Down,
+			type: pdi.PlatformPointType.Down,
 			identifier: identifier,
 			offset: this.getOffsetFromEvent(pagePosition)
 		});
@@ -82,7 +83,7 @@ export class InputAbstractHandler {
 			return;
 		}
 		this.pointTrigger.fire({
-			type: g.PlatformPointType.Move,
+			type: pdi.PlatformPointType.Move,
 			identifier: identifier,
 			offset: this.getOffsetFromEvent(pagePosition)
 		});
@@ -93,7 +94,7 @@ export class InputAbstractHandler {
 			return;
 		}
 		this.pointTrigger.fire({
-			type: g.PlatformPointType.Up,
+			type: pdi.PlatformPointType.Up,
 			identifier: identifier,
 			offset: this.getOffsetFromEvent(pagePosition)
 		});
@@ -101,7 +102,7 @@ export class InputAbstractHandler {
 		delete this.pointerEventLock[identifier];
 	}
 
-	getOffsetFromEvent(e: OffsetPosition): g.CommonOffset {
+	getOffsetFromEvent(e: OffsetPosition): pdi.CommonOffset {
 		return { x: e.offsetX, y: e.offsetY };
 	}
 
