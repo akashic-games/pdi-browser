@@ -33,9 +33,9 @@
     "index.js"
   ],
   "devDependencies": {
-    "@akashic/akashic-pdi": "~1.13.0",
-    "@akashic/amflow": "~1.0.0",
-    "@akashic/playlog": "~2.0.0",
+    "@akashic/akashic-pdi": "~1.14.0",
+    "@akashic/amflow": "~2.0.0",
+    "@akashic/playlog": "~3.0.0",
     "@types/node": "9.6.56",
     "browserify": "16.5.1",
     "es5-shim": "4.5.14",
