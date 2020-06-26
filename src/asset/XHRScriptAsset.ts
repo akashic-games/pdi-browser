@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
 import { XHRLoader } from "../utils/XHRLoader";
 import { Asset } from "./Asset";
 

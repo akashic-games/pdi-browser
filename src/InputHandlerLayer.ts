@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
 import { InputAbstractHandler } from "./handler/InputAbstractHandler";
 import { TouchHandler } from "./handler/TouchHandler";

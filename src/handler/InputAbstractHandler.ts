@@ -1,5 +1,5 @@
 "use strict";
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
 import { OffsetPosition } from "./OffsetPosition";
 

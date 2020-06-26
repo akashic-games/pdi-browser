@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
 import { RenderingHelper } from "../RenderingHelper";
 import { WebGLSharedObject, WebGLSurfaceTexture } from "./WebGLSharedObject";
 import { WebGLTextureMap } from "./WebGLTextureMap";

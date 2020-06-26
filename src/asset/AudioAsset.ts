@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
 import { Asset } from "./Asset";
 
 export abstract class AudioAsset extends Asset implements pdi.AudioAsset {

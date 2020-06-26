@@ -1,5 +1,5 @@
 "use strict";
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
 import { ExceptionFactory } from "./ExceptionFactory";
 import { XHRLoaderOption } from "./XHRLoaderOption";
 export interface XHRRequestObject {

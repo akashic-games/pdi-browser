@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
 import { AffineTransformer } from "../AffineTransformer";
 import { WebGLBackSurface } from "./WebGLBackSurface";
 import { WebGLPrimarySurface } from "./WebGLPrimarySurface";

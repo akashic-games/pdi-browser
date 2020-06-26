@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
 import { SurfaceAtlasSlot } from "./SurfaceAtrasSlot";
 
 // TODO akashic-engine 側に SurfaceAtlas を持たせてこのファイルは削除する

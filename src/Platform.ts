@@ -1,6 +1,6 @@
 "use strict";
 import { AMFlow } from "@akashic/amflow";
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
 import { RafLooper } from "./RafLooper";
 import { ResourceFactory } from "./ResourceFactory";
 import { ContainerController } from "./ContainerController";

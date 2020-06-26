@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
 import { Surface } from "../Surface";
 
 export abstract class CanvasSurface extends Surface {

@@ -1,5 +1,5 @@
 "use strict";
-import { Looper } from "@akashic/akashic-pdi";
+import { Looper } from "@akashic/pdi-types";
 
 export class RafLooper implements Looper {
 	_fun: (deltaTime: number) => number;

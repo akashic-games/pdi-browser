@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
 import { CanvasSurfaceContext } from "./CanvasSurfaceContext";
 import { Context2DSurface } from "./Context2DSurface";
 

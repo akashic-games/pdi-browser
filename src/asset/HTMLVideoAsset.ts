@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
 import { Surface } from "../Surface";
 import { Asset } from "./Asset";
 import { HTMLVideoPlayer } from "./HTMLVideoPlayer";
