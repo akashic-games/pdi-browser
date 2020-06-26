@@ -1,11 +1,12 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
+import { Trigger } from "@akashic/trigger";
 
-export abstract class Asset implements g.AssetLike {
+export abstract class Asset implements pdi.Asset {
 	type: string;
 	id: string;
 	path: string;
 	originalPath: string;
-	onDestroyed: g.Trigger<g.AssetLike> = new g.Trigger();
+	onDestroyed: Trigger<pdi.Asset> = new Trigger();
 
 	constructor(id: string, path: string) {
 		this.id = id;
@@ -30,7 +31,7 @@ export abstract class Asset implements g.AssetLike {
 		return false;
 	}
 
-	abstract _load(loader: g.AssetLoadHandler): void;
+	abstract _load(loader: pdi.AssetLoadHandler): void;
 
 	_assetPathFilter(path: string): string {
 		// 拡張子の補完・読み替えが必要なassetはこれをオーバーライドすればよい。(対応形式が限定されるaudioなどの場合)

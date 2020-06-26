@@ -1,5 +1,5 @@
 "use strict";
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../asset/AudioAsset";
 import { AudioManager } from "../AudioManager";
 import { AudioPlayer } from "./AudioPlayer";
@@ -16,10 +16,10 @@ export interface AudioPlugin {
 		id: string,
 		assetPath: string,
 		duration: number,
-		system: g.AudioSystemLike,
+		system: pdi.AudioSystem,
 		loop: boolean,
-		hint: g.AudioAssetHint
+		hint: pdi.AudioAssetHint
 	) => AudioAsset;
 
-	createPlayer: (system: g.AudioSystemLike, manager: AudioManager) => AudioPlayer;
+	createPlayer: (system: pdi.AudioSystem, manager: AudioManager) => AudioPlayer;
 }

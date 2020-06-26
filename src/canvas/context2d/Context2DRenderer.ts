@@ -1,8 +1,8 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 import { CanvasSurfaceContext } from "./CanvasSurfaceContext";
 import { Context2DSurface } from "./Context2DSurface";
 
-const compositeOperationTable: { [P in g.CompositeOperationString]: string } = {
+const compositeOperationTable: { [P in pdi.CompositeOperationString]: string } = {
 	"source-over": "source-over",
 	"source-atop": "source-atop",
 	"lighter": "lighter",
@@ -16,7 +16,7 @@ const compositeOperationTable: { [P in g.CompositeOperationString]: string } = {
 	"xor": "xor"
 };
 
-export class Context2DRenderer implements g.RendererLike {
+export class Context2DRenderer implements pdi.Renderer {
 	private surface: Context2DSurface;
 	private context: CanvasSurfaceContext;
 	private canvasRenderingContext2D: CanvasRenderingContext2D;
@@ -94,7 +94,7 @@ export class Context2DRenderer implements g.RendererLike {
 		this.context.fillRect(x, y, width, height);
 	}
 
-	setCompositeOperation(operation: g.CompositeOperationString): void {
+	setCompositeOperation(operation: pdi.CompositeOperationString): void {
 		this.context.globalCompositeOperation = compositeOperationTable[operation] || "source-over";
 	}
 
@@ -106,7 +106,7 @@ export class Context2DRenderer implements g.RendererLike {
 		this.context.setTransform(matrix[0], matrix[1], matrix[2], matrix[3], matrix[4], matrix[5]);
 	}
 
-	setShaderProgram(_shaderProgram: g.ShaderProgram | null): void {
+	setShaderProgram(_shaderProgram: pdi.ShaderProgram | null): void {
 		throw new Error("Context2DRenderer#setShaderProgram() is not implemented");
 	}
 
@@ -114,7 +114,7 @@ export class Context2DRenderer implements g.RendererLike {
 		return false;
 	}
 
-	_getImageData(sx: number, sy: number, sw: number, sh: number): g.ImageData {
+	_getImageData(sx: number, sy: number, sw: number, sh: number): pdi.ImageData {
 		return this.context.getImageData(sx, sy, sw, sh);
 	}
 

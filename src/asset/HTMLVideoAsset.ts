@@ -1,4 +1,4 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 import { Surface } from "../Surface";
 import { Asset } from "./Asset";
 import { HTMLVideoPlayer } from "./HTMLVideoPlayer";
@@ -8,7 +8,7 @@ class VideoAssetSurface extends Surface {
 		super(width, height, drawable);
 	}
 
-	renderer(): g.RendererLike {
+	renderer(): pdi.Renderer {
 		throw new Error("VideoAssetSurface cannot be rendered.");
 	}
 
@@ -17,19 +17,19 @@ class VideoAssetSurface extends Surface {
 	}
 }
 
-export class HTMLVideoAsset extends Asset implements g.VideoAssetLike {
+export class HTMLVideoAsset extends Asset implements pdi.VideoAsset {
 	type: "video" = "video";
 	width: number;
 	height: number;
 	realWidth: number;
 	realHeight: number;
-	_system: g.VideoSystemLike;
+	_system: pdi.VideoSystem;
 	_loop: boolean;
 	_useRealSize: boolean;
 	_player: HTMLVideoPlayer;
 	_surface: VideoAssetSurface;
 
-	constructor(id: string, assetPath: string, width: number, height: number, system: g.VideoSystemLike, loop: boolean, useRealSize: boolean) {
+	constructor(id: string, assetPath: string, width: number, height: number, system: pdi.VideoSystem, loop: boolean, useRealSize: boolean) {
 		super(id, assetPath);
 		this.width = width;
 		this.height = height;
@@ -42,7 +42,7 @@ export class HTMLVideoAsset extends Asset implements g.VideoAssetLike {
 		this._surface = new VideoAssetSurface(width, height, null);
 	}
 
-	play(_loop?: boolean): g.VideoPlayerLike {
+	play(_loop?: boolean): pdi.VideoPlayer {
 		this.getPlayer().play(this);
 		return this.getPlayer();
 	}
@@ -55,7 +55,7 @@ export class HTMLVideoAsset extends Asset implements g.VideoAssetLike {
 		return false;
 	}
 
-	_load(loader: g.AssetLoadHandler): void {
+	_load(loader: pdi.AssetLoadHandler): void {
 		setTimeout(() => {
 			loader._onAssetLoad(this);
 		}, 0);

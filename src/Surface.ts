@@ -1,6 +1,6 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 
-export abstract class Surface implements g.SurfaceLike {
+export abstract class Surface implements pdi.Surface {
 	width: number;
 	height: number;
 	_drawable: any;
@@ -20,7 +20,7 @@ export abstract class Surface implements g.SurfaceLike {
 		// this._destroyedは破棄時に一度だけ代入する特殊なフィールドなため、コンストラクタで初期値を代入しない
 	}
 
-	abstract renderer(): g.RendererLike;
+	abstract renderer(): pdi.Renderer;
 
 	abstract isPlaying(): boolean;
 

@@ -1,4 +1,4 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
 import { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
@@ -11,9 +11,9 @@ export class ProxyAudioAsset extends AudioAsset {
 		id: string,
 		assetPath: string,
 		duration: number,
-		system: g.AudioSystemLike,
+		system: pdi.AudioSystem,
 		loop: boolean,
-		hint: g.AudioAssetHint
+		hint: pdi.AudioAssetHint
 	) {
 		super(id, assetPath, duration, system, loop, hint);
 		this._handlerSet = handlerSet;
@@ -24,7 +24,7 @@ export class ProxyAudioAsset extends AudioAsset {
 		super.destroy();
 	}
 
-	_load(loader: g.AssetLoadHandler): void {
+	_load(loader: pdi.AssetLoadHandler): void {
 		this._handlerSet.loadAudioAsset({
 			id: this.id,
 			assetPath: this.path,

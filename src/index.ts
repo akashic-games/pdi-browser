@@ -3,10 +3,6 @@ export { Platform, PlatformParameterObject };
 import { ResourceFactory, ResourceFactoryParameterObject } from "./ResourceFactory";
 export { ResourceFactory, ResourceFactoryParameterObject };
 
-// akashic-engine内部でresourceを使えるように初期設定
-import * as g from "@akashic/akashic-engine";
-export { g };
-
 import { AudioPluginRegistry } from "./plugin/AudioPluginRegistry";
 export { AudioPluginRegistry };
 export { AudioPlugin } from "./plugin/AudioPlugin";

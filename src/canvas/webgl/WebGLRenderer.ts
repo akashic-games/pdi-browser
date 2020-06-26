@@ -1,10 +1,10 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 import { WebGLBackSurface } from "./WebGLBackSurface";
 import { WebGLColor } from "./WebGLColor";
 import { WebGLRenderingState } from "./WebGLRenderingState";
 import { RenderTarget, WebGLSharedObject } from "./WebGLSharedObject";
 
-export class WebGLRenderer implements g.RendererLike {
+export class WebGLRenderer implements pdi.Renderer {
 	static DEFAULT_CAPACITY: number = 16;
 
 	protected _shared: WebGLSharedObject;
@@ -56,7 +56,7 @@ export class WebGLRenderer implements g.RendererLike {
 		this.currentState().globalAlpha *= opacity;
 	}
 
-	setCompositeOperation(operation: g.CompositeOperationString): void {
+	setCompositeOperation(operation: pdi.CompositeOperationString): void {
 		this.currentState().globalCompositeOperation = operation;
 	}
 
@@ -110,7 +110,7 @@ export class WebGLRenderer implements g.RendererLike {
 		this.currentState().globalAlpha = opacity;
 	}
 
-	setShaderProgram(shaderProgram: g.ShaderProgram): void {
+	setShaderProgram(shaderProgram: pdi.ShaderProgram): void {
 		this.currentState().shaderProgram = this._shared.initializeShaderProgram(shaderProgram);
 	}
 
@@ -137,7 +137,7 @@ export class WebGLRenderer implements g.RendererLike {
 		this._whiteColor = undefined;
 	}
 
-	_getImageData(): g.ImageData {
+	_getImageData(): pdi.ImageData {
 		throw new Error("WebGLRenderer#_getImageData() is not implemented");
 	}
 
