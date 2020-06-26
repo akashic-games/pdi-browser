@@ -1,5 +1,5 @@
 "use strict";
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 import { ExceptionFactory } from "./ExceptionFactory";
 import { XHRLoaderOption } from "./XHRLoaderOption";
 export interface XHRRequestObject {
@@ -16,21 +16,21 @@ export class XHRLoader {
 		this.timeout = options.timeout || 15000;
 	}
 
-	get(url: string, callback: (error: g.AssetLoadError, data?: string) => void): void {
+	get(url: string, callback: (error: pdi.AssetLoadError, data?: string) => void): void {
 		this._getRequestObject({
 			url: url,
 			responseType: "text"
 		}, callback);
 	}
 
-	getArrayBuffer(url: string, callback: (error: g.AssetLoadError, data?: ArrayBuffer) => void): void {
+	getArrayBuffer(url: string, callback: (error: pdi.AssetLoadError, data?: ArrayBuffer) => void): void {
 		this._getRequestObject({
 			url: url,
 			responseType: "arraybuffer"
 		}, callback);
 	}
 
-	private _getRequestObject(requestObject: XHRRequestObject, callback: (error: g.AssetLoadError, data?: any) => void): void {
+	private _getRequestObject(requestObject: XHRRequestObject, callback: (error: pdi.AssetLoadError, data?: any) => void): void {
 		var request = new XMLHttpRequest();
 		request.open("GET", requestObject.url, true);
 		request.responseType = requestObject.responseType;

@@ -1,10 +1,10 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 import { Surface } from "../Surface";
 import { ExceptionFactory } from "../utils/ExceptionFactory";
 import { Asset } from "./Asset";
 
 export class ImageAssetSurface extends Surface {
-	renderer(): g.RendererLike {
+	renderer(): pdi.Renderer {
 		throw new Error("ImageAssetSurface cannot be rendered.");
 	}
 
@@ -13,11 +13,11 @@ export class ImageAssetSurface extends Surface {
 	}
 }
 
-export class HTMLImageAsset extends Asset implements g.ImageAssetLike {
+export class HTMLImageAsset extends Asset implements pdi.ImageAsset {
 	type: "image" = "image";
 	width: number;
 	height: number;
-	hint: g.ImageAssetHint;
+	hint: pdi.ImageAssetHint;
 	data: any;
 	_surface: ImageAssetSurface;
 
@@ -29,7 +29,7 @@ export class HTMLImageAsset extends Asset implements g.ImageAssetLike {
 		this._surface = undefined;
 	}
 
-	initialize(hint: g.ImageAssetHint): void {
+	initialize(hint: pdi.ImageAssetHint): void {
 		this.hint = hint;
 	}
 
@@ -42,7 +42,7 @@ export class HTMLImageAsset extends Asset implements g.ImageAssetLike {
 		super.destroy();
 	}
 
-	_load(loader: g.AssetLoadHandler): void {
+	_load(loader: pdi.AssetLoadHandler): void {
 		const image = new Image();
 
 		if (this.hint && this.hint.untainted) {

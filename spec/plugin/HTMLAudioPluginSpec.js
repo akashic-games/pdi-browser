@@ -1,5 +1,5 @@
 "use strict";
-var g = require("../../lib/full/index").g;
+var MockAudioSystem = require("../helpers/mock").MockAudioSystem;
 var HTMLAudioPlugin = require("../../lib/full/plugin/HTMLAudioPlugin/HTMLAudioPlugin").HTMLAudioPlugin;
 var HTMLAudioAsset = require("../../lib/full/plugin/HTMLAudioPlugin/HTMLAudioAsset").HTMLAudioAsset;
 var AudioManager = require("../../lib/full/AudioManager").AudioManager;
@@ -15,7 +15,7 @@ describe("HTMLAudioPlugin", function () {
     describe("#createAsset", function () {
         it("should HTMLAudioAsset", function () {
             var plugin = new HTMLAudioPlugin();
-            var system = new g.SoundAudioSystem({id: "voice"});
+            var system = new MockAudioSystem({id: "voice"});
             var asset = plugin.createAsset("id", audioAssetPath, system, false, {});
             expect(asset).toEqual(jasmine.any(HTMLAudioAsset));
         });
@@ -23,7 +23,7 @@ describe("HTMLAudioPlugin", function () {
     describe("HTMLAudioAsset", function () {
         it("#loadするとaudio dataが取得できる", function (done) {
             var plugin = new HTMLAudioPlugin();
-            var system = new g.SoundAudioSystem({id: "voice"});
+            var system = new MockAudioSystem({id: "voice"});
             var asset = plugin.createAsset("id", audioAssetPath, system, false, {});
             var loader = {
                 _onAssetLoad: function (asset) {
@@ -39,7 +39,7 @@ describe("HTMLAudioPlugin", function () {
         });
         it("オーディオアセットの拡張子がファイル名の末尾につく", function (done) {
             var plugin = new HTMLAudioPlugin();
-            var system = new g.SoundAudioSystem({id: "voice"});
+            var system = new MockAudioSystem({id: "voice"});
             var query = "rev=1234";
             var asset = plugin.createAsset("id", audioAssetPath + "?" + query, system, false, {});
             var loader = {
@@ -55,7 +55,7 @@ describe("HTMLAudioPlugin", function () {
         });
         it("存在しないファイルを#loadするとonAssetErrorが呼ばれる", function (done) {
             var plugin = new HTMLAudioPlugin();
-            var system = new g.SoundAudioSystem({id: "voice"});
+            var system = new MockAudioSystem({id: "voice"});
             var asset = plugin.createAsset("id", "not_found_audio", system, false, {});
             var loader = {
                 _onAssetLoad: function (asset) {
@@ -63,7 +63,8 @@ describe("HTMLAudioPlugin", function () {
                 },
                 _onAssetError: function (asset, error) {
                     expect(asset.data).not.toBeUndefined();
-                    expect(error).toEqual(jasmine.any(Error));
+                    expect(error.name).toEqual("AssetLoadError");
+                    expect(typeof error.message).toEqual("string");
                     done();
                 }
             };
@@ -74,7 +75,7 @@ describe("HTMLAudioPlugin", function () {
             var plugin = new HTMLAudioPlugin();
             // aacとoggがサポート対象にあるが、このテストではどちらか一方のみサポートしてると限定して行う
             plugin.supportedFormats = plugin.supportedFormats.length >= 2 ? [supportedFormat] : plugin.supportedFormats;
-            var system = new g.SoundAudioSystem({id: "voice"});
+            var system = new MockAudioSystem({id: "voice"});
             var asset = plugin.createAsset("id", audioAssetPath, system, false, {});
             var loader = {
                 _onAssetLoad: function (asset) {
@@ -90,7 +91,7 @@ describe("HTMLAudioPlugin", function () {
         it("aacファイルが存在しない場合mp4ファイルが読み込まれる", function (done) {
             var plugin = new HTMLAudioPlugin();
             plugin.supportedFormats = ["aac", "mp4"];
-            var system = new g.SoundAudioSystem({id: "voice"});
+            var system = new MockAudioSystem({id: "voice"});
             var audioAsset2Path = "/spec/fixtures/audio/bgm2"
             var query = "rev=4321";
             var asset = plugin.createAsset("id", audioAsset2Path + "?" + query, system, false, {});
@@ -112,7 +113,7 @@ describe("HTMLAudioPlugin", function () {
         xit("#playすると音を再生できる", function (done) {
             var manager = new AudioManager();
             var plugin = new HTMLAudioPlugin();
-            var system = new g.SoundAudioSystem({id: "voice"});
+            var system = new MockAudioSystem({id: "voice"});
             var asset = plugin.createAsset("id", seAssetPath, system, false, {});
             var player = plugin.createPlayer(system, manager);
             player.changeVolume(0.1);

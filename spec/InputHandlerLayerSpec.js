@@ -4,7 +4,7 @@ var MouseHandler = require("../lib/full/handler/MouseHandler").MouseHandler;
 var InputHandlerLayer = require("../lib/full/InputHandlerLayer").InputHandlerLayer;
 var ResourceFactory = require("../lib/full/ResourceFactory").ResourceFactory;
 
-// akashic-pdi の PointEventType の模倣。本家は const enum なのでJSでは使えない。
+// pdi-types の PointEventType の模倣。本家は const enum なのでJSでは使えない。
 var PdiPointEventType = { Down: 0, Move: 1, Up: 2 };
 
 describe("InputHandlerLayer", function () {

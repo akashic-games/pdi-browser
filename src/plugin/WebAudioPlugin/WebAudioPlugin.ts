@@ -1,5 +1,5 @@
 "use strict";
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
 import { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
@@ -41,14 +41,14 @@ export class WebAudioPlugin implements AudioPlugin {
 		id: string,
 		assetPath: string,
 		duration: number,
-		system: g.AudioSystemLike,
+		system: pdi.AudioSystem,
 		loop: boolean,
-		hint: g.AudioAssetHint
+		hint: pdi.AudioAssetHint
 	): AudioAsset {
 		return new WebAudioAsset(id, assetPath, duration, system, loop, hint);
 	}
 
-	createPlayer(system: g.AudioSystemLike, manager: AudioManager): AudioPlayer {
+	createPlayer(system: pdi.AudioSystem, manager: AudioManager): AudioPlayer {
 		return new WebAudioPlayer(system, manager);
 	}
 

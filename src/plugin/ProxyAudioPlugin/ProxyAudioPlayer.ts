@@ -1,4 +1,4 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 import { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
 import { ProxyAudioAsset } from "./ProxyAudioAsset";
@@ -11,7 +11,7 @@ export class ProxyAudioPlayer extends AudioPlayer {
 	private _handlerSet: ProxyAudioHandlerSet;
 	private _manager: AudioManager;
 
-	constructor(handlerSet: ProxyAudioHandlerSet, system: g.AudioSystemLike, manager: AudioManager) {
+	constructor(handlerSet: ProxyAudioHandlerSet, system: pdi.AudioSystem, manager: AudioManager) {
 		super(system);
 		this._audioPlayerId = null;
 		this._handlerSet = handlerSet;

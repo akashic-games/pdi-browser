@@ -1,12 +1,13 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
+import { Trigger } from "@akashic/trigger";
 
-export class HTMLVideoPlayer implements g.VideoPlayerLike {
-	currentVideo: g.VideoAssetLike;
-	onPlay: g.Trigger<g.VideoPlayerEvent>;
-	onStop: g.Trigger<g.VideoPlayerEvent>;
+export class HTMLVideoPlayer implements pdi.VideoPlayer {
+	currentVideo: pdi.VideoAsset;
+	onPlay: Trigger<pdi.VideoPlayerEvent>;
+	onStop: Trigger<pdi.VideoPlayerEvent>;
 	volume: number;
-	played: g.Trigger<g.VideoPlayerEvent>;
-	stopped: g.Trigger<g.VideoPlayerEvent>;
+	played: Trigger<pdi.VideoPlayerEvent>;
+	stopped: Trigger<pdi.VideoPlayerEvent>;
 	_loop: boolean;
 
 	/**
@@ -18,8 +19,8 @@ export class HTMLVideoPlayer implements g.VideoPlayerLike {
 
 	constructor(loop?: boolean) {
 		this._loop = !!loop;
-		this.onPlay = new g.Trigger();
-		this.onStop = new g.Trigger();
+		this.onPlay = new Trigger();
+		this.onStop = new Trigger();
 		this.played = this.onPlay;
 		this.stopped = this.onStop;
 		this.currentVideo = undefined;
@@ -27,7 +28,7 @@ export class HTMLVideoPlayer implements g.VideoPlayerLike {
 		this.isDummy = true;
 	}
 
-	play(_videoAsset: g.VideoAssetLike): void {
+	play(_videoAsset: pdi.VideoAsset): void {
 		// not yet supported
 	}
 

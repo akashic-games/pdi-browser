@@ -1,17 +1,18 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
+import { Trigger } from "@akashic/trigger";
 import { AudioAsset } from "../asset/AudioAsset";
 
-export abstract class AudioPlayer implements g.AudioPlayerLike {
+export abstract class AudioPlayer implements pdi.AudioPlayer {
 	currentAudio: AudioAsset | undefined;
-	onPlay: g.Trigger<g.AudioPlayerEvent> = new g.Trigger();
-	onStop: g.Trigger<g.AudioPlayerEvent> = new g.Trigger();
+	onPlay: Trigger<pdi.AudioPlayerEvent> = new Trigger();
+	onStop: Trigger<pdi.AudioPlayerEvent> = new Trigger();
 	volume: number;
-	played: g.Trigger<g.AudioPlayerEvent> = this.onPlay;
-	stopped: g.Trigger<g.AudioPlayerEvent> = this.onStop;
+	played: Trigger<pdi.AudioPlayerEvent> = this.onPlay;
+	stopped: Trigger<pdi.AudioPlayerEvent> = this.onStop;
 	_muted: boolean;
-	_system: g.AudioSystemLike;
+	_system: pdi.AudioSystem;
 
-	constructor(system: g.AudioSystemLike) {
+	constructor(system: pdi.AudioSystem) {
 		this.volume = system.volume;
 		this._muted = system._muted;
 		this._system = system;

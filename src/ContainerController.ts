@@ -1,6 +1,6 @@
 "use strict";
-import * as g from "@akashic/akashic-engine";
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
+import { Trigger } from "@akashic/trigger";
 import { CanvasSurface } from "./canvas/CanvasSurface";
 import { InputHandlerLayer } from "./InputHandlerLayer";
 import { ResourceFactory } from "./ResourceFactory";
@@ -34,7 +34,7 @@ export class ContainerController {
 	 */
 	useResizeForScaling: boolean;
 
-	pointEventTrigger: g.Trigger<g.PlatformPointEvent>;
+	pointEventTrigger: Trigger<pdi.PlatformPointEvent>;
 
 	private _rendererReq: pdi.RendererRequirement;
 	private _disablePreventDefault: boolean;
@@ -45,7 +45,7 @@ export class ContainerController {
 		this.inputHandlerLayer = null;
 		this.rootView = null;
 		this.useResizeForScaling = false;
-		this.pointEventTrigger = new g.Trigger<g.PlatformPointEvent>();
+		this.pointEventTrigger = new Trigger<pdi.PlatformPointEvent>();
 		this._rendererReq = null;
 		this._disablePreventDefault = false;
 		this.resourceFactory = resourceFactory;
@@ -77,7 +77,7 @@ export class ContainerController {
 		this._appendToRootView(this.rootView);
 	}
 
-	getRenderer(): g.RendererLike {
+	getRenderer(): pdi.Renderer {
 		if (!this.surface) {
 			throw new Error("this container has no surface");
 		}
