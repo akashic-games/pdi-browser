@@ -10,7 +10,6 @@ import { Platform } from "./Platform";
 import { GlyphFactory } from "./canvas/GlyphFactory";
 import { SurfaceFactory } from "./canvas/shims/SurfaceFactory";
 import { CanvasSurface } from "./canvas/CanvasSurface";
-import { SurfaceAtlas } from "./SurfaceAtlas";
 
 export interface ResourceFactoryParameterObject {
 	audioPluginManager: AudioPluginManager;
@@ -95,10 +94,6 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		fontWeight?: pdi.FontWeightString
 	): pdi.GlyphFactory {
 		return new GlyphFactory(fontFamily, fontSize, baseline, fontColor, strokeWidth, strokeColor, strokeOnly, fontWeight);
-	}
-
-	createSurfaceAtlas(width: number, height: number): pdi.SurfaceAtlas {
-		return new SurfaceAtlas(this.createSurface(width, height));
 	}
 
 	_onAudioAssetDestroyed(asset: AudioAsset): void {
