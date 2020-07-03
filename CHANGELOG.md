@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 2.0.0-beta.8
-* @akashic/akashic-engine@3.0.0-beta.28 への追従対応
+* @akashic/pdi-types@1.0.1 への追従対応
 
 ## 2.0.0-beta.7
 * @akashic/pdi-types を利用するように
