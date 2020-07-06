@@ -1,6 +1,6 @@
 {
   "name": "@akashic/pdi-browser",
-  "version": "2.0.0-beta.7",
+  "version": "2.0.0-beta.8",
   "description": "An akashic-pdi implementatation for Web browsers",
   "main": "index.js",
   "typings": "lib/full/index.d.ts",
@@ -41,7 +41,7 @@
   ],
   "devDependencies": {
     "@akashic/amflow": "~2.0.0",
-    "@akashic/pdi-types": "~1.0.0",
+    "@akashic/pdi-types": "~1.0.1",
     "@akashic/playlog": "~3.0.0",
     "@types/node": "12.12.18",
     "browserify": "16.5.0",
