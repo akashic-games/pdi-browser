@@ -41,7 +41,7 @@
   ],
   "devDependencies": {
     "@akashic/amflow": "~2.0.0",
-    "@akashic/pdi-types": "../pdi-types",
+    "@akashic/pdi-types": "~1.0.1",
     "@akashic/playlog": "~3.0.0",
     "@types/node": "12.12.18",
     "browserify": "16.5.0",
