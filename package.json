@@ -43,7 +43,7 @@
     "@akashic/akashic-pdi": "~2.9.0",
     "@akashic/amflow": "~2.0.0",
     "@akashic/playlog": "~3.0.0",
-    "@types/node": "12.12.47",
+    "@types/node": "12.12.50",
     "browserify": "16.5.1",
     "cpx": "1.5.0",
     "es5-shim": "4.5.14",
