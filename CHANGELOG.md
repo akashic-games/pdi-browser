@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.10.1
+* シェーダの `uniform.value` で `Float32Array` が取得できない問題を修正
+
 ## 1.10.0
 * @akashic/amflowと@akashic/playlogのmajor更新に伴うバージョンアップ
 
