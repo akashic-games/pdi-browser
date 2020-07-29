@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.0.0-beta.9
+* シェーダの `uniform.value` で `Float32Array` を取得できない問題を修正
+
 ## 2.0.0-beta.8
 * @akashic/pdi-types@1.0.1 への追従対応
 
