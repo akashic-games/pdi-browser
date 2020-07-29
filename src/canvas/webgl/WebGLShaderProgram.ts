@@ -169,7 +169,7 @@ export class WebGLShaderProgram {
 		if (uniforms != null) {
 			Object.keys(uniforms).forEach(k => {
 				let type = uniforms[k].type;
-				const isArray = Array.isArray(uniforms[k].value);
+				const isArray = !(typeof uniforms[k].value === "number");
 				// typeがfloatまたはintで、valueが配列であれば配列としてuniform値を転送する。
 				if (isArray && (type === "int" || type === "float")) {
 					type += "_v";
