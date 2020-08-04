@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.0.0-beta.10
+* @akashic/akashic-engine@3.0.0-beta.30 への追従対応
+
 ## 2.0.0-beta.9
 * シェーダの `uniform.value` で `Float32Array` を取得できない問題を修正
 
