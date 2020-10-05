@@ -36,8 +36,8 @@
     "@akashic/akashic-pdi": "~1.15.0",
     "@akashic/amflow": "~3.0.0",
     "@akashic/playlog": "~3.1.0",
-    "@types/node": "9.6.56",
-    "browserify": "16.5.1",
+    "@types/node": "9.6.59",
+    "browserify": "16.5.2",
     "es5-shim": "4.5.14",
     "exorcist": "1.0.1",
     "glob": "7.1.6",
@@ -50,7 +50,7 @@
     "shx": "0.3.2",
     "testem": "3.2.0",
     "tslint": "5.20.1",
-    "typescript": "3.9.6",
+    "typescript": "3.9.7",
     "uglify-js": "3.9.4"
   },
   "dependencies": {
