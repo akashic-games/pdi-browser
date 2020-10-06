@@ -41,7 +41,7 @@
     "es5-shim": "4.5.14",
     "exorcist": "1.0.1",
     "glob": "7.1.6",
-    "jasmine": "3.5.0",
+    "jasmine": "3.6.1",
     "jasmine-reporters": "2.3.2",
     "jasmine-terminal-reporter": "1.0.3",
     "phantomjs": "2.1.7",
@@ -51,7 +51,7 @@
     "testem": "3.2.0",
     "tslint": "5.20.1",
     "typescript": "3.9.7",
-    "uglify-js": "3.9.4"
+    "uglify-js": "3.11.1"
   },
   "dependencies": {
     "@akashic/akashic-engine": "~1.14.0"
