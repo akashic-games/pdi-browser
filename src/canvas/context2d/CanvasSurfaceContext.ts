@@ -154,6 +154,9 @@ export class CanvasSurfaceContext {
 		}
 		this._stateStack.pop();
 		this._modifiedTransform = true;
+		this._currentFillStyle = this._context.fillStyle;
+		this._currentGlobalAlpha = this._context.globalAlpha;
+		this._currentGlobalCompositeOperation = this._context.globalCompositeOperation;
 	}
 
 	private currentState(): CanvasRenderingState {
