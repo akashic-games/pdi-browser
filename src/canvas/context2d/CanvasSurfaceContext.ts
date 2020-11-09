@@ -4,18 +4,18 @@ export class CanvasSurfaceContext {
 	protected _context: CanvasRenderingContext2D;
 	protected _stateStack: CanvasRenderingState[] = [];
 
-	protected _currentFillStyle: string | CanvasGradient | CanvasPattern;
-	protected _currentGlobalAlpha: number;
-	protected _currentGlobalCompositeOperation: string;
+	protected _contextFillStyle: string | CanvasGradient | CanvasPattern;
+	protected _contextGlobalAlpha: number;
+	protected _contextGlobalCompositeOperation: string;
 
 	private _modifiedTransform: boolean = false;
 
 	constructor(context: CanvasRenderingContext2D) {
 		this._context = context;
 		const state = new CanvasRenderingState();
-		this._currentFillStyle = state.fillStyle;
-		this._currentGlobalAlpha = state.globalAlpha;
-		this._currentGlobalCompositeOperation = state.globalCompositeOperation;
+		this._contextFillStyle = state.fillStyle;
+		this._contextGlobalAlpha = state.globalAlpha;
+		this._contextGlobalCompositeOperation = state.globalCompositeOperation;
 		this.pushState(state);
 	}
 
@@ -118,17 +118,17 @@ export class CanvasSurfaceContext {
 	prerender() {
 		const currentState = this.currentState();
 
-		if (currentState.fillStyle !== this._currentFillStyle) {
+		if (currentState.fillStyle !== this._contextFillStyle) {
 			this._context.fillStyle = currentState.fillStyle;
-			this._currentFillStyle = currentState.fillStyle;
+			this._contextFillStyle = currentState.fillStyle;
 		}
-		if (currentState.globalAlpha !== this._currentGlobalAlpha) {
+		if (currentState.globalAlpha !== this._contextGlobalAlpha) {
 			this._context.globalAlpha = currentState.globalAlpha;
-			this._currentGlobalAlpha = currentState.globalAlpha;
+			this._contextGlobalAlpha = currentState.globalAlpha;
 		}
-		if (currentState.globalCompositeOperation !== this._currentGlobalCompositeOperation) {
+		if (currentState.globalCompositeOperation !== this._contextGlobalCompositeOperation) {
 			this._context.globalCompositeOperation = currentState.globalCompositeOperation;
-			this._currentGlobalCompositeOperation = currentState.globalCompositeOperation;
+			this._contextGlobalCompositeOperation = currentState.globalCompositeOperation;
 		}
 		if (this._modifiedTransform) {
 			const transformer = currentState.transformer;
@@ -154,6 +154,10 @@ export class CanvasSurfaceContext {
 		}
 		this._stateStack.pop();
 		this._modifiedTransform = true;
+		// TODO: `_context` が外部(Context2DRenderer)で破壊されているのでここで値を反映している。本来 `_context` の操作は全てこのクラスに集約すべきである。
+		this._contextFillStyle = this._context.fillStyle;
+		this._contextGlobalAlpha = this._context.globalAlpha;
+		this._contextGlobalCompositeOperation = this._context.globalCompositeOperation;
 	}
 
 	private currentState(): CanvasRenderingState {

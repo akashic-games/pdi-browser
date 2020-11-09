@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.0.0-beta.11
+* `CanvasSurfaceContext#restore()` で描画状態を復元された時に変数 `_contextXXXXX` が現在の状態を保持したままになる問題を修正
+
 ## 2.0.0-beta.10
 * @akashic/akashic-engine@3.0.0-beta.30 への追従対応
 
