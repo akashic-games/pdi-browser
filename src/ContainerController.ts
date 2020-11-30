@@ -118,9 +118,9 @@ export class ContainerController {
 			this.inputHandlerLayer.setViewSize({ width, height });
 			this.inputHandlerLayer.pointEventTrigger.removeAll();
 			if (this.surface && ! this.surface.destroyed()) {
-					this.inputHandlerLayer.view.removeChild(this.surface.canvas);
-					this.surface.destroy();
-				}
+				this.inputHandlerLayer.view.removeChild(this.surface.canvas);
+				this.surface.destroy();
+			}
 		}
 
 		// 入力受け付けレイヤー > 描画レイヤー

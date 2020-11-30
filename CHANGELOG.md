@@ -35,6 +35,27 @@
 * AudioAssetにクエリパラメータを付与可能とする対応
 * `Platform#setRendererRequirement()` を2度呼び出したとき、null参照によって例外が発生する問題を修正
 
+## 1.11.1
+* `CanvasSurfaceContext#restore()` で描画状態を復元された時に変数 `_contextXXXXX` が現在の状態を保持したままになる問題を修正
+
+## 1.11.0
+* @akashic/amflowのmajor更新と@akashic/playlogのminor更新に伴うバージョンアップ
+
+## 1.10.1
+* シェーダの `uniform.value` で `Float32Array` が取得できない問題を修正
+
+## 1.10.0
+* @akashic/amflowと@akashic/playlogのmajor更新に伴うバージョンアップ
+
+## 1.9.0
+* @akashic/amflowと@akashic/playlogのmajor更新に伴うバージョンアップ
+
+## 1.8.3
+* AudioAssetにクエリパラメータを付与できるように修正
+
+## 1.8.2
+* Platform#setRendererRequirement() を二度以上呼び出すと例外が発生する問題を修正
+
 ## 1.8.1
 * MouseHandler が画面外でキャンセルされてしまう問題を修正
 
