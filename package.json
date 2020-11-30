@@ -1,6 +1,6 @@
 {
   "name": "@akashic/pdi-browser",
-  "version": "2.0.0-beta.11",
+  "version": "2.0.0",
   "description": "An akashic-pdi implementatation for Web browsers",
   "main": "index.js",
   "typings": "lib/full/index.d.ts",
@@ -66,7 +66,6 @@
     "@akashic/trigger": "~1.0.0"
   },
   "publishConfig": {
-    "@akashic:registry": "https://registry.npmjs.org/",
-    "tag": "next"
+    "@akashic:registry": "https://registry.npmjs.org/"
   }
 }
