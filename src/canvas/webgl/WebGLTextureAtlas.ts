@@ -1,7 +1,7 @@
-import * as g from "@akashic/akashic-engine";
-import { WebGLTextureMap } from "./WebGLTextureMap";
-import { WebGLSharedObject, WebGLSurfaceTexture } from "./WebGLSharedObject";
+import * as pdi from "@akashic/pdi-types";
 import { RenderingHelper } from "../RenderingHelper";
+import { WebGLSharedObject, WebGLSurfaceTexture } from "./WebGLSharedObject";
+import { WebGLTextureMap } from "./WebGLTextureMap";
 
 export class WebGLTextureAtlas {
 	// 確保するテクスチャのサイズ (実際のゲームに合わせてチューニングする必要がある)
@@ -41,9 +41,9 @@ export class WebGLTextureAtlas {
 	}
 
 	/**
-	 * g.Surface 用にテクスチャを作成する。
+	 * pdi.Surface 用にテクスチャを作成する。
 	 */
-	makeTextureForSurface(shared: WebGLSharedObject, surface: g.Surface): void {
+	makeTextureForSurface(shared: WebGLSharedObject, surface: pdi.Surface): void {
 		var image = surface._drawable;
 		if (!image || image.texture) {
 			return;
@@ -84,7 +84,7 @@ export class WebGLTextureAtlas {
 	/**
 	 * 適当なテクスチャアトラスにサーフィスを割り当てる
 	 */
-	private _assign(shared: WebGLSharedObject, surface: g.Surface, maps: WebGLTextureMap[]): void {
+	private _assign(shared: WebGLSharedObject, surface: pdi.Surface, maps: WebGLTextureMap[]): void {
 		// テクスチャアトラスに割り当てる
 		var map: WebGLTextureMap;
 		for (var i = 0; i < maps.length; ++i) {

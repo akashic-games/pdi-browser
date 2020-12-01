@@ -1,10 +1,10 @@
-import * as g from "@akashic/akashic-engine";
-import { WebGLSharedObject, RenderTarget } from "./WebGLSharedObject";
+import * as pdi from "@akashic/pdi-types";
 import { WebGLBackSurface } from "./WebGLBackSurface";
 import { WebGLColor } from "./WebGLColor";
 import { WebGLRenderingState } from "./WebGLRenderingState";
+import { RenderTarget, WebGLSharedObject } from "./WebGLSharedObject";
 
-export class WebGLRenderer extends g.Renderer {
+export class WebGLRenderer implements pdi.Renderer {
 	static DEFAULT_CAPACITY: number = 16;
 
 	protected _shared: WebGLSharedObject;
@@ -15,7 +15,6 @@ export class WebGLRenderer extends g.Renderer {
 	private _capacity: number;
 
 	constructor(shared: WebGLSharedObject, renderTarget: RenderTarget) {
-		super();
 		this._stateStack = [];
 		this._stateStackPointer = 0;
 		this._capacity = 0;
@@ -27,6 +26,10 @@ export class WebGLRenderer extends g.Renderer {
 
 	clear(): void {
 		this._shared.clear();
+	}
+
+	begin(): void {
+		// do nothing.
 	}
 
 	end(): void {
@@ -53,7 +56,7 @@ export class WebGLRenderer extends g.Renderer {
 		this.currentState().globalAlpha *= opacity;
 	}
 
-	setCompositeOperation(operation: g.CompositeOperation): void {
+	setCompositeOperation(operation: pdi.CompositeOperationString): void {
 		this.currentState().globalCompositeOperation = operation;
 	}
 
@@ -80,7 +83,7 @@ export class WebGLRenderer extends g.Renderer {
 	          canvasOffsetX: number, canvasOffsetY: number): void {
 
 		if (!surface._drawable) {
-			throw g.ExceptionFactory.createAssertionError("WebGLRenderer#drawImage: no drawable surface.");
+			throw new Error("WebGLRenderer#drawImage: no drawable surface.");
 		}
 
 		// WebGLTexture でないなら変換する (HTMLVideoElement は対応しない)
@@ -90,20 +93,13 @@ export class WebGLRenderer extends g.Renderer {
 		}
 
 		if (!surface._drawable.texture) {
-			throw g.ExceptionFactory.createAssertionError("WebGLRenderer#drawImage: could not create a texture.");
+			throw new Error("WebGLRenderer#drawImage: could not create a texture.");
 		}
 
 		this._shared.draw(
 			this.currentState(), surface._drawable, offsetX, offsetY, width, height,
 			canvasOffsetX, canvasOffsetY, this._whiteColor
 		);
-	}
-
-	drawSystemText(text: string,
-	               x: number, y: number, maxWidth: number, fontSize: number,
-	               textAlign: g.TextAlign, textBaseline: g.TextBaseline, textColor: string, fontFamily: g.FontFamily,
-	               strokeWidth: number, strokeColor: string, strokeOnly: boolean): void {
-		// do nothing.
 	}
 
 	setTransform(matrix: number[]): void {
@@ -114,7 +110,7 @@ export class WebGLRenderer extends g.Renderer {
 		this.currentState().globalAlpha = opacity;
 	}
 
-	setShaderProgram(shaderProgram: g.ShaderProgram): void {
+	setShaderProgram(shaderProgram: pdi.ShaderProgram): void {
 		this.currentState().shaderProgram = this._shared.initializeShaderProgram(shaderProgram);
 	}
 
@@ -141,13 +137,20 @@ export class WebGLRenderer extends g.Renderer {
 		this._whiteColor = undefined;
 	}
 
-	_getImageData(): g.ImageData {
-		throw g.ExceptionFactory.createAssertionError("WebGLRenderer#_getImageData() is not implemented");
+	_getImageData(): pdi.ImageData {
+		throw new Error("WebGLRenderer#_getImageData() is not implemented");
 	}
 
-	_putImageData(imageData: ImageData, dx: number, dy: number, dirtyX?: number,
-	              dirtyY?: number, dirtyWidth?: number, dirtyHeight?: number): void {
-		throw g.ExceptionFactory.createAssertionError("WebGLRenderer#_putImageData() is not implemented");
+	_putImageData(
+		_imageData: ImageData,
+		_dx: number,
+		_dy: number,
+		_dirtyX?: number,
+		_dirtyY?: number,
+		_dirtyWidth?: number,
+		_dirtyHeight?: number
+	): void {
+		throw new Error("WebGLRenderer#_putImageData() is not implemented");
 	}
 
 	private _pushState(): void {
@@ -164,8 +167,7 @@ export class WebGLRenderer extends g.Renderer {
 			this.currentState().shaderProgram = null;
 			--this._stateStackPointer;
 		} else {
-			throw g.ExceptionFactory.createAssertionError(
-				"WebGLRenderer#restore: state stack under-flow.");
+			throw new Error("WebGLRenderer#restore: state stack under-flow.");
 		}
 	}
 

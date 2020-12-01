@@ -1,5 +1,43 @@
 # CHANGELOG
 
+## 2.0.0
+* @akashic/akashic-engine@3.0.0 への追従対応
+
+## 2.0.0-beta.11
+* `CanvasSurfaceContext#restore()` で描画状態を復元された時に変数 `_contextXXXXX` が現在の状態を保持したままになる問題を修正
+
+## 2.0.0-beta.10
+* @akashic/akashic-engine@3.0.0-beta.30 への追従対応
+
+## 2.0.0-beta.9
+* シェーダの `uniform.value` で `Float32Array` を取得できない問題を修正
+
+## 2.0.0-beta.8
+* @akashic/pdi-types@1.0.1 への追従対応
+
+## 2.0.0-beta.7
+* @akashic/pdi-types を利用するように
+
+## 2.0.0-beta.6
+* @akashic/akashic-engine@3.0.0-beta.24 への追従対応
+
+## 2.0.0-beta.5
+* @akashic/akashic-engine@3 への追従対応
+
+## 2.0.0-beta.4
+* @akashic/akashic-engine@3.0.0-beta.18 までに追従
+
+## 2.0.0-beta.3
+* `g.Glyph` が deprecated になったので、`g.GlyphLike` に置き換える対応
+
+## 2.0.0-beta.2
+* 各AudioPlayerの `_calculateVolume()` の計算条件を `AudioPlayer#_muted` から `AudioSystem#_muted`へ変更
+* 未使用の `PostMessageAudioPlugin` 関連を削除
+
+## 2.0.0-beta.1
+* AudioAssetにクエリパラメータを付与可能とする対応
+* `Platform#setRendererRequirement()` を2度呼び出したとき、null参照によって例外が発生する問題を修正
+
 ## 1.11.1
 * `CanvasSurfaceContext#restore()` で描画状態を復元された時に変数 `_contextXXXXX` が現在の状態を保持したままになる問題を修正
 

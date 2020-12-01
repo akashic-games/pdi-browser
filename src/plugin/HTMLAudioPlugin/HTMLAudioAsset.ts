@@ -1,17 +1,20 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
+import { AudioAsset } from "../../asset/AudioAsset";
+import { ExceptionFactory } from "../../utils/ExceptionFactory";
+import { addExtname } from "../../PathUtil";
 
 export interface MediaLoaderEventHandlerSet {
 	success: () => void;
 	error: () => void;
 }
 
-export class HTMLAudioAsset extends g.AudioAsset {
+export class HTMLAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[];
 	private _intervalId: number;
 	private _intervalCount: number;
 
-	_load(loader: g.AssetLoadHandler): void {
+	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {
 			// 再生可能な形式がない。実際には鳴らない音声としてロード成功しておく
 			this.data = null;
@@ -48,7 +51,7 @@ export class HTMLAudioAsset extends g.AudioAsset {
 			error: (): void => {
 				this._detachAll(audio, handlers);
 				this.data = audio;
-				loader._onAssetError(this, g.ExceptionFactory.createAssetLoadError("HTMLAudioAsset loading error"));
+				loader._onAssetError(this, ExceptionFactory.createAssetLoadError("HTMLAudioAsset loading error"));
 				window.clearInterval(this._intervalId);
 			}
 		};
@@ -82,7 +85,7 @@ export class HTMLAudioAsset extends g.AudioAsset {
 				error: () => {
 					this._detachAll(audio, altHandlers);
 					window.clearInterval(this._intervalId);
-					this.path = g.PathUtil.addExtname(this.originalPath, "mp4");
+					this.path = addExtname(this.originalPath, "mp4");
 					startLoadingAudio(this.path, handlers);
 				}
 			};
@@ -99,10 +102,10 @@ export class HTMLAudioAsset extends g.AudioAsset {
 
 	_assetPathFilter(path: string): string {
 		if (HTMLAudioAsset.supportedFormats.indexOf("ogg") !== -1) {
-			return g.PathUtil.addExtname(path, "ogg");
+			return addExtname(path, "ogg");
 		}
 		if (HTMLAudioAsset.supportedFormats.indexOf("aac") !== -1) {
-			return g.PathUtil.addExtname(path, "aac");
+			return addExtname(path, "aac");
 		}
 		// ここで検出されるのは最初にアクセスを試みるオーディオアセットのファイルパスなので、
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない

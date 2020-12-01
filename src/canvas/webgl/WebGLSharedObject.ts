@@ -1,10 +1,10 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
+import { AffineTransformer } from "../AffineTransformer";
+import { WebGLBackSurface } from "./WebGLBackSurface";
+import { WebGLPrimarySurface } from "./WebGLPrimarySurface";
+import { WebGLRenderingState } from "./WebGLRenderingState";
 import { WebGLShaderProgram } from "./WebGLShaderProgram";
 import { WebGLTextureAtlas } from "./WebGLTextureAtlas";
-import { WebGLRenderingState } from "./WebGLRenderingState";
-import { AffineTransformer } from "../AffineTransformer";
-import { WebGLPrimarySurface } from "./WebGLPrimarySurface";
-import { WebGLBackSurface } from "./WebGLBackSurface";
 
 export interface WebGLSurfaceTexture {
 	texture: WebGLTexture;
@@ -42,17 +42,17 @@ export class WebGLSharedObject {
 	private _currentTexture: WebGLTexture;
 	private _currentColor: number[];
 	private _currentAlpha: number;
-	private _currentCompositeOperation: g.CompositeOperation;
+	private _currentCompositeOperation: pdi.CompositeOperationString;
 	private _currentShaderProgram: WebGLShaderProgram;
 
-	private _compositeOps: {[key: number]: [number, number]; };
+	private _compositeOps: {[key in pdi.CompositeOperationString]: [number, number]; };
 	private _deleteRequestedTargets: RenderTarget[];
 
 	constructor(width: number, height: number) {
 		const surface = new WebGLPrimarySurface(this, width, height);
 		const context = surface.canvas.getContext("webgl", { depth: false, preserveDrawingBuffer: true });
 		if (!context) {
-			throw g.ExceptionFactory.createAssertionError("WebGLSharedObject#constructor: could not initialize WebGLRenderingContext");
+			throw new Error("WebGLSharedObject#constructor: could not initialize WebGLRenderingContext");
 		}
 
 		this._surface = surface;
@@ -208,7 +208,7 @@ export class WebGLSharedObject {
 		}
 	}
 
-	makeTextureForSurface(surface: g.Surface): void {
+	makeTextureForSurface(surface: pdi.Surface): void {
 		this._textureAtlas.makeTextureForSurface(this, surface);
 	}
 
@@ -225,7 +225,7 @@ export class WebGLSharedObject {
 		this._context.bindTexture(this._context.TEXTURE_2D, texture);
 
 		if (image instanceof HTMLVideoElement) {
-			throw g.ExceptionFactory.createAssertionError("WebGLRenderer#assignTexture: HTMLVideoElement is not supported.");
+			throw new Error("WebGLRenderer#assignTexture: HTMLVideoElement is not supported.");
 		}
 
 		this._context.texSubImage2D(this._context.TEXTURE_2D, 0, x, y, this._context.RGBA, this._context.UNSIGNED_BYTE, image);
@@ -350,7 +350,7 @@ export class WebGLSharedObject {
 		return this._defaultShaderProgram;
 	}
 
-	initializeShaderProgram(shaderProgram: g.ShaderProgram | null): g.ShaderProgram {
+	initializeShaderProgram(shaderProgram: pdi.ShaderProgram | null): pdi.ShaderProgram {
 		if (shaderProgram) {
 			if (!shaderProgram._program) {
 				const program = new WebGLShaderProgram(
@@ -396,7 +396,7 @@ export class WebGLSharedObject {
 		this._currentTexture = null;
 		this._currentColor = [1.0, 1.0, 1.0, 1.0];
 		this._currentAlpha = 1.0;
-		this._currentCompositeOperation = g.CompositeOperation.SourceOver;
+		this._currentCompositeOperation = "source-over";
 		this._currentShaderProgram = program;
 		this._defaultShaderProgram = program;
 		this._renderTargetStack = [];
@@ -419,17 +419,17 @@ export class WebGLSharedObject {
 		this._context.bindTexture(this._context.TEXTURE_2D, this._fillRectTexture);
 
 		this._compositeOps = {
-			[g.CompositeOperation.SourceAtop]: [this._context.DST_ALPHA, this._context.ONE_MINUS_SRC_ALPHA],
-			[g.CompositeOperation.ExperimentalSourceIn]: [this._context.DST_ALPHA, this._context.ZERO],
-			[g.CompositeOperation.ExperimentalSourceOut]: [this._context.ONE_MINUS_DST_ALPHA, this._context.ZERO],
-			[g.CompositeOperation.SourceOver]: [this._context.ONE, this._context.ONE_MINUS_SRC_ALPHA],
-			[g.CompositeOperation.ExperimentalDestinationAtop]: [this._context.ONE_MINUS_DST_ALPHA, this._context.SRC_ALPHA],
-			[g.CompositeOperation.ExperimentalDestinationIn]: [this._context.ZERO, this._context.SRC_ALPHA],
-			[g.CompositeOperation.DestinationOut]: [this._context.ZERO, this._context.ONE_MINUS_SRC_ALPHA],
-			[g.CompositeOperation.DestinationOver]: [this._context.ONE_MINUS_DST_ALPHA, this._context.ONE],
-			[g.CompositeOperation.Lighter]: [this._context.ONE, this._context.ONE],
-			[g.CompositeOperation.Copy]: [this._context.ONE, this._context.ZERO],
-			[g.CompositeOperation.Xor]: [this._context.ONE_MINUS_DST_ALPHA, this._context.ONE_MINUS_SRC_ALPHA]
+			"source-atop": [this._context.DST_ALPHA, this._context.ONE_MINUS_SRC_ALPHA],
+			"experimental-source-in": [this._context.DST_ALPHA, this._context.ZERO],
+			"experimental-source-out": [this._context.ONE_MINUS_DST_ALPHA, this._context.ZERO],
+			"source-over": [this._context.ONE, this._context.ONE_MINUS_SRC_ALPHA],
+			"experimental-destination-atop": [this._context.ONE_MINUS_DST_ALPHA, this._context.SRC_ALPHA],
+			"experimental-destination-in": [this._context.ZERO, this._context.SRC_ALPHA],
+			"destination-out": [this._context.ZERO, this._context.ONE_MINUS_SRC_ALPHA],
+			"destination-over": [this._context.ONE_MINUS_DST_ALPHA, this._context.ONE],
+			"lighter": [this._context.ONE, this._context.ONE],
+			"copy": [this._context.ONE, this._context.ZERO],
+			"xor": [this._context.ONE_MINUS_DST_ALPHA, this._context.ONE_MINUS_SRC_ALPHA]
 		};
 
 		const compositeOperation = this._compositeOps[this._currentCompositeOperation];

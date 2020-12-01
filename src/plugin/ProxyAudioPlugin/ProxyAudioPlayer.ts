@@ -1,17 +1,17 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 import { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
 import { ProxyAudioAsset } from "./ProxyAudioAsset";
 import { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
 
-export class ProxyAudioPlayer extends g.AudioPlayer implements AudioPlayer {
+export class ProxyAudioPlayer extends AudioPlayer {
 	private static _audioPlayerIdCounter: number = 0;
 
 	private _audioPlayerId: string | null;
 	private _handlerSet: ProxyAudioHandlerSet;
 	private _manager: AudioManager;
 
-	constructor(handlerSet: ProxyAudioHandlerSet, system: g.AudioSystem, manager: AudioManager) {
+	constructor(handlerSet: ProxyAudioHandlerSet, system: pdi.AudioSystem, manager: AudioManager) {
 		super(system);
 		this._audioPlayerId = null;
 		this._handlerSet = handlerSet;
@@ -63,6 +63,6 @@ export class ProxyAudioPlayer extends g.AudioPlayer implements AudioPlayer {
 	}
 
 	private _calculateVolume(): number {
-		return this._muted ? 0 : this.volume * this._system.volume * this._manager.getMasterVolume();
+		return this._system._muted ? 0 : this.volume * this._system.volume * this._manager.getMasterVolume();
 	}
 }

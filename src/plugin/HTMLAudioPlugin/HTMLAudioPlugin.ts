@@ -1,9 +1,11 @@
 "use strict";
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
+import { AudioManager } from "../../AudioManager";
+import { AudioAsset } from "../../asset/AudioAsset";
+import { AudioPlayer } from "../AudioPlayer";
 import { AudioPlugin } from "../AudioPlugin";
 import { HTMLAudioAsset } from "./HTMLAudioAsset";
 import { HTMLAudioPlayer } from "./HTMLAudioPlayer";
-import { AudioManager } from "../../AudioManager";
 
 export class HTMLAudioPlugin implements AudioPlugin {
 	// https://github.com/Modernizr/Modernizr/blob/master/feature-detects/audio.js
@@ -32,20 +34,16 @@ export class HTMLAudioPlugin implements AudioPlugin {
 		return this._supportedFormats;
 	}
 
-	// TSLintのバグ - setterはreturn typeを書くとコンパイルエラー
-	/* tslint:disable:typedef */
-	// HTMLAudioAssetへ反映させるためsetterとする
 	set supportedFormats(supportedFormats: string[]) {
 		this._supportedFormats = supportedFormats;
 		HTMLAudioAsset.supportedFormats = supportedFormats;
 	}
-	/* tslint:enable:typedef */
 
-	createAsset(id: string, assetPath: string, duration: number, system: g.AudioSystem, loop: boolean, hint: g.AudioAssetHint): g.AudioAsset {
-		return new HTMLAudioAsset(id, assetPath, duration, system, loop, hint);
+	createAsset(id: string, path: string, duration: number, system: pdi.AudioSystem, loop: boolean, hint: pdi.AudioAssetHint): AudioAsset {
+		return new HTMLAudioAsset(id, path, duration, system, loop, hint);
 	}
 
-	createPlayer(system: g.AudioSystem, manager: AudioManager): g.AudioPlayer {
+	createPlayer(system: pdi.AudioSystem, manager: AudioManager): AudioPlayer {
 		return new HTMLAudioPlayer(system, manager);
 	}
 

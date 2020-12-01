@@ -1,5 +1,6 @@
 "use strict";
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
+import { ExceptionFactory } from "./ExceptionFactory";
 import { XHRLoaderOption } from "./XHRLoaderOption";
 export interface XHRRequestObject {
 	url: string;
@@ -15,27 +16,27 @@ export class XHRLoader {
 		this.timeout = options.timeout || 15000;
 	}
 
-	get(url: string, callback: (error: g.AssetLoadError, data?: string) => void): void {
+	get(url: string, callback: (error: pdi.AssetLoadError, data?: string) => void): void {
 		this._getRequestObject({
 			url: url,
 			responseType: "text"
 		}, callback);
 	}
 
-	getArrayBuffer(url: string, callback: (error: g.AssetLoadError, data?: ArrayBuffer) => void): void {
+	getArrayBuffer(url: string, callback: (error: pdi.AssetLoadError, data?: ArrayBuffer) => void): void {
 		this._getRequestObject({
 			url: url,
 			responseType: "arraybuffer"
 		}, callback);
 	}
 
-	private _getRequestObject(requestObject: XHRRequestObject, callback: (error: g.AssetLoadError, data?: any) => void): void {
+	private _getRequestObject(requestObject: XHRRequestObject, callback: (error: pdi.AssetLoadError, data?: any) => void): void {
 		var request = new XMLHttpRequest();
 		request.open("GET", requestObject.url, true);
 		request.responseType = requestObject.responseType;
 		request.timeout = this.timeout;
 		request.addEventListener("timeout", () => {
-			callback(g.ExceptionFactory.createAssetLoadError("loading timeout"));
+			callback(ExceptionFactory.createAssetLoadError("loading timeout"));
 		}, false);
 		request.addEventListener("load", () => {
 			if (request.status >= 200 && request.status < 300) {
@@ -43,11 +44,11 @@ export class XHRLoader {
 				var response = requestObject.responseType === "text" ? request.responseText : request.response;
 				callback(null, response);
 			} else {
-				callback(g.ExceptionFactory.createAssetLoadError("loading error. status: " + request.status));
+				callback(ExceptionFactory.createAssetLoadError("loading error. status: " + request.status));
 			}
 		}, false);
 		request.addEventListener("error", () => {
-			callback(g.ExceptionFactory.createAssetLoadError("loading error. status: " + request.status));
+			callback(ExceptionFactory.createAssetLoadError("loading error. status: " + request.status));
 		}, false);
 		request.send();
 	}

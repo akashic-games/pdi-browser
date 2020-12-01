@@ -1,4 +1,4 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 import { CanvasSurface } from "./CanvasSurface";
 import { Context2DSurface } from "./context2d/Context2DSurface";
 
@@ -11,7 +11,7 @@ interface GlyphRenderSurfaceResult {
 function createGlyphRenderedSurface(code: number, fontSize: number, cssFontFamily: string,
                                     baselineHeight: number, marginW: number, marginH: number,
                                     needImageData: boolean, fontColor: string, strokeWidth: number,
-                                    strokeColor: string, strokeOnly: boolean, fontWeight: g.FontWeight): GlyphRenderSurfaceResult {
+                                    strokeColor: string, strokeOnly: boolean, fontWeight: pdi.FontWeightString): GlyphRenderSurfaceResult {
 
 	// 要求されたフォントサイズが描画可能な最小フォントサイズ以下だった場合、必要なスケーリング係数
 	const scale = fontSize < GlyphFactory._environmentMinimumFontSize ? fontSize / GlyphFactory._environmentMinimumFontSize : 1;
@@ -28,14 +28,13 @@ function createGlyphRenderedSurface(code: number, fontSize: number, cssFontFamil
 	const context = canvas.getContext("2d");
 
 	const str = (code & 0xFFFF0000) ? String.fromCharCode((code & 0xFFFF0000) >>> 16, code & 0xFFFF) : String.fromCharCode(code);
-	const fontWeightValue = fontWeight === g.FontWeight.Bold ? "bold " : "";
 
 	context.save();
 
 	// CanvasRenderingContext2D.font
 	// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/font
 	// > This string uses the same syntax as the CSS font specifier. The default font is 10px sans-serif.
-	context.font = fontWeightValue + fontSize + "px " + cssFontFamily;
+	context.font = fontWeight + " " + fontSize + "px " + cssFontFamily;
 
 	context.textAlign = "left";
 	context.textBaseline = "alphabetic";
@@ -68,7 +67,7 @@ function createGlyphRenderedSurface(code: number, fontSize: number, cssFontFamil
 	return result;
 }
 
-function calcGlyphArea(imageData: ImageData): g.GlyphArea {
+function calcGlyphArea(imageData: ImageData): pdi.GlyphArea {
 	let sx = imageData.width;
 	let sy = imageData.height;
 	let ex = 0;
@@ -96,7 +95,7 @@ function calcGlyphArea(imageData: ImageData): g.GlyphArea {
 		}
 	}
 
-	let glyphArea: g.GlyphArea = undefined;
+	let glyphArea: pdi.GlyphArea = undefined;
 	if (sx === imageData.width) { // 空白文字
 		glyphArea = { x: 0, y: 0, width: 0, height: 0 }; // 空の領域に設定
 	} else {
@@ -108,19 +107,8 @@ function calcGlyphArea(imageData: ImageData): g.GlyphArea {
 	return glyphArea;
 }
 
-function isGlyphAreaEmpty(glyphArea: g.GlyphArea): boolean {
+function isGlyphAreaEmpty(glyphArea: pdi.GlyphArea): boolean {
 	return glyphArea.width === 0 || glyphArea.height === 0;
-}
-
-function fontFamily2FontFamilyName(fontFamily: g.FontFamily): string {
-	switch (fontFamily) {
-	case g.FontFamily.Monospace:
-		return "monospace";
-	case g.FontFamily.Serif:
-		return "serif";
-	default:
-		return "sans-serif";
-	}
 }
 
 // ジェネリックフォントファミリとして定義されているキーワードのリスト
@@ -133,53 +121,85 @@ const genericFontFamilyNames = [
 // > Font family names must either be given quoted as strings, or unquoted as a sequence of one or more identifiers.
 // > Generic family names are keywords and must not be quoted.
 // see: https://developer.mozilla.org/en-US/docs/Web/CSS/font-family
-function quoteIfNotGeneric(name: string): string {
-	if (genericFontFamilyNames.indexOf(name) !== -1) {
-		return name;
-	} else {
-		return "\"" + name + "\"";
-	}
+function quoteIfNonGeneric(name: string): string {
+	return (genericFontFamilyNames.indexOf(name) !== -1) ? name : "\"" + name + "\"";
 }
 
-function fontFamily2CSSFontFamily(fontFamily: g.FontFamily|string|(g.FontFamily|string)[]): string {
-	if (typeof fontFamily === "number") {
-		return fontFamily2FontFamilyName(fontFamily);
-	} else if (typeof fontFamily === "string") {
-		return quoteIfNotGeneric(fontFamily);
-	} else {
-		return fontFamily.map((font) => {
-			if (typeof font === "string") {
-				return quoteIfNotGeneric(font);
-			} else {
-				return fontFamily2FontFamilyName(font);
-			}
-		}).join(",");
-	}
+function createGlyph(
+	code: number,
+	x: number,
+	y: number,
+	width: number,
+	height: number,
+	offsetX: number,
+	offsetY: number,
+	advanceWidth: number,
+	surface: pdi.Surface,
+	isSurfaceValid: boolean
+): pdi.Glyph {
+	return {
+		code,
+		x,
+		y,
+		width,
+		height,
+		surface,
+		offsetX,
+		offsetY,
+		advanceWidth,
+		isSurfaceValid,
+		_atlas: null
+	};
 }
 
-export class GlyphFactory extends g.GlyphFactory {
+export class GlyphFactory implements pdi.GlyphFactory {
 	/**
 	 * 実行環境が描画可能な最小フォントサイズ
 	 */
 	static _environmentMinimumFontSize: number;
 
-	_glyphAreas: {[key: number]: g.GlyphArea};
+	fontFamily: string | string[];
+	fontSize: number;
+	baselineHeight: number;
+	fontColor: string;
+	fontWeight: pdi.FontWeightString;
+	strokeWidth: number;
+	strokeColor: string;
+	strokeOnly: boolean;
+
+	_glyphAreas: {[key: number]: pdi.GlyphArea} = Object.create(null);
 	_marginW: number;
 	_marginH: number;
 
 	_cssFontFamily: string;
 
-	constructor(fontFamily: g.FontFamily|string|(g.FontFamily|string)[], fontSize: number, baselineHeight?: number,	fontColor?: string,
-	            strokeWidth?: number, strokeColor?: string, strokeOnly?: boolean, fontWeight?: g.FontWeight) {
-		super(fontFamily, fontSize, baselineHeight, fontColor, strokeWidth, strokeColor, strokeOnly, fontWeight);
-		this._glyphAreas = {};
-		this._cssFontFamily = fontFamily2CSSFontFamily(fontFamily);
+	constructor(
+		fontFamily: string|string[],
+		fontSize: number,
+		baselineHeight: number = fontSize,
+		fontColor: string = "black",
+		strokeWidth: number = 0,
+		strokeColor: string = "black",
+		strokeOnly: boolean = false,
+		fontWeight: pdi.FontWeightString = "normal"
+	) {
+		this.fontFamily = fontFamily;
+		this.fontSize = fontSize;
+		this.baselineHeight = baselineHeight;
+		this.fontColor = fontColor;
+		this.strokeWidth = strokeWidth;
+		this.strokeColor = strokeColor;
+		this.strokeOnly = strokeOnly;
+		this.fontWeight = fontWeight;
+
+		this._cssFontFamily = (typeof fontFamily === "string")
+			? quoteIfNonGeneric(fontFamily)
+			: fontFamily.map(quoteIfNonGeneric).join(",");
 
 		// Akashicエンジンは指定されたフォントに利用可能なものが見つからない時
-		// `g.FontFamily.SansSerif` を利用する、と仕様して定められている。
-		const fallbackFontFamilyName = fontFamily2FontFamilyName(g.FontFamily.SansSerif);
-		if (this._cssFontFamily.indexOf(fallbackFontFamilyName) === -1) {
-			this._cssFontFamily += "," + fallbackFontFamilyName;
+		// `"sans-serif"` を利用する、と仕様して定められている。
+		if (this._cssFontFamily.indexOf("sans-serif") === -1) {
+			this._cssFontFamily += ",sans-serif";
 		}
 
 		// `this.fontSize`の大きさの文字を描画するためのサーフェスを生成する。
@@ -197,7 +217,7 @@ export class GlyphFactory extends g.GlyphFactory {
 		}
 	}
 
-	create(code: number): g.Glyph {
+	create(code: number): pdi.Glyph {
 		let result: GlyphRenderSurfaceResult;
 		let glyphArea = this._glyphAreas[code];
 
@@ -218,9 +238,9 @@ export class GlyphFactory extends g.GlyphFactory {
 			if (result) {
 				result.surface.destroy();
 			}
-			return new g.Glyph(code, 0, 0, 0, 0, 0, 0, glyphArea.advanceWidth, undefined, true);
+			return createGlyph(code, 0, 0, 0, 0, 0, 0, glyphArea.advanceWidth, undefined, true);
 		} else {
-			// g.Glyphに格納するサーフェスを生成する。
+			// pdi.Glyphに格納するサーフェスを生成する。
 			// glyphAreaはサーフェスをキャッシュしないため、描画する内容を持つグリフに対しては
 			// サーフェスを生成する。もし前段でcalcGlyphArea()のためのサーフェスを生成して
 			// いればここでは生成せずにそれを利用する。
@@ -233,7 +253,7 @@ export class GlyphFactory extends g.GlyphFactory {
 					this.strokeColor, this.strokeOnly, this.fontWeight
 				);
 			}
-			return new g.Glyph(
+			return createGlyph(
 				code,
 				glyphArea.x, glyphArea.y,
 				glyphArea.width, glyphArea.height,

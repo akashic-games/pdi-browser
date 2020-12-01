@@ -1,10 +1,11 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 import { HTMLAudioAsset } from "./HTMLAudioAsset";
 import { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
 import * as autoPlayHelper from "./HTMLAudioAutoplayHelper";
 
-export class HTMLAudioPlayer extends g.AudioPlayer implements AudioPlayer { private _endedEventHandler: () => void;
+export class HTMLAudioPlayer extends AudioPlayer {
+	private _endedEventHandler: () => void;
 	private _audioInstance: HTMLAudioElement;
 	private _manager: AudioManager;
 	private _isWaitingPlayEvent: boolean;
@@ -12,7 +13,7 @@ export class HTMLAudioPlayer extends g.AudioPlayer implements AudioPlayer { priv
 	private _onPlayEventHandler: () => void;
 	private _dummyDurationWaitTimer: any;
 
-	constructor(system: g.AudioSystem, manager: AudioManager) {
+	constructor(system: pdi.AudioSystem, manager: AudioManager) {
 		super(system);
 		this._manager = manager;
 		this._endedEventHandler = () => {
@@ -112,6 +113,6 @@ export class HTMLAudioPlayer extends g.AudioPlayer implements AudioPlayer { priv
 	}
 
 	private _calculateVolume(): number {
-		return this._muted ? 0 : this.volume * this._system.volume * this._manager.getMasterVolume();
+		return this._system._muted ? 0 : this.volume * this._system.volume * this._manager.getMasterVolume();
 	}
 }

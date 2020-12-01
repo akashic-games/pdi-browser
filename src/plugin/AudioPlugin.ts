@@ -1,6 +1,9 @@
 "use strict";
-import g = require("@akashic/akashic-engine");
+import * as pdi from "@akashic/pdi-types";
+import { AudioAsset } from "../asset/AudioAsset";
 import { AudioManager } from "../AudioManager";
+import { AudioPlayer } from "./AudioPlayer";
+
 // Audioプラグインの詳細は docs/audio-plugin.md
 // Audio Pluginの実装すべきInterface
 // Static methodについては AudioPluginStatic.ts を参照
@@ -9,7 +12,14 @@ export interface AudioPlugin {
 	// e.g.) ["aac", "ogg"]
 	supportedFormats: string[];
 
-	createAsset: (id: string, assetPath: string, duration: number,
-	              system: g.AudioSystem, loop: boolean, hint: g.AudioAssetHint) => g.AudioAsset;
-	createPlayer: (system: g.AudioSystem, manager: AudioManager) => g.AudioPlayer;
+	createAsset: (
+		id: string,
+		assetPath: string,
+		duration: number,
+		system: pdi.AudioSystem,
+		loop: boolean,
+		hint: pdi.AudioAssetHint
+	) => AudioAsset;
+
+	createPlayer: (system: pdi.AudioSystem, manager: AudioManager) => AudioPlayer;
 }

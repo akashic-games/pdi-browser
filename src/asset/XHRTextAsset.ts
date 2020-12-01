@@ -1,15 +1,17 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 import { XHRLoader } from "../utils/XHRLoader";
+import { Asset } from "./Asset";
 
-export class XHRTextAsset extends g.TextAsset {
+export class XHRTextAsset extends Asset implements pdi.TextAsset {
+	type: "text" = "text";
+	data: string | undefined;
 
 	constructor(id: string, path: string) {
 		super(id, path);
-		this.data = undefined;
 	}
 
-	_load(handler: g.AssetLoadHandler): void {
-		var loader = new XHRLoader();
+	_load(handler: pdi.AssetLoadHandler): void {
+		const loader = new XHRLoader();
 		loader.get(this.path, (error, responseText) => {
 			if (error) {
 				handler._onAssetError(this, error);
@@ -18,5 +20,10 @@ export class XHRTextAsset extends g.TextAsset {
 			this.data = responseText;
 			handler._onAssetLoad(this);
 		});
+	}
+
+	destroy(): void {
+		this.data = undefined;
+		super.destroy();
 	}
 }

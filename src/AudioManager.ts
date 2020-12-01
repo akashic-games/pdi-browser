@@ -1,16 +1,16 @@
-import * as g from "@akashic/akashic-engine";
+import { AudioAsset } from "./asset/AudioAsset";
 import { AudioPlayer } from "./plugin/AudioPlayer";
 
 export class AudioManager {
-	audioAssets: g.AudioAsset[] = [];
+	audioAssets: AudioAsset[] = [];
 	_masterVolume: number = 1.0;
 
-	registerAudioAsset(asset: g.AudioAsset): void {
+	registerAudioAsset(asset: AudioAsset): void {
 		if (this.audioAssets.indexOf(asset) === -1)
 			this.audioAssets.push(asset);
 	}
 
-	removeAudioAsset(asset: g.AudioAsset): void {
+	removeAudioAsset(asset: AudioAsset): void {
 		var index = this.audioAssets.indexOf(asset);
 		if (index === -1)
 			this.audioAssets.splice(index, 1);

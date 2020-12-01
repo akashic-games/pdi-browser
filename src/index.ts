@@ -3,10 +3,6 @@ export { Platform, PlatformParameterObject };
 import { ResourceFactory, ResourceFactoryParameterObject } from "./ResourceFactory";
 export { ResourceFactory, ResourceFactoryParameterObject };
 
-// akashic-engine内部でresourceを使えるように初期設定
-import * as g from "@akashic/akashic-engine";
-export { g };
-
 import { AudioPluginRegistry } from "./plugin/AudioPluginRegistry";
 export { AudioPluginRegistry };
 export { AudioPlugin } from "./plugin/AudioPlugin";
@@ -18,10 +14,6 @@ import { HTMLAudioPlugin } from "./plugin/HTMLAudioPlugin/HTMLAudioPlugin";
 import { WebAudioPlugin } from "./plugin/WebAudioPlugin/WebAudioPlugin";
 export { HTMLAudioPlugin };
 export { WebAudioPlugin };
-
-// TODO 削除。誰も使っていない
-import { PostMessageAudioPlugin } from "./plugin/PostMessageAudioPlugin/PostMessageAudioPlugin";
-export { PostMessageAudioPlugin };
 
 import { ProxyAudioPlugin } from "./plugin/ProxyAudioPlugin/ProxyAudioPlugin";
 export { ProxyAudioPlugin };

@@ -1,10 +1,10 @@
-import * as g from "@akashic/akashic-engine";
-import { WebAudioAsset } from "./WebAudioAsset";
+import * as pdi from "@akashic/pdi-types";
 import { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
+import { WebAudioAsset } from "./WebAudioAsset";
 import * as helper from "./WebAudioHelper";
 
-export class WebAudioPlayer extends g.AudioPlayer implements AudioPlayer {
+export class WebAudioPlayer extends AudioPlayer {
 	_endedEventHandler: () => void;
 	private _gainNode: GainNode;
 	private _sourceNode: AudioBufferSourceNode;
@@ -12,7 +12,7 @@ export class WebAudioPlayer extends g.AudioPlayer implements AudioPlayer {
 	private _manager: AudioManager;
 	private _dummyDurationWaitTimer: any;
 
-	constructor(system: g.AudioSystem, manager: AudioManager) {
+	constructor(system: pdi.AudioSystem, manager: AudioManager) {
 		super(system);
 		this._audioContext = helper.getAudioContext();
 		this._manager = manager;
@@ -87,6 +87,6 @@ export class WebAudioPlayer extends g.AudioPlayer implements AudioPlayer {
 	}
 
 	private _calculateVolume(): number {
-		return this._muted ? 0 : this.volume * this._system.volume * this._manager.getMasterVolume();
+		return this._system._muted ? 0 : this.volume * this._system.volume * this._manager.getMasterVolume();
 	}
 }

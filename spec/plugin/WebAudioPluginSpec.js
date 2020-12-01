@@ -1,5 +1,5 @@
 "use strict";
-var g = require("../../lib/full/index").g;
+var MockAudioSystem = require("../helpers/mock").MockAudioSystem;
 var WebAudioPlugin = require("../../lib/full/plugin/WebAudioPlugin/WebAudioPlugin").WebAudioPlugin;
 var WebAudioAsset = require("../../lib/full/plugin/WebAudioPlugin/WebAudioAsset").WebAudioAsset;
 var AudioManager = require("../../lib/full/AudioManager").AudioManager;
@@ -9,17 +9,13 @@ describe("WebAudioPlugin", function () {
         return;
     }
     var audioAssetPath = "/spec/fixtures/audio/bgm";
-    var game;
-    beforeEach(function () {
-        game = new g.Game({ width: 100, height: 300, fps: 10 });
-    });
     it("サポートしてる実行環境ではtrueを返す", function () {
         expect(WebAudioPlugin.isSupported()).toBeTruthy();
     });
     describe("#createAsset", function () {
         it("should WebAudioAsset", function () {
             var plugin = new WebAudioPlugin();
-            var system = new g.SoundAudioSystem("voice", game);
+            var system = new MockAudioSystem({id: "voice"});
             var asset = plugin.createAsset("id", audioAssetPath, system, false, {});
             expect(asset).toEqual(jasmine.any(WebAudioAsset));
         });
@@ -27,7 +23,7 @@ describe("WebAudioPlugin", function () {
     describe("WebAudioAsset", function () {
         it("#loadするとaudio dataが取得できる", function (done) {
             var plugin = new WebAudioPlugin();
-            var system = new g.SoundAudioSystem("voice", game);
+            var system = new MockAudioSystem({id: "voice"});
             var asset = plugin.createAsset("id", audioAssetPath, system, false, {});
             var loader = {
                 _onAssetLoad: function (asset) {
@@ -43,7 +39,7 @@ describe("WebAudioPlugin", function () {
         });
         it("オーディオアセットの拡張子がファイル名の末尾につく", function (done) {
             var plugin = new WebAudioPlugin();
-            var system = new g.SoundAudioSystem("voice", game);
+            var system = new MockAudioSystem({id: "voice"});
             var query = "rev=1234";
             var asset = plugin.createAsset("id", audioAssetPath + "?" + query, system, false, {});
             var loader = {
@@ -59,14 +55,15 @@ describe("WebAudioPlugin", function () {
         });
         it("存在しないファイルを#loadするとonAssetErrorが呼ばれる", function (done) {
             var plugin = new WebAudioPlugin();
-            var system = new g.SoundAudioSystem("voice", game);
+            var system = new MockAudioSystem({id: "voice"});
             var asset = plugin.createAsset("id", "not_found_audio", system, false, {});
             var loader = {
                 _onAssetLoad: function (asset) {
                     done.fail();
                 },
                 _onAssetError: function (asset, error) {
-                    expect(error).toEqual(jasmine.any(Error));
+                    expect(error.name).toEqual("AssetLoadError");
+                    expect(typeof error.message).toEqual("string");
                     done();
                 }
             };
@@ -77,7 +74,7 @@ describe("WebAudioPlugin", function () {
             var plugin = new WebAudioPlugin();
             // aacとoggがサポート対象にあるが、このテストではどちらか一方のみサポートしてると限定して行う
             plugin.supportedFormats = plugin.supportedFormats.length >= 2 ? [supportedFormat] : plugin.supportedFormats;
-            var system = new g.SoundAudioSystem("voice", game);
+            var system = new MockAudioSystem({id: "voice"});
             var asset = plugin.createAsset("id", audioAssetPath, system, false, {});
             var loader = {
                 _onAssetLoad: function (asset) {
@@ -93,7 +90,7 @@ describe("WebAudioPlugin", function () {
         it("aacファイルが存在しない場合mp4ファイルが読み込まれる", function (done) {
             var plugin = new WebAudioPlugin();
             plugin.supportedFormats = ["aac"];
-            var system = new g.SoundAudioSystem("voice", game);
+            var system = new MockAudioSystem({id: "voice"});
             var audioAsset2Path = "/spec/fixtures/audio/bgm2"
             var query = "rev=4321";
             var asset = plugin.createAsset("id", audioAsset2Path + "?" + query, system, false, {});
@@ -115,7 +112,7 @@ describe("WebAudioPlugin", function () {
         xit("#playすると音を再生できる", function (done) {
             var manager = new AudioManager();
             var plugin = new WebAudioPlugin();
-            var system = new g.SoundAudioSystem("voice", game);
+            var system = new MockAudioSystem({id: "voice"});
             var asset = plugin.createAsset("id", seAssetPath, system, false, {});
             var player = plugin.createPlayer(system, manager);
             player.changeVolume(0.1);

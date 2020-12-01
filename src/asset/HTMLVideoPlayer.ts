@@ -1,6 +1,15 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
+import { Trigger } from "@akashic/trigger";
 
-export class HTMLVideoPlayer extends g.VideoPlayer {
+export class HTMLVideoPlayer implements pdi.VideoPlayer {
+	currentVideo: pdi.VideoAsset;
+	onPlay: Trigger<pdi.VideoPlayerEvent>;
+	onStop: Trigger<pdi.VideoPlayerEvent>;
+	volume: number;
+	played: Trigger<pdi.VideoPlayerEvent>;
+	stopped: Trigger<pdi.VideoPlayerEvent>;
+	_loop: boolean;
+
 	/**
 	 * コンテンツからの参照用プロパティ。
 	 * Note: このプロパティは暫定処理である。コンテンツ側はanyキャストして本値を参照する必要がある。
@@ -9,11 +18,17 @@ export class HTMLVideoPlayer extends g.VideoPlayer {
 	isDummy: boolean;
 
 	constructor(loop?: boolean) {
-		super(loop);
+		this._loop = !!loop;
+		this.onPlay = new Trigger();
+		this.onStop = new Trigger();
+		this.played = this.onPlay;
+		this.stopped = this.onStop;
+		this.currentVideo = undefined;
+		this.volume = 1.0;
 		this.isDummy = true;
 	}
 
-	play(videoAsset: g.VideoAsset): void {
+	play(_videoAsset: pdi.VideoAsset): void {
 		// not yet supported
 	}
 
@@ -21,7 +36,7 @@ export class HTMLVideoPlayer extends g.VideoPlayer {
 		// not yet supported
 	}
 
-	changeVolume(volume: number): void {
+	changeVolume(_volume: number): void {
 		// not yet supported
 	}
 }

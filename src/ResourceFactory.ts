@@ -1,4 +1,5 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
+import { AudioAsset } from "./asset/AudioAsset";
 import { HTMLImageAsset } from "./asset/HTMLImageAsset";
 import { HTMLVideoAsset } from "./asset/HTMLVideoAsset";
 import { XHRTextAsset } from "./asset/XHRTextAsset";
@@ -16,7 +17,7 @@ export interface ResourceFactoryParameterObject {
 	platform: Platform;
 }
 
-export class ResourceFactory extends g.ResourceFactory {
+export class ResourceFactory implements pdi.ResourceFactory {
 	_audioPluginManager: AudioPluginManager;
 	_audioManager: AudioManager;
 	_rendererCandidates: string[];
@@ -24,43 +25,53 @@ export class ResourceFactory extends g.ResourceFactory {
 	_platform: Platform;
 
 	constructor(param: ResourceFactoryParameterObject) {
-		super();
 		this._audioPluginManager = param.audioPluginManager;
 		this._audioManager = param.audioManager;
 		this._platform = param.platform;
 		this._surfaceFactory = new SurfaceFactory();
 	}
 
-	createAudioAsset(id: string, assetPath: string, duration: number,
-	                 system: g.AudioSystem, loop: boolean, hint: g.AudioAssetHint): g.AudioAsset {
-		var activePlugin = this._audioPluginManager.getActivePlugin();
-		var audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint);
-		if (audioAsset.onDestroyed) {
-			this._audioManager.registerAudioAsset(audioAsset);
-			audioAsset.onDestroyed.add(this._onAudioAssetDestroyed, this);
-		}
+	createAudioAsset(
+		id: string,
+		assetPath: string,
+		duration: number,
+		system: pdi.AudioSystem,
+		loop: boolean,
+		hint: pdi.AudioAssetHint
+	): AudioAsset {
+		const activePlugin = this._audioPluginManager.getActivePlugin();
+		const audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint);
+		this._audioManager.registerAudioAsset(audioAsset);
+		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed, this);
 		return audioAsset;
 	}
 
-	createAudioPlayer(system: g.AudioSystem): g.AudioPlayer {
-		var activePlugin = this._audioPluginManager.getActivePlugin();
+	createAudioPlayer(system: pdi.AudioSystem): pdi.AudioPlayer {
+		const activePlugin = this._audioPluginManager.getActivePlugin();
 		return activePlugin.createPlayer(system, this._audioManager);
 	}
 
-	createImageAsset(id: string, assetPath: string, width: number, height: number): g.ImageAsset {
+	createImageAsset(id: string, assetPath: string, width: number, height: number): pdi.ImageAsset {
 		return new HTMLImageAsset(id, assetPath, width, height);
 	}
 
-	createVideoAsset(id: string, assetPath: string, width: number, height: number,
-	                 system: g.VideoSystem, loop: boolean, useRealSize: boolean): g.VideoAsset {
+	createVideoAsset(
+		id: string,
+		assetPath: string,
+		width: number,
+		height: number,
+		system: pdi.VideoSystem,
+		loop: boolean,
+		useRealSize: boolean
+	): pdi.VideoAsset {
 		return new HTMLVideoAsset(id, assetPath, width, height, system, loop, useRealSize);
 	}
 
-	createTextAsset(id: string, assetPath: string): g.TextAsset {
+	createTextAsset(id: string, assetPath: string): pdi.TextAsset {
 		return new XHRTextAsset(id, assetPath);
 	}
 
-	createScriptAsset(id: string, assetPath: string): g.ScriptAsset {
+	createScriptAsset(id: string, assetPath: string): pdi.ScriptAsset {
 		return new XHRScriptAsset(id, assetPath);
 	}
 
@@ -72,14 +83,20 @@ export class ResourceFactory extends g.ResourceFactory {
 		return this._surfaceFactory.createBackSurface(width, height, this._rendererCandidates);
 	}
 
-	createGlyphFactory(fontFamily: g.FontFamily|string|(g.FontFamily|string)[], fontSize: number, baseline?: number,
-	                   fontColor?: string, strokeWidth?: number, strokeColor?: string, strokeOnly?: boolean,
-	                   fontWeight?: g.FontWeight): g.GlyphFactory {
-		return new GlyphFactory(fontFamily, fontSize, baseline, fontColor,
-		                        strokeWidth, strokeColor, strokeOnly, fontWeight);
+	createGlyphFactory(
+		fontFamily: string|string[],
+		fontSize: number,
+		baseline?: number,
+		fontColor?: string,
+		strokeWidth?: number,
+		strokeColor?: string,
+		strokeOnly?: boolean,
+		fontWeight?: pdi.FontWeightString
+	): pdi.GlyphFactory {
+		return new GlyphFactory(fontFamily, fontSize, baseline, fontColor, strokeWidth, strokeColor, strokeOnly, fontWeight);
 	}
 
-	_onAudioAssetDestroyed(asset: g.AudioAsset): void {
+	_onAudioAssetDestroyed(asset: AudioAsset): void {
 		this._audioManager.removeAudioAsset(asset);
 	}
 }

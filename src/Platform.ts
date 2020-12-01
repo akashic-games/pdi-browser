@@ -1,7 +1,6 @@
 "use strict";
 import { AMFlow } from "@akashic/amflow";
-import * as g from "@akashic/akashic-engine";
-import * as pdi from "@akashic/akashic-pdi";
+import * as pdi from "@akashic/pdi-types";
 import { RafLooper } from "./RafLooper";
 import { ResourceFactory } from "./ResourceFactory";
 import { ContainerController } from "./ContainerController";
@@ -94,12 +93,12 @@ export class Platform implements pdi.Platform {
 	loadGameConfiguration(url: string, callback: (err: any, configuration: any) => void): void {
 		var a = new XHRTextAsset("(game.json)", url);
 		a._load({
-			_onAssetLoad: (asset: g.Asset) => { callback(null, JSON.parse(a.data)); },
-			_onAssetError: (asset: g.Asset, error: any) => { callback(error, null); }
+			_onAssetLoad: _asset => { callback(null, JSON.parse(a.data)); },
+			_onAssetError: (_asset, error) => { callback(error, null); }
 		});
 	}
 
-	getResourceFactory(): g.ResourceFactory {
+	getResourceFactory(): ResourceFactory {
 		return this._resourceFactory;
 	}
 
@@ -128,11 +127,11 @@ export class Platform implements pdi.Platform {
 		}
 	}
 
-	getPrimarySurface(): g.Surface {
+	getPrimarySurface(): pdi.Surface {
 		return this.containerController.surface;
 	}
 
-	getOperationPluginViewInfo(): g.OperationPluginViewInfo {
+	getOperationPluginViewInfo(): pdi.OperationPluginViewInfo {
 		return <any>{
 			type: "pdi-browser", // note: scale情報を付加したため null ではないものを返している。
 			view: this.containerController.inputHandlerLayer.view,

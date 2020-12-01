@@ -1,4 +1,4 @@
-﻿import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
 
 export class WebGLTextureMap {
 	// 各テクスチャを配置する際のマージンピクセル数
@@ -12,7 +12,7 @@ export class WebGLTextureMap {
 	private _height: number;
 	private _left: WebGLTextureMap;
 	private _right: WebGLTextureMap;
-	private _surface: g.Surface;
+	private _surface: pdi.Surface;
 
 	constructor(texture: WebGLTexture, offsetX: number, offsetY: number, width: number, height: number) {
 		this.texture = texture;
@@ -63,7 +63,7 @@ export class WebGLTextureMap {
 		return this.area() / this.capacity();
 	}
 
-	insert(surface: g.Surface): WebGLTextureMap {
+	insert(surface: pdi.Surface): WebGLTextureMap {
 		var image = surface._drawable;
 
 		// マージンを考慮した領域を確保

@@ -1,27 +1,25 @@
-import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/pdi-types";
+import { Surface } from "../Surface";
 
-export abstract class CanvasSurface extends g.Surface {
+export abstract class CanvasSurface extends Surface {
 	canvas: HTMLCanvasElement;
-	protected _renderer: g.Renderer;
 
 	constructor(width: number, height: number) {
-		var canvas = document.createElement("canvas");
+		const canvas = document.createElement("canvas");
 		super(width, height, canvas);
 		canvas.width = width;
 		canvas.height = height;
 		this.canvas = canvas;
-		this._renderer = undefined;
 	}
 
 	destroy(): void {
 		this.canvas.width = 1;
 		this.canvas.height = 1;
 		this.canvas = null;
-		this._renderer = null;
 		super.destroy();
 	}
 
-	abstract renderer(): g.Renderer;
+	abstract renderer(): pdi.Renderer;
 
 	getHTMLElement(): HTMLElement {
 		return this.canvas;
