@@ -6,9 +6,9 @@ import { addExtname } from "../../PathUtil";
 import * as helper from "./WebAudioHelper";
 
 export class WebAudioAsset extends AudioAsset {
-	_lastPlayedPlayer: pdi.AudioPlayer = null!;
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[] = [];
+	_lastPlayedPlayer: pdi.AudioPlayer = null!;
 
 	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {

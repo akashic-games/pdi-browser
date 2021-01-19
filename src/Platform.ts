@@ -172,7 +172,7 @@ export class Platform implements pdi.Platform {
 	/**
 	 * 最終的に出力されるマスター音量を取得する
 	 */
-	getMasterVolume(): number | undefined{
+	getMasterVolume(): number | undefined {
 		if (this._audioManager)
 			return this._audioManager.getMasterVolume();
 		return undefined;
