@@ -17,7 +17,7 @@ export class WebGLRenderingState {
 			this.globalAlpha = 1.0;
 			this.globalCompositeOperation = "source-over";
 			this.transformer = new AffineTransformer();
-			this.shaderProgram = null;
+			this.shaderProgram = null!;
 		}
 	}
 

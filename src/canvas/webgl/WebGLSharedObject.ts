@@ -26,27 +26,27 @@ export interface RenderTarget {
 export class WebGLSharedObject {
 	private _context: WebGLRenderingContext;
 	private _surface: WebGLPrimarySurface;
-	private _renderTarget: RenderTarget;
+	private _renderTarget: RenderTarget = null!;;
 
-	private _defaultShaderProgram: WebGLShaderProgram;
-	private _textureAtlas: WebGLTextureAtlas;
-	private _fillRectTexture: WebGLTexture;
-	private _fillRectSurfaceTexture: WebGLSurfaceTexture;
+	private _defaultShaderProgram: WebGLShaderProgram = null!;;
+	private _textureAtlas: WebGLTextureAtlas = null!;;
+	private _fillRectTexture: WebGLTexture = null!;;
+	private _fillRectSurfaceTexture: WebGLSurfaceTexture = null!;;
 
-	private _maxSpriteCount: number;
-	private _vertices: WebGLBuffer;
-	private _verticesCache: Float32Array;
-	private _numSprites: number;
-	private _renderTargetStack: RenderTarget[];
+	private _maxSpriteCount: number = null!;;
+	private _vertices: WebGLBuffer = null!;;
+	private _verticesCache: Float32Array = null!;;
+	private _numSprites: number = null!;;
+	private _renderTargetStack: RenderTarget[] = null!;;
 
-	private _currentTexture: WebGLTexture;
-	private _currentColor: number[];
-	private _currentAlpha: number;
-	private _currentCompositeOperation: pdi.CompositeOperationString;
-	private _currentShaderProgram: WebGLShaderProgram;
+	private _currentTexture: WebGLTexture = null!;
+	private _currentColor: number[] = null!;;
+	private _currentAlpha: number = null!;;
+	private _currentCompositeOperation: pdi.CompositeOperationString = null!;;
+	private _currentShaderProgram: WebGLShaderProgram = null!;;
 
-	private _compositeOps: {[key in pdi.CompositeOperationString]: [number, number]; };
-	private _deleteRequestedTargets: RenderTarget[];
+	private _compositeOps: {[key in pdi.CompositeOperationString]: [number, number]; } = null!;;
+	private _deleteRequestedTargets: RenderTarget[] = null!;;
 
 	constructor(width: number, height: number) {
 		const surface = new WebGLPrimarySurface(this, width, height);
@@ -142,10 +142,10 @@ export class WebGLSharedObject {
 			this._currentShaderProgram.updateUniforms();
 
 			// シェーダプログラム変更時は全ての設定をクリア
-			this._currentCompositeOperation = null;
-			this._currentAlpha = null;
+			this._currentCompositeOperation = null!;
+			this._currentAlpha = null!;
 			this._currentColor = [];
-			this._currentTexture = null;
+			this._currentTexture = null!;
 		}
 
 		// テクスチャを設定
@@ -251,8 +251,8 @@ export class WebGLSharedObject {
 		this._context.bindTexture(this._context.TEXTURE_2D, this._currentTexture);
 	}
 
-	makeTextureRaw(width: number, height: number, pixels: Uint8Array = null): WebGLTexture {
-		const texture = this._context.createTexture();
+	makeTextureRaw(width: number, height: number, pixels: Uint8Array = null!): WebGLTexture {
+		const texture = this._context.createTexture()!;
 		this._context.bindTexture(this._context.TEXTURE_2D, texture);
 		this._context.pixelStorei(this._context.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
 		this._context.texParameteri(this._context.TEXTURE_2D, this._context.TEXTURE_WRAP_S, this._context.CLAMP_TO_EDGE);
@@ -269,7 +269,7 @@ export class WebGLSharedObject {
 	}
 
 	makeTexture(data: HTMLImageElement|HTMLCanvasElement|ImageData): WebGLTexture {
-		var texture = this._context.createTexture();
+		var texture = this._context.createTexture()!;
 		this._context.bindTexture(this._context.TEXTURE_2D, texture);
 		this._context.pixelStorei(this._context.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
 		this._context.texParameteri(this._context.TEXTURE_2D, this._context.TEXTURE_WRAP_S, this._context.CLAMP_TO_EDGE);
@@ -300,10 +300,10 @@ export class WebGLSharedObject {
 	createRenderTarget(width: number, height: number): RenderTarget {
 		const context = this._context;
 
-		const framebuffer = context.createFramebuffer();
+		const framebuffer = context.createFramebuffer()!;
 		context.bindFramebuffer(context.FRAMEBUFFER, framebuffer);
 
-		const texture = context.createTexture();
+		const texture = context.createTexture()!;
 		context.bindTexture(context.TEXTURE_2D, texture);
 		context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MAG_FILTER, context.LINEAR);
 		context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.LINEAR);
@@ -363,7 +363,7 @@ export class WebGLSharedObject {
 			}
 		}
 
-		return shaderProgram;
+		return shaderProgram!;
 	}
 
 	private _init(): void {
@@ -384,8 +384,8 @@ export class WebGLSharedObject {
 			height: this._surface.height,
 			viewportWidth: this._surface.width,
 			viewportHeight: this._surface.height,
-			framebuffer: null,
-			texture: null
+			framebuffer: null!,
+			texture: null!
 		};
 
 		// 描画命令をため込んでおくバッファ
@@ -393,7 +393,7 @@ export class WebGLSharedObject {
 		this._vertices = this._makeBuffer(this._maxSpriteCount * 24 * 4);
 		this._verticesCache = new Float32Array(this._maxSpriteCount * 24);
 		this._numSprites = 0; // the number of sprites
-		this._currentTexture = null;
+		this._currentTexture = null!;
 		this._currentColor = [1.0, 1.0, 1.0, 1.0];
 		this._currentAlpha = 1.0;
 		this._currentCompositeOperation = "source-over";
@@ -437,7 +437,7 @@ export class WebGLSharedObject {
 	}
 
 	private _makeBuffer(data: any): WebGLBuffer {
-		const buffer = this._context.createBuffer();
+		const buffer = this._context.createBuffer()!;
 		this._context.bindBuffer(this._context.ARRAY_BUFFER, buffer);
 		this._context.bufferData(this._context.ARRAY_BUFFER, data, this._context.DYNAMIC_DRAW);
 		return buffer;

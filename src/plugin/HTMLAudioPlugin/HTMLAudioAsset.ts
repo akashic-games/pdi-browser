@@ -9,10 +9,11 @@ export interface MediaLoaderEventHandlerSet {
 }
 
 export class HTMLAudioAsset extends AudioAsset {
+	_lastPlayedPlayer: pdi.AudioPlayer = null!;
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[];
-	private _intervalId: number;
-	private _intervalCount: number;
+	private _intervalId: number = null!;
+	private _intervalCount: number = null!;
 
 	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {
@@ -97,7 +98,7 @@ export class HTMLAudioAsset extends AudioAsset {
 	}
 
 	cloneElement(): HTMLAudioElement {
-		return this.data ? new Audio(this.data.src) : null;
+		return this.data ? new Audio(this.data.src) : null!;
 	}
 
 	_assetPathFilter(path: string): string {
@@ -109,7 +110,7 @@ export class HTMLAudioAsset extends AudioAsset {
 		}
 		// ここで検出されるのは最初にアクセスを試みるオーディオアセットのファイルパスなので、
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない
-		return null;
+		return null!;
 	}
 
 	private _attachAll(audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void {

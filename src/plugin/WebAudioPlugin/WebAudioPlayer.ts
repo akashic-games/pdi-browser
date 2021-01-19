@@ -18,7 +18,7 @@ export class WebAudioPlayer extends AudioPlayer {
 		this._manager = manager;
 		this._gainNode = helper.createGainNode(this._audioContext);
 		this._gainNode.connect(this._audioContext.destination);
-		this._sourceNode = undefined;
+		this._sourceNode = undefined!;
 		this._dummyDurationWaitTimer = null;
 		this._endedEventHandler = () => {
 			this._onAudioEnded();

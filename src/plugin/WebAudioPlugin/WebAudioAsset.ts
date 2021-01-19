@@ -6,6 +6,7 @@ import { addExtname } from "../../PathUtil";
 import * as helper from "./WebAudioHelper";
 
 export class WebAudioAsset extends AudioAsset {
+	_lastPlayedPlayer: pdi.AudioPlayer = null!;
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[] = [];
 
@@ -67,6 +68,6 @@ export class WebAudioAsset extends AudioAsset {
 		}
 		// ここで検出されるのは最初にアクセスを試みるオーディオアセットのファイルパスなので、
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない
-		return null;
+		return null!;
 	}
 }

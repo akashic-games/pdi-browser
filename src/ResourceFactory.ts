@@ -20,7 +20,7 @@ export interface ResourceFactoryParameterObject {
 export class ResourceFactory implements pdi.ResourceFactory {
 	_audioPluginManager: AudioPluginManager;
 	_audioManager: AudioManager;
-	_rendererCandidates: string[];
+	_rendererCandidates: string[] = null!;
 	_surfaceFactory: SurfaceFactory;
 	_platform: Platform;
 
@@ -42,7 +42,7 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		const activePlugin = this._audioPluginManager.getActivePlugin();
 		const audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint);
 		this._audioManager.registerAudioAsset(audioAsset);
-		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed, this);
+		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed as (arg: pdi.Asset) => void, this);
 		return audioAsset;
 	}
 

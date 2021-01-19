@@ -4,6 +4,7 @@ import { ExceptionFactory } from "../../utils/ExceptionFactory";
 import { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
 
 export class ProxyAudioAsset extends AudioAsset {
+	_lastPlayedPlayer: pdi.AudioPlayer = null!;
 	private _handlerSet: ProxyAudioHandlerSet;
 
 	constructor(

@@ -36,7 +36,7 @@ export class InputHandlerLayer {
 	 */
 	constructor(param: InputHandlerLayerParameterObject) {
 		this.view = this._createInputView(param.width, param.height);
-		this._inputHandler = undefined;
+		this._inputHandler = undefined!;
 		this.pointEventTrigger = new Trigger<pdi.PlatformPointEvent>();
 
 		this._disablePreventDefault = !!param.disablePreventDefault;

@@ -40,13 +40,13 @@ export class ContainerController {
 	private _disablePreventDefault: boolean;
 
 	constructor(resourceFactory: ResourceFactory) {
-		this.container = null;
-		this.surface = null;
-		this.inputHandlerLayer = null;
-		this.rootView = null;
+		this.container = null!;
+		this.surface = null!;
+		this.inputHandlerLayer = null!;
+		this.rootView = null!;
 		this.useResizeForScaling = false;
 		this.pointEventTrigger = new Trigger<pdi.PlatformPointEvent>();
-		this._rendererReq = null;
+		this._rendererReq = null!;
 		this._disablePreventDefault = false;
 		this.resourceFactory = resourceFactory;
 	}

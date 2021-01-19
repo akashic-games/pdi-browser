@@ -25,7 +25,7 @@ function createGlyphRenderedSurface(code: number, fontSize: number, cssFontFamil
 	// * Renderer#drawSystemText()を廃止または非推奨にしたいのでそれを用いず文字列を描画する
 	// * RenderingHelperがcontextの状態を復帰するためTextMetricsを取れない
 	const canvas = surface.canvas;
-	const context = canvas.getContext("2d");
+	const context = canvas.getContext("2d")!;
 
 	const str = (code & 0xFFFF0000) ? String.fromCharCode((code & 0xFFFF0000) >>> 16, code & 0xFFFF) : String.fromCharCode(code);
 
@@ -61,7 +61,7 @@ function createGlyphRenderedSurface(code: number, fontSize: number, cssFontFamil
 	const result = {
 		surface: surface,
 		advanceWidth: advanceWidth,
-		imageData: needImageData ? context.getImageData(0, 0, canvas.width, canvas.height) : undefined
+		imageData: needImageData ? context.getImageData(0, 0, canvas.width, canvas.height) : undefined!
 	};
 
 	return result;
@@ -95,7 +95,7 @@ function calcGlyphArea(imageData: ImageData): pdi.GlyphArea {
 		}
 	}
 
-	let glyphArea: pdi.GlyphArea = undefined;
+	let glyphArea: pdi.GlyphArea = undefined!;
 	if (sx === imageData.width) { // 空白文字
 		glyphArea = { x: 0, y: 0, width: 0, height: 0 }; // 空の領域に設定
 	} else {
@@ -218,7 +218,7 @@ export class GlyphFactory implements pdi.GlyphFactory {
 	}
 
 	create(code: number): pdi.Glyph {
-		let result: GlyphRenderSurfaceResult;
+		let result!: GlyphRenderSurfaceResult;
 		let glyphArea = this._glyphAreas[code];
 
 		if (! glyphArea) {
@@ -238,7 +238,7 @@ export class GlyphFactory implements pdi.GlyphFactory {
 			if (result) {
 				result.surface.destroy();
 			}
-			return createGlyph(code, 0, 0, 0, 0, 0, 0, glyphArea.advanceWidth, undefined, true);
+			return createGlyph(code, 0, 0, 0, 0, 0, 0, glyphArea.advanceWidth!, undefined!, true);
 		} else {
 			// pdi.Glyphに格納するサーフェスを生成する。
 			// glyphAreaはサーフェスをキャッシュしないため、描画する内容を持つグリフに対しては
@@ -256,9 +256,9 @@ export class GlyphFactory implements pdi.GlyphFactory {
 			return createGlyph(
 				code,
 				glyphArea.x, glyphArea.y,
-				glyphArea.width, glyphArea.height,
+				glyphArea.width!, glyphArea.height!,
 				glyphArea.x - this._marginW, glyphArea.y - this._marginH,
-				glyphArea.advanceWidth,
+				glyphArea.advanceWidth!,
 				result.surface,
 				true
 			);
@@ -270,7 +270,7 @@ export class GlyphFactory implements pdi.GlyphFactory {
 		let fontSize = 1;
 		const str = "M";
 		const canvas = document.createElement("canvas");
-		const context = canvas.getContext("2d");
+		const context = canvas.getContext("2d")!;
 		context.textAlign = "left";
 		context.textBaseline = "alphabetic";
 		context.lineJoin = "bevel";

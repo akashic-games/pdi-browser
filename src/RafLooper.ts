@@ -8,7 +8,7 @@ export class RafLooper implements Looper {
 
 	constructor(fun: (deltaTime: number) => number) {
 		this._fun = fun;
-		this._timerId = undefined;
+		this._timerId = undefined!;
 		this._prev = 0;
 	}
 
@@ -32,7 +32,7 @@ export class RafLooper implements Looper {
 
 	stop(): void {
 		cancelAnimationFrame(this._timerId);
-		this._timerId = undefined;
+		this._timerId = undefined!;
 		this._prev = 0;
 	}
 }

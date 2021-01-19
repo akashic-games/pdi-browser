@@ -6,10 +6,10 @@ import * as autoPlayHelper from "./HTMLAudioAutoplayHelper";
 
 export class HTMLAudioPlayer extends AudioPlayer {
 	private _endedEventHandler: () => void;
-	private _audioInstance: HTMLAudioElement;
+	private _audioInstance: HTMLAudioElement = null!;
 	private _manager: AudioManager;
-	private _isWaitingPlayEvent: boolean;
-	private _isStopRequested: boolean;
+	private _isWaitingPlayEvent: boolean = null!;
+	private _isStopRequested: boolean = null!;
 	private _onPlayEventHandler: () => void;
 	private _dummyDurationWaitTimer: any;
 
@@ -58,7 +58,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 			if (!this._isWaitingPlayEvent) {
 				// _audioInstance が再び play されることは無いので、 removeEventListener("play") する必要は無い
 				this._audioInstance.pause();
-				this._audioInstance = null;
+				this._audioInstance = null!;
 			} else {
 				this._isStopRequested = true;
 			}
@@ -108,7 +108,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 			this._isStopRequested = false;
 			// _audioInstance が再び play されることは無いので、 removeEventListener("play") する必要は無い
 			this._audioInstance.pause();
-			this._audioInstance = null;
+			this._audioInstance = null!;
 		}
 	}
 

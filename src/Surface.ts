@@ -4,7 +4,7 @@ export abstract class Surface implements pdi.Surface {
 	width: number;
 	height: number;
 	_drawable: any;
-	_destroyed: boolean;
+	_destroyed: boolean = null!;
 
 	constructor(width: number, height: number, drawable: any) {
 		this.width = width;

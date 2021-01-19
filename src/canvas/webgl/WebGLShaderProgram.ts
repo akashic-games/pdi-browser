@@ -8,6 +8,8 @@ interface UniformCache {
 	loc: WebGLUniformLocation;
 }
 
+type UniformSetter = (loc: WebGLUniformLocation, v: number | Int32Array | Float32Array) => void;
+
 export class WebGLShaderProgram {
 	program: WebGLProgram;
 
@@ -43,14 +45,14 @@ export class WebGLShaderProgram {
 
 	private _uniforms: {[key: string]: pdi.ShaderUniform};
 	private _uniformCaches: UniformCache[];
-	private _uniformSetterTable: { [type: string]: (loc: WebGLUniformLocation, v: number | Int32Array | Float32Array) => void; };
+	private _uniformSetterTable: { [type: string]: UniformSetter; };
 
 	private static _makeShader(gl: WebGLRenderingContext, typ: number, src: string): WebGLShader {
-		var shader = gl.createShader(typ);
+		var shader = gl.createShader(typ)!;
 		gl.shaderSource(shader, src);
 		gl.compileShader(shader);
 		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-			var msg = gl.getShaderInfoLog(shader);
+			var msg = gl.getShaderInfoLog(shader)!;
 			gl.deleteShader(shader);
 			throw new Error(msg);
 		}
@@ -58,7 +60,7 @@ export class WebGLShaderProgram {
 	}
 
 	private static _makeShaderProgram(gl: WebGLRenderingContext, vSrc: string, fSrc: string): WebGLProgram {
-		var program = gl.createProgram();
+		var program = gl.createProgram()!;
 
 		var vShader = WebGLShaderProgram._makeShader(gl, gl.VERTEX_SHADER, vSrc);
 		gl.attachShader(program, vShader);
@@ -70,7 +72,7 @@ export class WebGLShaderProgram {
 
 		gl.linkProgram(program);
 		if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-			var msg = gl.getProgramInfoLog(program);
+			var msg = gl.getProgramInfoLog(program)!;
 			gl.deleteProgram(program);
 			throw new Error(msg);
 		}
@@ -80,33 +82,33 @@ export class WebGLShaderProgram {
 
 	constructor(context: WebGLRenderingContext, fSrc?: string, uniforms?: {[key: string]: pdi.ShaderUniform}) {
 		var vSrc = WebGLShaderProgram._DEFAULT_VERTEX_SHADER;
-		var fSrc = fSrc || WebGLShaderProgram._DEFAULT_FRAGMENT_SHADER;
+		fSrc = fSrc || WebGLShaderProgram._DEFAULT_FRAGMENT_SHADER;
 
 		const program = WebGLShaderProgram._makeShaderProgram(context, vSrc, fSrc);
 
 		this.program = program;
 		this._context = context;
 		this._aVertex = context.getAttribLocation(this.program, "aVertex");
-		this._uColor = context.getUniformLocation(this.program, "uColor");
-		this._uAlpha = context.getUniformLocation(this.program, "uAlpha");
-		this._uSampler = context.getUniformLocation(this.program, "uSampler");
+		this._uColor = context.getUniformLocation(this.program, "uColor")!;
+		this._uAlpha = context.getUniformLocation(this.program, "uAlpha")!;
+		this._uSampler = context.getUniformLocation(this.program, "uSampler")!;
 
-		this._uniforms = uniforms;
+		this._uniforms = uniforms!;
 		this._uniformCaches = [];
 		this._uniformSetterTable = {
-			"float": this._uniform1f.bind(this),
-			"int": this._uniform1i.bind(this),
-			"float_v": this._uniform1fv.bind(this),
-			"int_v": this._uniform1iv.bind(this),
-			"vec2": this._uniform2fv.bind(this),
-			"vec3": this._uniform3fv.bind(this),
-			"vec4": this._uniform4fv.bind(this),
-			"ivec2": this._uniform2iv.bind(this),
-			"ivec3": this._uniform3iv.bind(this),
-			"ivec4": this._uniform4iv.bind(this),
-			"mat2": this._uniformMatrix2fv.bind(this),
-			"mat3": this._uniformMatrix3fv.bind(this),
-			"mat4": this._uniformMatrix4fv.bind(this)
+			"float": this._uniform1f.bind(this) as UniformSetter,
+			"int": this._uniform1i.bind(this) as UniformSetter,
+			"float_v": this._uniform1fv.bind(this) as UniformSetter,
+			"int_v": this._uniform1iv.bind(this) as UniformSetter,
+			"vec2": this._uniform2fv.bind(this) as UniformSetter,
+			"vec3": this._uniform3fv.bind(this) as UniformSetter,
+			"vec4": this._uniform4fv.bind(this) as UniformSetter,
+			"ivec2": this._uniform2iv.bind(this) as UniformSetter,
+			"ivec3": this._uniform3iv.bind(this) as UniformSetter,
+			"ivec4": this._uniform4iv.bind(this) as UniformSetter,
+			"mat2": this._uniformMatrix2fv.bind(this) as UniformSetter,
+			"mat3": this._uniformMatrix3fv.bind(this) as UniformSetter,
+			"mat4": this._uniformMatrix4fv.bind(this) as UniformSetter
 		};
 	}
 
@@ -186,7 +188,7 @@ export class WebGLShaderProgram {
 					update,
 					beforeValue: null,
 					isArray,
-					loc: this._context.getUniformLocation(this.program, k)
+					loc: this._context.getUniformLocation(this.program, k)!
 				});
 			});
 		}

@@ -3,8 +3,8 @@ import { WebGLSurfaceTexture } from "./WebGLSharedObject";
 import { WebGLPrimarySurface } from "./WebGLPrimarySurface";
 
 export class WebGLBackSurface extends WebGLPrimarySurface {
-	_drawable: WebGLSurfaceTexture;
-	protected _renderer: WebGLBackSurfaceRenderer;
+	_drawable: WebGLSurfaceTexture = undefined!;
+	protected _renderer: WebGLBackSurfaceRenderer = undefined!;
 
 	// override
 	renderer(): WebGLBackSurfaceRenderer {
@@ -18,8 +18,8 @@ export class WebGLBackSurface extends WebGLPrimarySurface {
 		if (this._renderer) {
 			this._renderer.destroy();
 		}
-		this._renderer = undefined;
-		this._drawable = undefined;
+		this._renderer = undefined!;
+		this._drawable = undefined!;
 		super.destroy();
 	}
 }

@@ -4,7 +4,7 @@ import { Asset } from "./Asset";
 import { HTMLVideoPlayer } from "./HTMLVideoPlayer";
 
 class VideoAssetSurface extends Surface {
-	constructor(width: number, height: number, drawable: HTMLVideoElement) {
+	constructor(width: number, height: number, drawable: HTMLVideoElement | null) {
 		super(width, height, drawable);
 	}
 

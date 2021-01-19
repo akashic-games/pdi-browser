@@ -11,7 +11,7 @@ export class AudioPluginManager {
 	private _activePlugin: AudioPlugin;
 
 	constructor() {
-		this._activePlugin = null;
+		this._activePlugin = null!;
 	}
 
 	getActivePlugin(): AudioPlugin {

@@ -132,9 +132,9 @@ export class WebGLRenderer implements pdi.Renderer {
 
 	destroy(): void {
 		this._shared.requestDeleteRenderTarget(this._renderTarget);
-		this._shared = undefined;
-		this._renderTarget = undefined;
-		this._whiteColor = undefined;
+		this._shared = undefined!;
+		this._renderTarget = undefined!;
+		this._whiteColor = undefined!;
 	}
 
 	_getImageData(): pdi.ImageData {
@@ -164,7 +164,7 @@ export class WebGLRenderer implements pdi.Renderer {
 
 	private _popState(): void {
 		if (this._stateStackPointer > 0) {
-			this.currentState().shaderProgram = null;
+			this.currentState().shaderProgram = null!;
 			--this._stateStackPointer;
 		} else {
 			throw new Error("WebGLRenderer#restore: state stack under-flow.");
