@@ -26,27 +26,27 @@ export interface RenderTarget {
 export class WebGLSharedObject {
 	private _context: WebGLRenderingContext;
 	private _surface: WebGLPrimarySurface;
-	private _renderTarget: RenderTarget = null!;;
+	private _renderTarget: RenderTarget = null!;
 
-	private _defaultShaderProgram: WebGLShaderProgram = null!;;
-	private _textureAtlas: WebGLTextureAtlas = null!;;
-	private _fillRectTexture: WebGLTexture = null!;;
-	private _fillRectSurfaceTexture: WebGLSurfaceTexture = null!;;
+	private _defaultShaderProgram: WebGLShaderProgram = null!;
+	private _textureAtlas: WebGLTextureAtlas = null!;
+	private _fillRectTexture: WebGLTexture = null!;
+	private _fillRectSurfaceTexture: WebGLSurfaceTexture = null!;
 
-	private _maxSpriteCount: number = null!;;
-	private _vertices: WebGLBuffer = null!;;
-	private _verticesCache: Float32Array = null!;;
-	private _numSprites: number = null!;;
-	private _renderTargetStack: RenderTarget[] = null!;;
+	private _maxSpriteCount: number = null!;
+	private _vertices: WebGLBuffer = null!;
+	private _verticesCache: Float32Array = null!;
+	private _numSprites: number = null!;
+	private _renderTargetStack: RenderTarget[] = null!;
 
 	private _currentTexture: WebGLTexture = null!;
-	private _currentColor: number[] = null!;;
-	private _currentAlpha: number = null!;;
-	private _currentCompositeOperation: pdi.CompositeOperationString = null!;;
-	private _currentShaderProgram: WebGLShaderProgram = null!;;
+	private _currentColor: number[] = null!;
+	private _currentAlpha: number = null!;
+	private _currentCompositeOperation: pdi.CompositeOperationString = null!;
+	private _currentShaderProgram: WebGLShaderProgram = null!;
 
-	private _compositeOps: {[key in pdi.CompositeOperationString]: [number, number]; } = null!;;
-	private _deleteRequestedTargets: RenderTarget[] = null!;;
+	private _compositeOps: {[key in pdi.CompositeOperationString]: [number, number]; } = null!;
+	private _deleteRequestedTargets: RenderTarget[] = null!;
 
 	constructor(width: number, height: number) {
 		const surface = new WebGLPrimarySurface(this, width, height);

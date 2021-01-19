@@ -25,7 +25,7 @@ export class XHRScriptAsset extends Asset implements pdi.ScriptAsset {
 		// TODO: この方式では読み込んだスクリプトがcookie参照できる等本質的な危険性がある
 		// 信頼できないスクリプトを読み込むようなケースでは、iframeに閉じ込めて実行などの方式を検討する事。
 		var func = this._wrap();
-		func(execEnv);	
+		func(execEnv);
 		return execEnv.module.exports;
 	}
 

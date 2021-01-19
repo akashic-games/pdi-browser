@@ -17,16 +17,16 @@ export class HTMLImageAsset extends Asset implements pdi.ImageAsset {
 	type: "image" = "image";
 	width: number;
 	height: number;
-	hint: pdi.ImageAssetHint | undefined;
+	hint: pdi.ImageAssetHint = undefined!;
 	data: any;
-	_surface: ImageAssetSurface | undefined;
+	_surface: ImageAssetSurface = undefined!;
 
 	constructor(id: string, path: string, width: number, height: number) {
 		super(id, path);
 		this.width = width;
 		this.height = height;
 		this.data = undefined;
-		this._surface = undefined;
+		this._surface = undefined!;
 	}
 
 	initialize(hint: pdi.ImageAssetHint): void {
@@ -38,7 +38,7 @@ export class HTMLImageAsset extends Asset implements pdi.ImageAsset {
 			this._surface.destroy();
 		}
 		this.data = undefined;
-		this._surface = undefined;
+		this._surface = undefined!;
 		super.destroy();
 	}
 

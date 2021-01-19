@@ -2,7 +2,7 @@ import * as pdi from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
 
 export class HTMLVideoPlayer implements pdi.VideoPlayer {
-	currentVideo: pdi.VideoAsset | undefined;
+	currentVideo: pdi.VideoAsset = undefined!;
 	onPlay: Trigger<pdi.VideoPlayerEvent>;
 	onStop: Trigger<pdi.VideoPlayerEvent>;
 	volume: number;
@@ -23,7 +23,7 @@ export class HTMLVideoPlayer implements pdi.VideoPlayer {
 		this.onStop = new Trigger();
 		this.played = this.onPlay;
 		this.stopped = this.onStop;
-		this.currentVideo = undefined;
+		this.currentVideo = undefined!;
 		this.volume = 1.0;
 		this.isDummy = true;
 	}

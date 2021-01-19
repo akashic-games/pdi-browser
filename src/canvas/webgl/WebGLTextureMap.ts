@@ -63,7 +63,7 @@ export class WebGLTextureMap {
 		return this.area() / this.capacity();
 	}
 
-	insert(surface: pdi.Surface): WebGLTextureMap | null {
+	insert(surface: pdi.Surface): WebGLTextureMap {
 		var image = surface._drawable;
 
 		// マージンを考慮した領域を確保
@@ -86,12 +86,12 @@ export class WebGLTextureMap {
 				}
 			}
 
-			return null;
+			return null!;
 		}
 
 		// 詰め込み不可能
 		if ((this._width < width) || (this._height < height)) {
-			return null;
+			return null!;
 		}
 
 		var remainWidth = this._width - width;
