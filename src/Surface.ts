@@ -17,7 +17,7 @@ export abstract class Surface implements pdi.Surface {
 		this.width = width;
 		this.height = height;
 		this._drawable = drawable;
-		// this._destroyedは破棄時に一度だけ代入する特殊なフィールドなため、コンストラクタで初期値を代入しない
+		this._destroyed = false;
 	}
 
 	abstract renderer(): pdi.Renderer;
@@ -29,7 +29,6 @@ export abstract class Surface implements pdi.Surface {
 	}
 
 	destroyed(): boolean {
-		// _destroyedはundefinedかtrueなため、常にbooleanが返すように!!演算子を用いる
-		return !!this._destroyed;
+		return this._destroyed;
 	}
 }

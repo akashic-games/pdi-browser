@@ -63,7 +63,7 @@ export class WebGLTextureAtlas {
 				canvas.width = w;
 				canvas.height = h;
 
-				var canvasContext = canvas.getContext("2d");
+				var canvasContext = canvas.getContext("2d")!; 
 				canvasContext.globalCompositeOperation = "copy";
 				canvasContext.drawImage(image, 0, 0);
 
@@ -86,7 +86,7 @@ export class WebGLTextureAtlas {
 	 */
 	private _assign(shared: WebGLSharedObject, surface: pdi.Surface, maps: WebGLTextureMap[]): void {
 		// テクスチャアトラスに割り当てる
-		var map: WebGLTextureMap;
+		var map: WebGLTextureMap | undefined;
 		for (var i = 0; i < maps.length; ++i) {
 			map = maps[(i + this._insertPos) % maps.length].insert(surface);
 			if (map) {
@@ -96,14 +96,16 @@ export class WebGLTextureAtlas {
 				return;
 			}
 		}
-		map = null;
+		map = undefined;
 
 		// テクスチャ容量があふれるので古いやつを消して再利用する
 		if (maps.length >= WebGLTextureAtlas.TEXTURE_COUNT) {
 			map = maps.shift();
-			shared.disposeTexture(map.texture);
-			map.dispose();
-			shared.clearTexture(this.emptyTexturePixels, WebGLTextureAtlas.TEXTURE_SIZE, WebGLTextureAtlas.TEXTURE_SIZE, map.texture);
+			if (map) {
+				shared.disposeTexture(map.texture);
+				map.dispose();
+				shared.clearTexture(this.emptyTexturePixels, WebGLTextureAtlas.TEXTURE_SIZE, WebGLTextureAtlas.TEXTURE_SIZE, map.texture);
+			}
 		}
 
 		// 再利用できない場合は、新規生成する
@@ -121,7 +123,7 @@ export class WebGLTextureAtlas {
 		// 登録する
 		maps.push(map);
 		map = map.insert(surface);
-		this._register(shared, map, surface._drawable);
+		if (map) this._register(shared, map, surface._drawable); // mapが無い場合insertできていない
 	}
 
 	/**

@@ -132,9 +132,9 @@ export class WebGLRenderer implements pdi.Renderer {
 
 	destroy(): void {
 		this._shared.requestDeleteRenderTarget(this._renderTarget);
-		this._shared = undefined;
-		this._renderTarget = undefined;
-		this._whiteColor = undefined;
+		this._shared = null!;
+		this._renderTarget = null!;
+		this._whiteColor = null!;
 	}
 
 	_getImageData(): pdi.ImageData {

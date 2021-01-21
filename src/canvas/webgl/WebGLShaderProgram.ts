@@ -8,6 +8,8 @@ interface UniformCache {
 	loc: WebGLUniformLocation;
 }
 
+type UniformSetter = (loc: WebGLUniformLocation, v: number | Int32Array | Float32Array) => void;
+
 export class WebGLShaderProgram {
 	program: WebGLProgram;
 
@@ -37,28 +39,32 @@ export class WebGLShaderProgram {
 
 	private _context: WebGLRenderingContext;
 	private _aVertex: number;
-	private _uColor: WebGLUniformLocation;
-	private _uAlpha: WebGLUniformLocation;
-	private _uSampler: WebGLUniformLocation;
+	private _uColor: WebGLUniformLocation | null;
+	private _uAlpha: WebGLUniformLocation | null;
+	private _uSampler: WebGLUniformLocation | null;
 
-	private _uniforms: {[key: string]: pdi.ShaderUniform};
+	private _uniforms: {[key: string]: pdi.ShaderUniform} | undefined;
 	private _uniformCaches: UniformCache[];
 	private _uniformSetterTable: { [type: string]: (loc: WebGLUniformLocation, v: number | Int32Array | Float32Array) => void; };
 
 	private static _makeShader(gl: WebGLRenderingContext, typ: number, src: string): WebGLShader {
 		var shader = gl.createShader(typ);
+		if (!shader) throw new Error("WebGLShaderProgram#_makeShader cannot create Shader.");
+
 		gl.shaderSource(shader, src);
 		gl.compileShader(shader);
 		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
 			var msg = gl.getShaderInfoLog(shader);
 			gl.deleteShader(shader);
-			throw new Error(msg);
+			throw new Error(msg!);
 		}
 		return shader;
 	}
 
 	private static _makeShaderProgram(gl: WebGLRenderingContext, vSrc: string, fSrc: string): WebGLProgram {
 		var program = gl.createProgram();
+		if (!program) throw new Error("WebGLShaderProgram#_makeShaderProgram cannot create Program.");
+
 
 		var vShader = WebGLShaderProgram._makeShader(gl, gl.VERTEX_SHADER, vSrc);
 		gl.attachShader(program, vShader);
@@ -72,7 +78,7 @@ export class WebGLShaderProgram {
 		if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
 			var msg = gl.getProgramInfoLog(program);
 			gl.deleteProgram(program);
-			throw new Error(msg);
+			throw new Error(msg!);
 		}
 
 		return program;
@@ -80,7 +86,7 @@ export class WebGLShaderProgram {
 
 	constructor(context: WebGLRenderingContext, fSrc?: string, uniforms?: {[key: string]: pdi.ShaderUniform}) {
 		var vSrc = WebGLShaderProgram._DEFAULT_VERTEX_SHADER;
-		var fSrc = fSrc || WebGLShaderProgram._DEFAULT_FRAGMENT_SHADER;
+		fSrc = fSrc || WebGLShaderProgram._DEFAULT_FRAGMENT_SHADER;
 
 		const program = WebGLShaderProgram._makeShaderProgram(context, vSrc, fSrc);
 
@@ -94,19 +100,19 @@ export class WebGLShaderProgram {
 		this._uniforms = uniforms;
 		this._uniformCaches = [];
 		this._uniformSetterTable = {
-			"float": this._uniform1f.bind(this),
-			"int": this._uniform1i.bind(this),
-			"float_v": this._uniform1fv.bind(this),
-			"int_v": this._uniform1iv.bind(this),
-			"vec2": this._uniform2fv.bind(this),
-			"vec3": this._uniform3fv.bind(this),
-			"vec4": this._uniform4fv.bind(this),
-			"ivec2": this._uniform2iv.bind(this),
-			"ivec3": this._uniform3iv.bind(this),
-			"ivec4": this._uniform4iv.bind(this),
-			"mat2": this._uniformMatrix2fv.bind(this),
-			"mat3": this._uniformMatrix3fv.bind(this),
-			"mat4": this._uniformMatrix4fv.bind(this)
+			"float": this._uniform1f.bind(this) as UniformSetter,
+			"int": this._uniform1i.bind(this) as UniformSetter,
+			"float_v": this._uniform1fv.bind(this) as UniformSetter,
+			"int_v": this._uniform1iv.bind(this) as UniformSetter,
+			"vec2": this._uniform2fv.bind(this) as UniformSetter,
+			"vec3": this._uniform3fv.bind(this) as UniformSetter,
+			"vec4": this._uniform4fv.bind(this) as UniformSetter,
+			"ivec2": this._uniform2iv.bind(this) as UniformSetter,
+			"ivec3": this._uniform3iv.bind(this) as UniformSetter,
+			"ivec4": this._uniform4iv.bind(this) as UniformSetter,
+			"mat2": this._uniformMatrix2fv.bind(this) as UniformSetter,
+			"mat3": this._uniformMatrix3fv.bind(this) as UniformSetter,
+			"mat4": this._uniformMatrix4fv.bind(this) as UniformSetter
 		};
 	}
 
@@ -149,6 +155,7 @@ export class WebGLShaderProgram {
 	 * use()/unuse() 間のみで効果がある。
 	 */
 	updateUniforms(): void {
+		if (!this._uniforms) return;
 		for (let i = 0; i < this._uniformCaches.length; ++i) {
 			const cache = this._uniformCaches[i];
 			const value = this._uniforms[cache.name].value;
@@ -186,7 +193,7 @@ export class WebGLShaderProgram {
 					update,
 					beforeValue: null,
 					isArray,
-					loc: this._context.getUniformLocation(this.program, k)
+					loc: this._context.getUniformLocation(this.program, k) || {}
 				});
 			});
 		}

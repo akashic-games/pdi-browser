@@ -21,7 +21,7 @@ export class WebAudioPlugin implements AudioPlugin {
 		return false;
 	}
 
-	private _supportedFormats: string[];
+	private _supportedFormats: string[] = [];
 
 	get supportedFormats(): string[] {
 		return this._supportedFormats;

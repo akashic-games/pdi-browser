@@ -55,9 +55,9 @@ export class Platform implements pdi.Platform {
 	audioPluginManager: AudioPluginManager;
 	amflow: AMFlow;
 
-	_platformEventHandler: pdi.PlatformEventHandler;
+	_platformEventHandler: pdi.PlatformEventHandler | null;
 	_resourceFactory: ResourceFactory;
-	_rendererReq: pdi.RendererRequirement;
+	_rendererReq: pdi.RendererRequirement | null;
 	_disablePreventDefault: boolean;
 	_audioManager: AudioManager;
 
@@ -110,7 +110,7 @@ export class Platform implements pdi.Platform {
 		}
 
 		this._rendererReq = requirement;
-		this._resourceFactory._rendererCandidates = this._rendererReq.rendererCandidates;
+		this._resourceFactory._rendererCandidates = this._rendererReq.rendererCandidates || null;
 
 		// Note: this.containerController.inputHandlerLayer の存在により this.containerController が初期化されているかを判定
 		if (this.containerController && ! this.containerController.inputHandlerLayer) {
@@ -128,14 +128,15 @@ export class Platform implements pdi.Platform {
 	}
 
 	getPrimarySurface(): pdi.Surface {
-		return this.containerController.surface;
+		return this.containerController.surface!; // 親pdiのI/Fに合わせる
 	}
 
 	getOperationPluginViewInfo(): pdi.OperationPluginViewInfo {
 		return <any>{
 			type: "pdi-browser", // note: scale情報を付加したため null ではないものを返している。
-			view: this.containerController.inputHandlerLayer.view,
-			getScale: () => this.containerController.inputHandlerLayer._inputHandler.getScale()
+			// 正常系で未初期化のケースを扱えないためnon-nullとして扱う
+			view: this.containerController.inputHandlerLayer!.view,
+			getScale: () => this.containerController.inputHandlerLayer!._inputHandler!.getScale()
 		};
 	}
 
@@ -173,8 +174,7 @@ export class Platform implements pdi.Platform {
 	 * 最終的に出力されるマスター音量を取得する
 	 */
 	getMasterVolume(): number {
-		if (this._audioManager)
-			return this._audioManager.getMasterVolume();
+		return this._audioManager.getMasterVolume();
 	}
 
 	destroy(): void {

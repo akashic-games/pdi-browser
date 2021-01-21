@@ -5,7 +5,7 @@ export class WebGLRenderingState {
 	globalAlpha: number;
 	globalCompositeOperation: pdi.CompositeOperationString;
 	transformer: AffineTransformer;
-	shaderProgram: pdi.ShaderProgram;
+	shaderProgram: pdi.ShaderProgram | null;
 
 	constructor(rhs?: WebGLRenderingState) {
 		if (rhs) {

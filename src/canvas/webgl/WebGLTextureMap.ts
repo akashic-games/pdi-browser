@@ -10,9 +10,9 @@ export class WebGLTextureMap {
 	offsetY: number;
 	private _width: number;
 	private _height: number;
-	private _left: WebGLTextureMap;
-	private _right: WebGLTextureMap;
-	private _surface: pdi.Surface;
+	private _left: WebGLTextureMap | null = null;
+	private _right: WebGLTextureMap | null = null;
+	private _surface: pdi.Surface | null = null;
 
 	constructor(texture: WebGLTexture, offsetX: number, offsetY: number, width: number, height: number) {
 		this.texture = texture;
@@ -63,7 +63,7 @@ export class WebGLTextureMap {
 		return this.area() / this.capacity();
 	}
 
-	insert(surface: pdi.Surface): WebGLTextureMap {
+	insert(surface: pdi.Surface): WebGLTextureMap | undefined { // Array#shift() の型に合わせる
 		var image = surface._drawable;
 
 		// マージンを考慮した領域を確保
@@ -86,12 +86,12 @@ export class WebGLTextureMap {
 				}
 			}
 
-			return null;
+			return undefined;
 		}
 
 		// 詰め込み不可能
 		if ((this._width < width) || (this._height < height)) {
-			return null;
+			return undefined;
 		}
 
 		var remainWidth = this._width - width;

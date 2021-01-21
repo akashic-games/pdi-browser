@@ -5,7 +5,7 @@ import { WebGLSharedObject } from "./WebGLSharedObject";
 
 export class WebGLPrimarySurface extends CanvasSurface {
 	protected _shared: WebGLSharedObject;
-	protected _renderer: WebGLPrimarySurfaceRenderer;
+	protected _renderer: WebGLPrimarySurfaceRenderer | null = null;
 
 	constructor(shared: WebGLSharedObject, width: number, height: number) {
 		super(width, height);

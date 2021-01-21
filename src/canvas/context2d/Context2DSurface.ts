@@ -3,12 +3,12 @@ import { CanvasSurfaceContext } from "./CanvasSurfaceContext";
 import { Context2DRenderer } from "./Context2DRenderer";
 
 export class Context2DSurface extends CanvasSurface {
-	protected _renderer: Context2DRenderer;
-	protected _context: CanvasSurfaceContext;
+	protected _renderer: Context2DRenderer = null!;
+	protected _context: CanvasSurfaceContext = null!;
 
 	context(): CanvasSurfaceContext {
 		if (!this._context) {
-			this._context = new CanvasSurfaceContext(this.canvas.getContext("2d"));
+			this._context = new CanvasSurfaceContext(this.canvas.getContext("2d")!);
 		}
 		return this._context;
 	}

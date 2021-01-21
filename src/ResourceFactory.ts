@@ -20,7 +20,7 @@ export interface ResourceFactoryParameterObject {
 export class ResourceFactory implements pdi.ResourceFactory {
 	_audioPluginManager: AudioPluginManager;
 	_audioManager: AudioManager;
-	_rendererCandidates: string[];
+	_rendererCandidates: string[] | null = null;
 	_surfaceFactory: SurfaceFactory;
 	_platform: Platform;
 
@@ -39,15 +39,15 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		loop: boolean,
 		hint: pdi.AudioAssetHint
 	): AudioAsset {
-		const activePlugin = this._audioPluginManager.getActivePlugin();
+		const activePlugin = this._audioPluginManager.getActivePlugin()!; // 利用側でtryInstallPlugin()が事前に呼ばれているためnon-nullとして扱う
 		const audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint);
 		this._audioManager.registerAudioAsset(audioAsset);
-		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed, this);
+		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed as (arg: pdi.Asset) => void, this);
 		return audioAsset;
 	}
 
 	createAudioPlayer(system: pdi.AudioSystem): pdi.AudioPlayer {
-		const activePlugin = this._audioPluginManager.getActivePlugin();
+		const activePlugin = this._audioPluginManager.getActivePlugin()!;
 		return activePlugin.createPlayer(system, this._audioManager);
 	}
 
@@ -76,11 +76,11 @@ export class ResourceFactory implements pdi.ResourceFactory {
 	}
 
 	createPrimarySurface(width: number, height: number): CanvasSurface {
-		return this._surfaceFactory.createPrimarySurface(width, height, this._rendererCandidates);
+		return this._surfaceFactory.createPrimarySurface(width, height, this._rendererCandidates!); // Platformなど外部から渡される
 	}
 
 	createSurface(width: number, height: number): CanvasSurface {
-		return this._surfaceFactory.createBackSurface(width, height, this._rendererCandidates);
+		return this._surfaceFactory.createBackSurface(width, height, this._rendererCandidates!);
 	}
 
 	createGlyphFactory(

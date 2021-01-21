@@ -111,7 +111,7 @@ export class CanvasSurfaceContext {
 	}
 
 	putImageData(imagedata: ImageData, dx: number, dy: number,
-	             dirtyX?: number, dirtyY?: number, dirtyWidth?: number, dirtyHeight?: number): void {
+	             dirtyX: number = 0, dirtyY: number = 0, dirtyWidth: number = imagedata.width, dirtyHeight: number = imagedata.height): void {
 		this._context.putImageData(imagedata, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
 	}
 

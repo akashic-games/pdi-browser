@@ -42,7 +42,7 @@ export class XHRLoader {
 			if (request.status >= 200 && request.status < 300) {
 				// "text" とそれ以外で取得方法を分類する
 				var response = requestObject.responseType === "text" ? request.responseText : request.response;
-				callback(null, response);
+				callback(null!, response);
 			} else {
 				callback(ExceptionFactory.createAssetLoadError("loading error. status: " + request.status));
 			}

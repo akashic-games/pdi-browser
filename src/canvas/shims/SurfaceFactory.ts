@@ -4,7 +4,7 @@ import { Context2DSurface } from "../context2d/Context2DSurface";
 import { WebGLSharedObject } from "../webgl/WebGLSharedObject";
 
 export class SurfaceFactory {
-	_shared: WebGLSharedObject;
+	_shared: WebGLSharedObject | null = null;
 
 	createPrimarySurface(width: number, height: number, rendererCandidates?: string[]): CanvasSurface {
 		if (RenderingHelper.usedWebGL(rendererCandidates)) {
@@ -18,7 +18,7 @@ export class SurfaceFactory {
 	}
 
 	createBackSurface(width: number, height: number, rendererCandidates?: string[]): CanvasSurface {
-		if (RenderingHelper.usedWebGL(rendererCandidates)) {
+		if (RenderingHelper.usedWebGL(rendererCandidates) && !!this._shared) {
 			return this._shared.createBackSurface(width, height);
 		} else {
 			return new Context2DSurface(width, height);

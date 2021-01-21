@@ -13,9 +13,11 @@ export abstract class CanvasSurface extends Surface {
 	}
 
 	destroy(): void {
-		this.canvas.width = 1;
-		this.canvas.height = 1;
-		this.canvas = null;
+		if (this.canvas) {
+			this.canvas.width = 1;
+			this.canvas.height = 1;
+		}
+		this.canvas = null!;
 		super.destroy();
 	}
 
@@ -43,6 +45,7 @@ export abstract class CanvasSurface extends Surface {
 	 * `changeRawSize()` との差異に注意。
 	 */
 	changeVisualScale(xScale: number, yScale: number): void {
+		if (!this.canvas) return;
 		/*
 		 Canvas要素のリサイズをCSS transformで行う。
 		 CSSのwidth/height styleによるリサイズはおかしくなるケースが存在するので、可能な限りtransformを使う。

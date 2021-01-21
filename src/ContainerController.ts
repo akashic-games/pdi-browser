@@ -23,10 +23,10 @@ export interface ContainerControllerInitializeParameterObject {
  */
 export class ContainerController {
 	resourceFactory: ResourceFactory;
-	container: DocumentFragment;
-	surface: CanvasSurface;
-	inputHandlerLayer: InputHandlerLayer;
-	rootView: HTMLElement;
+	container: DocumentFragment | null;
+	surface: CanvasSurface | null;
+	inputHandlerLayer: InputHandlerLayer | null;
+	rootView: HTMLElement | null;
 	/**
 	 * ゲームコンテンツのCanvas拡大・縮小時に内部のコンテキスト領域のリサイズを行うかどうか。初期値はfalse。
 	 * Note: この機能は実験的なものです。特定の環境や実行状態によっては正常な描画が期待できない場合もあります。
@@ -36,7 +36,7 @@ export class ContainerController {
 
 	pointEventTrigger: Trigger<pdi.PlatformPointEvent>;
 
-	private _rendererReq: pdi.RendererRequirement;
+	private _rendererReq: pdi.RendererRequirement | null;
 	private _disablePreventDefault: boolean;
 
 	constructor(resourceFactory: ResourceFactory) {
@@ -71,6 +71,7 @@ export class ContainerController {
 	}
 
 	resetView(rendererReq: pdi.RendererRequirement): void {
+		if (!this.rootView) return;
 		this.unloadView();
 		this._rendererReq = rendererReq;
 		this._loadView();
@@ -86,15 +87,17 @@ export class ContainerController {
 	}
 
 	changeScale(xScale: number, yScale: number): void {
+		if (!this.surface || !this.inputHandlerLayer) return;
 		if (this.useResizeForScaling) {
 			this.surface.changePhysicalScale(xScale, yScale);
 		} else {
 			this.surface.changeVisualScale(xScale, yScale);
 		}
-		this.inputHandlerLayer._inputHandler.setScale(xScale, yScale);
+		this.inputHandlerLayer._inputHandler!.setScale(xScale, yScale); // initialize()で_inputHandler代入済みとする
 	}
 
 	unloadView(): void {
+		if (!this.inputHandlerLayer) return;
 		// イベントを片付けてから、rootViewに所属するElementを開放する
 		this.inputHandlerLayer.disablePointerEvent();
 		if (this.rootView) {
@@ -105,6 +108,7 @@ export class ContainerController {
 	}
 
 	private _loadView(): void {
+		if (!this._rendererReq) return;
 		const { primarySurfaceWidth: width, primarySurfaceHeight: height } = this._rendererReq;
 		const disablePreventDefault = this._disablePreventDefault;
 		// DocumentFragmentはinsertした時点で開放されているため毎回作る
@@ -131,6 +135,7 @@ export class ContainerController {
 	}
 
 	private _appendToRootView(rootView: HTMLElement): void {
+		if (!this.container || !this.inputHandlerLayer) return;
 		rootView.appendChild(this.container);
 		this.inputHandlerLayer.enablePointerEvent(); // Viewが追加されてから設定する
 		this.inputHandlerLayer.pointEventTrigger.add(this.pointEventTrigger.fire, this.pointEventTrigger);

@@ -17,9 +17,9 @@ export class HTMLImageAsset extends Asset implements pdi.ImageAsset {
 	type: "image" = "image";
 	width: number;
 	height: number;
-	hint: pdi.ImageAssetHint;
+	hint: pdi.ImageAssetHint | undefined = undefined;
 	data: any;
-	_surface: ImageAssetSurface;
+	_surface: ImageAssetSurface | undefined;
 
 	constructor(id: string, path: string, width: number, height: number) {
 		super(id, path);

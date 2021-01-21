@@ -22,7 +22,7 @@ export class InputHandlerLayer {
 	// DOMで起きたイベントを通知するTrigger
 	pointEventTrigger: Trigger<pdi.PlatformPointEvent>;
 
-	_inputHandler: InputAbstractHandler;
+	_inputHandler: InputAbstractHandler | null;
 	private _disablePreventDefault: boolean;
 
 	/**
@@ -36,7 +36,7 @@ export class InputHandlerLayer {
 	 */
 	constructor(param: InputHandlerLayerParameterObject) {
 		this.view = this._createInputView(param.width, param.height);
-		this._inputHandler = undefined;
+		this._inputHandler = null;
 		this.pointEventTrigger = new Trigger<pdi.PlatformPointEvent>();
 
 		this._disablePreventDefault = !!param.disablePreventDefault;
@@ -59,6 +59,7 @@ export class InputHandlerLayer {
 	}
 
 	setOffset(offset: pdi.CommonOffset): void {
+		if (!this._inputHandler) return;
 		var inputViewStyle = `position:relative; left:${offset.x}px; top:${offset.y}px`;
 		this._inputHandler.inputView.setAttribute("style", inputViewStyle);
 	}

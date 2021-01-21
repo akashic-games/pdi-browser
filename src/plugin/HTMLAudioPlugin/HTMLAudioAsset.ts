@@ -11,8 +11,8 @@ export interface MediaLoaderEventHandlerSet {
 export class HTMLAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[];
-	private _intervalId: number;
-	private _intervalCount: number;
+	private _intervalId: number | undefined;
+	private _intervalCount: number = 0;
 
 	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {
@@ -65,7 +65,7 @@ export class HTMLAudioAsset extends AudioAsset {
 				if (audio.readyState === 4) {
 					handlers.success();
 				} else {
-					++this._intervalCount;
+					++this._intervalCount!; // 
 					// readyStateの値が4にならない状態が1分（100ms×600）続いた場合、
 					// 読み込みに失敗したとする。1分という時間に根拠は無い。
 					if (this._intervalCount === 600) {
@@ -96,7 +96,7 @@ export class HTMLAudioAsset extends AudioAsset {
 		startLoadingAudio(this.path, handlers);
 	}
 
-	cloneElement(): HTMLAudioElement {
+	cloneElement(): HTMLAudioElement | null {
 		return this.data ? new Audio(this.data.src) : null;
 	}
 
@@ -109,7 +109,7 @@ export class HTMLAudioAsset extends AudioAsset {
 		}
 		// ここで検出されるのは最初にアクセスを試みるオーディオアセットのファイルパスなので、
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない
-		return null;
+		return path;
 	}
 
 	private _attachAll(audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void {

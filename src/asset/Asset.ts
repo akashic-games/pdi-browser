@@ -2,7 +2,7 @@ import * as pdi from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
 
 export abstract class Asset implements pdi.Asset {
-	type: string;
+	abstract type: string;
 	id: string;
 	path: string;
 	originalPath: string;
@@ -16,15 +16,15 @@ export abstract class Asset implements pdi.Asset {
 
 	destroy(): void {
 		this.onDestroyed.fire(this);
-		this.id = undefined;
-		this.originalPath = undefined;
-		this.path = undefined;
+		this.id = null!;
+		this.originalPath = null!;
+		this.path = null!;
 		this.onDestroyed.destroy();
-		this.onDestroyed = undefined;
+		this.onDestroyed = null!;
 	}
 
 	destroyed(): boolean {
-		return this.id === undefined;
+		return this.id === null;
 	}
 
 	inUse(): boolean {
