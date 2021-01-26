@@ -65,7 +65,7 @@ export class HTMLAudioAsset extends AudioAsset {
 				if (audio.readyState === 4) {
 					handlers.success();
 				} else {
-					++this._intervalCount!; // 
+					++this._intervalCount;
 					// readyStateの値が4にならない状態が1分（100ms×600）続いた場合、
 					// 読み込みに失敗したとする。1分という時間に根拠は無い。
 					if (this._intervalCount === 600) {

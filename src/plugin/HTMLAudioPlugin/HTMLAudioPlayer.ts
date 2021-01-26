@@ -11,7 +11,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 	private _isWaitingPlayEvent: boolean = false;
 	private _isStopRequested: boolean = false;
 	private _onPlayEventHandler: () => void;
-	private _dummyDurationWaitTimer: any;
+	private _dummyDurationWaitTimer: any = null;
 
 	constructor(system: pdi.AudioSystem, manager: AudioManager) {
 		super(system);
@@ -22,7 +22,6 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		this._onPlayEventHandler = () => {
 			this._onPlayEvent();
 		};
-		this._dummyDurationWaitTimer = null;
 	}
 
 	play(asset: HTMLAudioAsset): void {
@@ -107,7 +106,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		if (this._isStopRequested) {
 			this._isStopRequested = false;
 			// _audioInstance が再び play されることは無いので、 removeEventListener("play") する必要は無い
-			if (this._audioInstance)this._audioInstance.pause();
+			this._audioInstance!.pause(); // _isStopRequested が真の場合 _audioInstance も存在する
 			this._audioInstance = null;
 		}
 	}

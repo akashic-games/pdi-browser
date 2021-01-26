@@ -10,7 +10,7 @@ export class WebAudioPlayer extends AudioPlayer {
 	private _sourceNode: AudioBufferSourceNode | null = null;
 	private _audioContext: AudioContext;
 	private _manager: AudioManager;
-	private _dummyDurationWaitTimer: any;
+	private _dummyDurationWaitTimer: any = null;
 
 	constructor(system: pdi.AudioSystem, manager: AudioManager) {
 		super(system);
@@ -18,7 +18,6 @@ export class WebAudioPlayer extends AudioPlayer {
 		this._manager = manager;
 		this._gainNode = helper.createGainNode(this._audioContext);
 		this._gainNode.connect(this._audioContext.destination);
-		this._dummyDurationWaitTimer = null;
 		this._endedEventHandler = () => {
 			this._onAudioEnded();
 		};

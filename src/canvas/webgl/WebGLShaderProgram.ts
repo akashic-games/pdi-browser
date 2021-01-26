@@ -45,7 +45,7 @@ export class WebGLShaderProgram {
 
 	private _uniforms: {[key: string]: pdi.ShaderUniform} | undefined;
 	private _uniformCaches: UniformCache[];
-	private _uniformSetterTable: { [type: string]: (loc: WebGLUniformLocation, v: number | Int32Array | Float32Array) => void; };
+	private _uniformSetterTable: { [type: string]: UniformSetter; };
 
 	private static _makeShader(gl: WebGLRenderingContext, typ: number, src: string): WebGLShader {
 		var shader = gl.createShader(typ);

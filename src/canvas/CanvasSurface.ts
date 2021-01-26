@@ -13,10 +13,8 @@ export abstract class CanvasSurface extends Surface {
 	}
 
 	destroy(): void {
-		if (this.canvas) {
-			this.canvas.width = 1;
-			this.canvas.height = 1;
-		}
+		this.canvas.width = 1;
+		this.canvas.height = 1;
 		this.canvas = null!;
 		super.destroy();
 	}
