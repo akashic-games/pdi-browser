@@ -4,7 +4,7 @@ import { Asset } from "./Asset";
 
 export class XHRTextAsset extends Asset implements pdi.TextAsset {
 	type: "text" = "text";
-	data: string = "";
+	data: string = null!;
 
 	constructor(id: string, path: string) {
 		super(id, path);
@@ -23,7 +23,7 @@ export class XHRTextAsset extends Asset implements pdi.TextAsset {
 	}
 
 	destroy(): void {
-		this.data = "";
+		this.data = null!;
 		super.destroy();
 	}
 }
