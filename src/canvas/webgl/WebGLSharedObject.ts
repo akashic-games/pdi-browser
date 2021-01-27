@@ -98,8 +98,8 @@ export class WebGLSharedObject {
 		this.clear();
 		this._currentShaderProgram.use();
 		this._currentShaderProgram.set_aVertex(this._vertices);
-		this._currentShaderProgram.set_uColor(this._currentColor!);
-		this._currentShaderProgram.set_uAlpha(this._currentAlpha!);
+		this._currentShaderProgram.set_uColor(this._currentColor);
+		this._currentShaderProgram.set_uAlpha(this._currentAlpha);
 		this._currentShaderProgram.set_uSampler(0);
 		this._currentShaderProgram.updateUniforms();
 	}

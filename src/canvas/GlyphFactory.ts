@@ -8,6 +8,16 @@ interface GlyphRenderSurfaceResult {
 	imageData?: ImageData;
 }
 
+interface GlyphArea extends pdi.GlyphArea {
+	x: number;
+    y: number;
+    width: number;
+    height: number;
+    offsetX?: number;
+    offsetY?: number;
+    advanceWidth?: number;
+}
+
 function createGlyphRenderedSurface(code: number, fontSize: number, cssFontFamily: string,
                                     baselineHeight: number, marginW: number, marginH: number,
                                     needImageData: boolean, fontColor: string, strokeWidth: number,
@@ -67,7 +77,7 @@ function createGlyphRenderedSurface(code: number, fontSize: number, cssFontFamil
 	return result;
 }
 
-function calcGlyphArea(imageData: ImageData): pdi.GlyphArea {
+function calcGlyphArea(imageData: ImageData): GlyphArea {
 	let sx = imageData.width;
 	let sy = imageData.height;
 	let ex = 0;
@@ -95,7 +105,7 @@ function calcGlyphArea(imageData: ImageData): pdi.GlyphArea {
 		}
 	}
 
-	let glyphArea: pdi.GlyphArea;
+	let glyphArea: GlyphArea;
 	if (sx === imageData.width) { // 空白文字
 		glyphArea = { x: 0, y: 0, width: 0, height: 0 }; // 空の領域に設定
 	} else {
@@ -129,7 +139,7 @@ function createGlyph(
 	code: number,
 	x: number,
 	y: number,
-	width?: number,
+	width: number,
 	height?: number,
 	offsetX?: number,
 	offsetY?: number,
@@ -167,7 +177,7 @@ export class GlyphFactory implements pdi.GlyphFactory {
 	strokeColor: string;
 	strokeOnly: boolean;
 
-	_glyphAreas: {[key: number]: pdi.GlyphArea} = Object.create(null);
+	_glyphAreas: {[key: number]: GlyphArea} = Object.create(null);
 	_marginW: number;
 	_marginH: number;
 
@@ -229,7 +239,7 @@ export class GlyphFactory implements pdi.GlyphFactory {
 				true, this.fontColor, this.strokeWidth,
 				this.strokeColor, this.strokeOnly, this.fontWeight
 			);
-			glyphArea = calcGlyphArea(result.imageData!);
+			glyphArea = calcGlyphArea(result.imageData!); // createGlyphRenderedSurface() に needImageData: true が渡るため imageData は受け取れる
 			glyphArea.advanceWidth = result.advanceWidth;
 			this._glyphAreas[code] = glyphArea;
 		}
