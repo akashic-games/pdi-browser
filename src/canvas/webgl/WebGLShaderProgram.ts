@@ -187,13 +187,17 @@ export class WebGLShaderProgram {
 						"WebGLShaderProgram#initializeUniforms: Uniform type '" + type + "' is not supported."
 					);
 				}
-
+				const loc = this._context.getUniformLocation(this.program, k);
+				if (!loc) {
+					console.log("WebGL UniformLocation is undefined. cache skipped.");
+					return;
+				}
 				uniformCaches.push({
 					name: k,
 					update,
 					beforeValue: null,
 					isArray,
-					loc: this._context.getUniformLocation(this.program, k) || {}
+					loc
 				});
 			});
 		}

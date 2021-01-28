@@ -252,7 +252,11 @@ export class WebGLSharedObject {
 	}
 
 	makeTextureRaw(width: number, height: number, pixels: Uint8Array | null = null): WebGLTexture {
-		const texture = this._context.createTexture()!;
+		const texture = this._context.createTexture();
+		if (!texture) {
+			throw new Error("WebGLSharedObject#makeTextureRaw: could not create WebGLTexture");
+		}
+
 		this._context.bindTexture(this._context.TEXTURE_2D, texture);
 		this._context.pixelStorei(this._context.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
 		this._context.texParameteri(this._context.TEXTURE_2D, this._context.TEXTURE_WRAP_S, this._context.CLAMP_TO_EDGE);
@@ -269,7 +273,11 @@ export class WebGLSharedObject {
 	}
 
 	makeTexture(data: HTMLImageElement|HTMLCanvasElement|ImageData): WebGLTexture {
-		var texture = this._context.createTexture()!; // nullが返された場合の代替処理が無いためnon-nullとして扱う
+		var texture = this._context.createTexture(); // nullが返された場合の代替処理が無いためnon-nullとして扱う
+		if (!texture) {
+			throw new Error("WebGLSharedObject#makeTexture: could not create WebGLTexture");
+		}
+
 		this._context.bindTexture(this._context.TEXTURE_2D, texture);
 		this._context.pixelStorei(this._context.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
 		this._context.texParameteri(this._context.TEXTURE_2D, this._context.TEXTURE_WRAP_S, this._context.CLAMP_TO_EDGE);
@@ -300,10 +308,18 @@ export class WebGLSharedObject {
 	createRenderTarget(width: number, height: number): RenderTarget {
 		const context = this._context;
 
-		const framebuffer = context.createFramebuffer()!;
+		const framebuffer = context.createFramebuffer();
+		if (!framebuffer) {
+			throw new Error("WebGLSharedObject#createRenderTarget: could not create WebGLFramebuffer");
+		}
+
 		context.bindFramebuffer(context.FRAMEBUFFER, framebuffer);
 
-		const texture = context.createTexture()!;
+		const texture = context.createTexture();
+		if (!texture) {
+			throw new Error("WebGLSharedObject#createRenderTarget: could not create WebGLTexture");
+		}
+
 		context.bindTexture(context.TEXTURE_2D, texture);
 		context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MAG_FILTER, context.LINEAR);
 		context.texParameteri(context.TEXTURE_2D, context.TEXTURE_MIN_FILTER, context.LINEAR);
@@ -437,7 +453,11 @@ export class WebGLSharedObject {
 	}
 
 	private _makeBuffer(data: any): WebGLBuffer {
-		const buffer = this._context.createBuffer()!;
+		const buffer = this._context.createBuffer();
+		if (!buffer) {
+			throw new Error("WebGLSharedObject#_makeBuffer: could not create WebGLBuffer");
+		}
+
 		this._context.bindBuffer(this._context.ARRAY_BUFFER, buffer);
 		this._context.bufferData(this._context.ARRAY_BUFFER, data, this._context.DYNAMIC_DRAW);
 		return buffer;
