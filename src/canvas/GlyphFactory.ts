@@ -10,18 +10,18 @@ interface GlyphRenderSurfaceResult {
 
 interface GlyphArea extends pdi.GlyphArea {
 	x: number;
-    y: number;
-    width: number;
-    height: number;
-    offsetX?: number;
-    offsetY?: number;
-    advanceWidth?: number;
+	y: number;
+	width: number;
+	height: number;
+	offsetX?: number;
+	offsetY?: number;
+	advanceWidth?: number;
 }
 
 function createGlyphRenderedSurface(code: number, fontSize: number, cssFontFamily: string,
-                                    baselineHeight: number, marginW: number, marginH: number,
-                                    needImageData: boolean, fontColor: string, strokeWidth: number,
-                                    strokeColor: string, strokeOnly: boolean, fontWeight: pdi.FontWeightString): GlyphRenderSurfaceResult {
+									baselineHeight: number, marginW: number, marginH: number,
+									needImageData: boolean, fontColor: string, strokeWidth: number,
+									strokeColor: string, strokeOnly: boolean, fontWeight: pdi.FontWeightString): GlyphRenderSurfaceResult {
 
 	// 要求されたフォントサイズが描画可能な最小フォントサイズ以下だった場合、必要なスケーリング係数
 	const scale = fontSize < GlyphFactory._environmentMinimumFontSize ? fontSize / GlyphFactory._environmentMinimumFontSize : 1;
