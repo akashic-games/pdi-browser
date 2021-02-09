@@ -35,7 +35,10 @@ function createGlyphRenderedSurface(code: number, fontSize: number, cssFontFamil
 	// * Renderer#drawSystemText()を廃止または非推奨にしたいのでそれを用いず文字列を描画する
 	// * RenderingHelperがcontextの状態を復帰するためTextMetricsを取れない
 	const canvas = surface.canvas;
-	const context = canvas.getContext("2d")!;
+	const context = canvas.getContext("2d");
+	if (!context) {
+		throw new Error("createGlyphRenderedSurface: cannot get context 2d.");
+	}
 
 	const str = (code & 0xFFFF0000) ? String.fromCharCode((code & 0xFFFF0000) >>> 16, code & 0xFFFF) : String.fromCharCode(code);
 
@@ -280,7 +283,10 @@ export class GlyphFactory implements pdi.GlyphFactory {
 		let fontSize = 1;
 		const str = "M";
 		const canvas = document.createElement("canvas");
-		const context = canvas.getContext("2d")!;
+		const context = canvas.getContext("2d");
+		if (!context) {
+			throw new Error("GlyphFactory#measureMinimumFontSize: cannot get context 2d.");
+		}
 		context.textAlign = "left";
 		context.textBaseline = "alphabetic";
 		context.lineJoin = "bevel";

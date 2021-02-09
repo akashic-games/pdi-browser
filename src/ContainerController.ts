@@ -108,7 +108,7 @@ export class ContainerController {
 	}
 
 	private _loadView(): void {
-		if (!this._rendererReq) return;
+		if (!this._rendererReq) return; // TODO: _rendererReqをnon-nullの型に直す
 		const { primarySurfaceWidth: width, primarySurfaceHeight: height } = this._rendererReq;
 		const disablePreventDefault = this._disablePreventDefault;
 		// DocumentFragmentはinsertした時点で開放されているため毎回作る

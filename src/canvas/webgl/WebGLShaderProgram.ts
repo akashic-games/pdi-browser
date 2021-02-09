@@ -63,7 +63,7 @@ export class WebGLShaderProgram {
 
 	private static _makeShaderProgram(gl: WebGLRenderingContext, vSrc: string, fSrc: string): WebGLProgram {
 		var program = gl.createProgram();
-		if (!program) throw new Error("WebGLShaderProgram#_makeShaderProgram cannot create Program.");
+		if (!program) throw new Error("WebGLShaderProgram#_makeShaderProgram:  cannot create Program.");
 
 
 		var vShader = WebGLShaderProgram._makeShader(gl, gl.VERTEX_SHADER, vSrc);
@@ -78,7 +78,11 @@ export class WebGLShaderProgram {
 		if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
 			var msg = gl.getProgramInfoLog(program);
 			gl.deleteProgram(program);
-			throw new Error(msg!);
+			if (msg) {
+				throw new Error(msg);
+			} else {
+				throw new Error("unknown error");
+			}
 		}
 
 		return program;
@@ -189,7 +193,7 @@ export class WebGLShaderProgram {
 				}
 				const loc = this._context.getUniformLocation(this.program, k);
 				if (!loc) {
-					console.log("WebGL UniformLocation is undefined. cache skipped.");
+					console.log("WebGLShaderProgram#initializeUniforms(): WebGL UniformLocation is undefined. cache skipped.");
 					return;
 				}
 				uniformCaches.push({

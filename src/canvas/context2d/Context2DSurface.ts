@@ -8,7 +8,11 @@ export class Context2DSurface extends CanvasSurface {
 
 	context(): CanvasSurfaceContext {
 		if (!this._context) {
-			this._context = new CanvasSurfaceContext(this.canvas.getContext("2d")!);
+			const context = this.canvas.getContext("2d");
+			if (!context) {
+				throw new Error("Context2DSurface#context: cannot get context 2d.");
+			}
+			this._context = new CanvasSurfaceContext(context);
 		}
 		return this._context;
 	}

@@ -16,21 +16,21 @@ export class XHRLoader {
 		this.timeout = options.timeout || 15000;
 	}
 
-	get(url: string, callback: (error: pdi.AssetLoadError, data?: string) => void): void {
+	get(url: string, callback: (error?: pdi.AssetLoadError, data?: string) => void): void {
 		this._getRequestObject({
 			url: url,
 			responseType: "text"
 		}, callback);
 	}
 
-	getArrayBuffer(url: string, callback: (error: pdi.AssetLoadError, data?: ArrayBuffer) => void): void {
+	getArrayBuffer(url: string, callback: (error?: pdi.AssetLoadError, data?: ArrayBuffer) => void): void {
 		this._getRequestObject({
 			url: url,
 			responseType: "arraybuffer"
 		}, callback);
 	}
 
-	private _getRequestObject(requestObject: XHRRequestObject, callback: (error: pdi.AssetLoadError, data?: any) => void): void {
+	private _getRequestObject(requestObject: XHRRequestObject, callback: (error?: pdi.AssetLoadError, data?: any) => void): void {
 		var request = new XMLHttpRequest();
 		request.open("GET", requestObject.url, true);
 		request.responseType = requestObject.responseType;
@@ -42,7 +42,7 @@ export class XHRLoader {
 			if (request.status >= 200 && request.status < 300) {
 				// "text" とそれ以外で取得方法を分類する
 				var response = requestObject.responseType === "text" ? request.responseText : request.response;
-				callback(null!, response);
+				callback(undefined, response);
 			} else {
 				callback(ExceptionFactory.createAssetLoadError("loading error. status: " + request.status));
 			}

@@ -63,7 +63,11 @@ export class WebGLTextureAtlas {
 				canvas.width = w;
 				canvas.height = h;
 
-				var canvasContext = canvas.getContext("2d")!;
+				var canvasContext = canvas.getContext("2d");
+				if (!canvasContext) {
+					throw new Error("WebGLTextureAtlas#makeTextureForSurface: cannot get context 2d.");
+				}
+
 				canvasContext.globalCompositeOperation = "copy";
 				canvasContext.drawImage(image, 0, 0);
 

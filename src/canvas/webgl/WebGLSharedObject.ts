@@ -46,7 +46,7 @@ export class WebGLSharedObject {
 	private _currentShaderProgram: WebGLShaderProgram = null!;
 
 	private _compositeOps: {[key in pdi.CompositeOperationString]: [number, number]; } = null!;
-	private _deleteRequestedTargets: RenderTarget[] = [];
+	private _deleteRequestedTargets!: RenderTarget[];
 
 	constructor(width: number, height: number) {
 		const surface = new WebGLPrimarySurface(this, width, height);

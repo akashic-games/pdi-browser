@@ -39,7 +39,8 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		loop: boolean,
 		hint: pdi.AudioAssetHint
 	): AudioAsset {
-		const activePlugin = this._audioPluginManager.getActivePlugin()!; // 利用側でtryInstallPlugin()が事前に呼ばれているためnon-nullとして扱う
+		// createAudioAsset() 以前に利用側で AudioPluginManager#tryInstallPlugin() が事前に呼ばれ、_activePlugin が生成されているため non-null として扱う
+		const activePlugin = this._audioPluginManager.getActivePlugin()!;
 		const audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint);
 		this._audioManager.registerAudioAsset(audioAsset);
 		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed as (arg: pdi.Asset) => void, this);
