@@ -1,14 +1,14 @@
 "use strict";
 import { AMFlow } from "@akashic/amflow";
 import * as pdi from "@akashic/pdi-types";
-import { RafLooper } from "./RafLooper";
-import { ResourceFactory } from "./ResourceFactory";
+import { XHRTextAsset } from "./asset/XHRTextAsset";
+import { AudioManager } from "./AudioManager";
 import { ContainerController } from "./ContainerController";
 import { AudioPluginManager } from "./plugin/AudioPluginManager";
-import { AudioManager } from "./AudioManager";
-import { AudioPluginStatic } from "./plugin/AudioPluginStatic";
 import { AudioPluginRegistry } from "./plugin/AudioPluginRegistry";
-import { XHRTextAsset } from "./asset/XHRTextAsset";
+import { AudioPluginStatic } from "./plugin/AudioPluginStatic";
+import { RafLooper } from "./RafLooper";
+import { ResourceFactory } from "./ResourceFactory";
 
 export interface PlatformParameterObject {
 	/**
@@ -93,8 +93,12 @@ export class Platform implements pdi.Platform {
 	loadGameConfiguration(url: string, callback: (err: any, configuration: any) => void): void {
 		var a = new XHRTextAsset("(game.json)", url);
 		a._load({
-			_onAssetLoad: _asset => { callback(null, JSON.parse(a.data)); },
-			_onAssetError: (_asset, error) => { callback(error, null); }
+			_onAssetLoad: _asset => {
+				callback(null, JSON.parse(a.data));
+			},
+			_onAssetError: (_asset, error) => {
+				callback(error, null);
+			}
 		});
 	}
 
