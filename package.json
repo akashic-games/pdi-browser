@@ -51,7 +51,7 @@
     "testem": "3.2.0",
     "tslint": "5.20.1",
     "typescript": "3.9.9",
-    "uglify-js": "3.11.6"
+    "uglify-js": "3.12.8"
   },
   "dependencies": {
     "@akashic/akashic-engine": "~1.14.0"
