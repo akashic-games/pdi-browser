@@ -104,7 +104,7 @@ export class WebGLTextureAtlas {
 
 		// テクスチャ容量があふれるので古いやつを消して再利用する
 		if (maps.length >= WebGLTextureAtlas.TEXTURE_COUNT) {
-			map = maps.shift()!; // maps.lengthは1以上を期待できるので、Shift() は undefined を返さないと仮定する
+			map = maps.shift()!;
 			shared.disposeTexture(map.texture);
 			map.dispose();
 			shared.clearTexture(this.emptyTexturePixels, WebGLTextureAtlas.TEXTURE_SIZE, WebGLTextureAtlas.TEXTURE_SIZE, map.texture);

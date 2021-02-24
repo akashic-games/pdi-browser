@@ -23,6 +23,15 @@ export interface RenderTarget {
 	texture: WebGLTexture | null;
 }
 
+export interface RenderTargetNonNull {
+	width: number;
+	height: number;
+	viewportWidth: number;
+	viewportHeight: number;
+	framebuffer: WebGLFramebuffer;
+	texture: WebGLTexture;
+}
+
 export class WebGLSharedObject {
 	private _context: WebGLRenderingContext;
 	private _surface: WebGLPrimarySurface;
@@ -149,7 +158,7 @@ export class WebGLSharedObject {
 		}
 
 		// テクスチャを設定
-		if (this._currentTexture !== surfaceTexture.texture && surfaceTexture.texture) {
+		if (this._currentTexture !== surfaceTexture.texture) {
 			this._currentTexture = surfaceTexture.texture;
 			this._commit();
 			this._context.bindTexture(this._context.TEXTURE_2D, surfaceTexture.texture);
@@ -305,7 +314,7 @@ export class WebGLSharedObject {
 		return this._renderTarget;
 	}
 
-	createRenderTarget(width: number, height: number): RenderTarget {
+	createRenderTarget(width: number, height: number): RenderTargetNonNull {
 		const context = this._context;
 
 		const framebuffer = context.createFramebuffer();
