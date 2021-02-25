@@ -5,7 +5,7 @@
   "main": "index.js",
   "typings": "lib/full/index.d.ts",
   "scripts": {
-    "prepublish": "npm run clean && npm run build",
+    "prepare": "npm run clean && npm run build",
     "clean": "npm run clean:ts && npm run testem:after",
     "clean:ts": "shx rm -rf ./lib && shx rm -rf ./build",
     "build": "npm run compile:ts && npm run compile:bundle && npm run compile:minify",
