@@ -106,7 +106,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		if (this._isStopRequested) {
 			this._isStopRequested = false;
 			// _audioInstance が再び play されることは無いので、 removeEventListener("play") する必要は無い
-			this._audioInstance!.pause(); // _isStopRequested が真の場合 _audioInstance も存在する
+			this._audioInstance?.pause(); // _isStopRequested が真の場合 _audioInstance も存在する
 			this._audioInstance = null;
 		}
 	}

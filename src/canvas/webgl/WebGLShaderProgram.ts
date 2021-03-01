@@ -56,14 +56,18 @@ export class WebGLShaderProgram {
 		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
 			var msg = gl.getShaderInfoLog(shader);
 			gl.deleteShader(shader);
-			throw new Error(msg!);
+			if (msg) {
+				throw new Error(msg);
+			} else {
+				throw new Error("WebGLShaderProgram#_makeShader: unknown error");
+			}
 		}
 		return shader;
 	}
 
 	private static _makeShaderProgram(gl: WebGLRenderingContext, vSrc: string, fSrc: string): WebGLProgram {
 		var program = gl.createProgram();
-		if (!program) throw new Error("WebGLShaderProgram#_makeShaderProgram:  cannot create Program.");
+		if (!program) throw new Error("WebGLShaderProgram#_makeShaderProgram: cannot create Program.");
 
 
 		var vShader = WebGLShaderProgram._makeShader(gl, gl.VERTEX_SHADER, vSrc);
@@ -81,7 +85,7 @@ export class WebGLShaderProgram {
 			if (msg) {
 				throw new Error(msg);
 			} else {
-				throw new Error("unknown error");
+				throw new Error("WebGLShaderProgram#_makeShaderProgram: unknown error");
 			}
 		}
 

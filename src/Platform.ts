@@ -135,8 +135,13 @@ export class Platform implements pdi.Platform {
 		return <any>{
 			type: "pdi-browser", // note: scale情報を付加したため null ではないものを返している。
 			// 正常系で未初期化のケースを扱えないためnon-nullとして扱う
-			view: this.containerController.inputHandlerLayer!.view,
-			getScale: () => this.containerController.inputHandlerLayer!._inputHandler!.getScale()
+			view: this.containerController.inputHandlerLayer?.view,
+			getScale: () => {
+				if (!this.containerController.inputHandlerLayer || !this.containerController.inputHandlerLayer._inputHandler) {
+					throw new Error("call Platform#setRendererRequirement() before getScale()");
+				}
+				return this.containerController.inputHandlerLayer._inputHandler.getScale();
+			}
 		};
 	}
 

@@ -36,25 +36,25 @@ export class WebGLSharedObject {
 	private _context: WebGLRenderingContext;
 	private _surface: WebGLPrimarySurface;
 	// _init() で代入されるメンバは non-null
-	private _renderTarget: RenderTarget = null!;
+	private _renderTarget!: RenderTarget;
 	private _defaultShaderProgram: WebGLShaderProgram = null!;
-	private _textureAtlas: WebGLTextureAtlas = null!;
-	private _fillRectTexture: WebGLTexture = null!;
-	private _fillRectSurfaceTexture: WebGLSurfaceTexture = null!;
+	private _textureAtlas!: WebGLTextureAtlas;
+	private _fillRectTexture!: WebGLTexture;
+	private _fillRectSurfaceTexture!: WebGLSurfaceTexture;
 
-	private _maxSpriteCount: number = null!;
-	private _vertices: WebGLBuffer = null!;
-	private _verticesCache: Float32Array = null!;
-	private _numSprites: number = null!;
+	private _maxSpriteCount!: number;
+	private _vertices!: WebGLBuffer;
+	private _verticesCache!: Float32Array;
+	private _numSprites!: number;
 	private _renderTargetStack: RenderTarget[] = [];
 
 	private _currentTexture: WebGLTexture | null = null;
 	private _currentColor: number[] = [];
-	private _currentAlpha: number  = null!;
+	private _currentAlpha!: number;
 	private _currentCompositeOperation: pdi.CompositeOperationString | null = null;
-	private _currentShaderProgram: WebGLShaderProgram = null!;
+	private _currentShaderProgram!: WebGLShaderProgram;
 
-	private _compositeOps: {[key in pdi.CompositeOperationString]: [number, number]; } = null!;
+	private _compositeOps!: {[key in pdi.CompositeOperationString]: [number, number]; };
 	private _deleteRequestedTargets!: RenderTarget[];
 
 	constructor(width: number, height: number) {
