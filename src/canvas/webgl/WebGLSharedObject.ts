@@ -14,14 +14,16 @@ export interface WebGLSurfaceTexture {
 	textureHeight: number;
 }
 
-export interface PrimaryRenderTarget {
+export interface RenderTarget {
 	width: number;
 	height: number;
 	viewportWidth: number;
 	viewportHeight: number;
+	framebuffer: WebGLFramebuffer | null;	
+	texture: WebGLTexture | null;
 }
 
-export interface RenderTarget {
+export interface RenderTargetNonNull {
 	width: number;
 	height: number;
 	viewportWidth: number;
@@ -34,7 +36,7 @@ export class WebGLSharedObject {
 	private _context: WebGLRenderingContext;
 	private _surface: WebGLPrimarySurface;
 	// _init() で代入されるメンバは non-null
-	private _renderTarget!: PrimaryRenderTarget;
+	private _renderTarget!: RenderTarget;
 	private _defaultShaderProgram: WebGLShaderProgram = null!;
 	private _textureAtlas!: WebGLTextureAtlas;
 	private _fillRectTexture!: WebGLTexture;
@@ -406,8 +408,9 @@ export class WebGLSharedObject {
 			width: this._surface.width,
 			height: this._surface.height,
 			viewportWidth: this._surface.width,
-			viewportHeight: this._surface.height
-
+			viewportHeight: this._surface.height,
+			framebuffer: null,	
+			texture: null
 		};
 
 		// 描画命令をため込んでおくバッファ
