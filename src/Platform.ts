@@ -128,7 +128,8 @@ export class Platform implements pdi.Platform {
 	}
 
 	getPrimarySurface(): pdi.Surface {
-		return this.containerController.surface!; // 親pdiのI/Fに合わせる
+		if (!this.containerController.surface) throw new Error("Platform#getPrimarySurface: containerController has no surface");
+		return this.containerController.surface;
 	}
 
 	getOperationPluginViewInfo(): pdi.OperationPluginViewInfo {
