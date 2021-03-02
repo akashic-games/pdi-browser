@@ -3,8 +3,8 @@ import { CanvasSurfaceContext } from "./CanvasSurfaceContext";
 import { Context2DRenderer } from "./Context2DRenderer";
 
 export class Context2DSurface extends CanvasSurface {
-	protected _renderer: Context2DRenderer = null!;
-	protected _context: CanvasSurfaceContext = null!;
+	protected _renderer: Context2DRenderer | null = null;
+	protected _context: CanvasSurfaceContext | null = null;
 
 	context(): CanvasSurfaceContext {
 		if (!this._context) {
@@ -27,7 +27,7 @@ export class Context2DSurface extends CanvasSurface {
 	changePhysicalScale(xScale: number, yScale: number): void {
 		this.canvas.width = this.width * xScale;
 		this.canvas.height = this.height * yScale;
-		this._context.scale(xScale, yScale);
+		if (this._context) this._context.scale(xScale, yScale);
 	}
 
 	isPlaying(): boolean {

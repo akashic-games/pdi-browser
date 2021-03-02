@@ -7,7 +7,7 @@ export class XHRScriptAsset extends Asset implements pdi.ScriptAsset {
 	static POST_SCRIPT: string = "\n})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);";
 
 	type: "script" = "script";
-	script: string = undefined!;
+	script!: string;
 
 	_load(handler: pdi.AssetLoadHandler): void {
 		var loader = new XHRLoader();

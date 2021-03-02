@@ -19,7 +19,7 @@ export interface RenderTarget {
 	height: number;
 	viewportWidth: number;
 	viewportHeight: number;
-	framebuffer: WebGLFramebuffer | null;	
+	framebuffer: WebGLFramebuffer | null;
 	texture: WebGLTexture | null;
 }
 
@@ -409,7 +409,7 @@ export class WebGLSharedObject {
 			height: this._surface.height,
 			viewportWidth: this._surface.width,
 			viewportHeight: this._surface.height,
-			framebuffer: null,	
+			framebuffer: null,
 			texture: null
 		};
 
