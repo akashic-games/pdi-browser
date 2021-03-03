@@ -23,15 +23,6 @@ export interface RenderTarget {
 	texture: WebGLTexture | null;
 }
 
-export interface RenderTargetNonNull {
-	width: number;
-	height: number;
-	viewportWidth: number;
-	viewportHeight: number;
-	framebuffer: WebGLFramebuffer;
-	texture: WebGLTexture;
-}
-
 export class WebGLSharedObject {
 	private _context: WebGLRenderingContext;
 	private _surface: WebGLPrimarySurface;
