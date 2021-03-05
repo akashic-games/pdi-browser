@@ -3,6 +3,10 @@
     "target": "es5",
     "lib": ["dom", "es5"],
     "noImplicitAny": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
     "declaration": true,
     "module": "commonjs",
     "outDir": "./lib"

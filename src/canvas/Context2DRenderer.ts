@@ -45,7 +45,7 @@ export class Context2DRenderer extends g.Renderer {
 	}
 
 	transform(matrix: number[]): void {
-		this.context.transform.apply(this.context, matrix);
+		this.context.transform.apply(this.context, matrix as [number, number, number, number, number, number]);
 	}
 
 	opacity(opacity: number): void {
@@ -77,6 +77,8 @@ export class Context2DRenderer extends g.Renderer {
 	}
 
 	setTransform(matrix: number[]): void {
-		this.context.setTransform.apply(this.context, matrix);
+		(this.context.setTransform as 
+			(a: number, b: number, c: number, d: number, e: number, f: number) => void)
+			.apply(this.context, matrix as [number, number, number, number, number, number]);
 	}
 }

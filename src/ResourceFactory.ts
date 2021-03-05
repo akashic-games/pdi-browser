@@ -34,7 +34,7 @@ export class ResourceFactory extends g.ResourceFactory {
 		var audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint);
 		if (audioAsset.onDestroyed) {
 			this._audioManager.registerAudioAsset(audioAsset);
-			audioAsset.onDestroyed.handle(this, this._onAudioAssetDestroyed);
+			audioAsset.onDestroyed.handle(this, this._onAudioAssetDestroyed as (arg: g.Asset) => void);
 		}
 		return audioAsset;
 	}
