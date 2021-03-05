@@ -42,7 +42,7 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		const activePlugin = this._audioPluginManager.getActivePlugin();
 		const audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint);
 		this._audioManager.registerAudioAsset(audioAsset);
-		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed, this);
+		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed as (arg: pdi.Asset) => void, this);
 		return audioAsset;
 	}
 
