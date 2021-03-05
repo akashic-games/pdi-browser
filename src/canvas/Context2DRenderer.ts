@@ -77,7 +77,7 @@ export class Context2DRenderer extends g.Renderer {
 	}
 
 	setTransform(matrix: number[]): void {
-		(this.context.setTransform as 
+		(this.context.setTransform as
 			(a: number, b: number, c: number, d: number, e: number, f: number) => void)
 			.apply(this.context, matrix as [number, number, number, number, number, number]);
 	}
