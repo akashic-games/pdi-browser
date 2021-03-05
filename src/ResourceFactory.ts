@@ -1,5 +1,4 @@
 import * as g from "@akashic/akashic-engine";
-import * as pdi from "@akashic/akashic-pdi";
 import { HTMLImageAsset } from "./asset/HTMLImageAsset";
 import { HTMLVideoAsset } from "./asset/HTMLVideoAsset";
 import { XHRTextAsset } from "./asset/XHRTextAsset";
