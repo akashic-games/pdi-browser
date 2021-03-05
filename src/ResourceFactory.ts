@@ -1,4 +1,5 @@
 import * as g from "@akashic/akashic-engine";
+import * as pdi from "@akashic/akashic-pdi";
 import { HTMLImageAsset } from "./asset/HTMLImageAsset";
 import { HTMLVideoAsset } from "./asset/HTMLVideoAsset";
 import { XHRTextAsset } from "./asset/XHRTextAsset";
@@ -37,7 +38,7 @@ export class ResourceFactory extends g.ResourceFactory {
 		var audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint);
 		if (audioAsset.onDestroyed) {
 			this._audioManager.registerAudioAsset(audioAsset);
-			audioAsset.onDestroyed.add(this._onAudioAssetDestroyed, this);
+			audioAsset.onDestroyed.add(this._onAudioAssetDestroyed as (arg: g.Asset) => void, this);
 		}
 		return audioAsset;
 	}
