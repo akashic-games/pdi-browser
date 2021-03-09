@@ -42,7 +42,7 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		const activePlugin = this._audioPluginManager.getActivePlugin();
 		const audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint);
 		this._audioManager.registerAudioAsset(audioAsset);
-		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed as (arg: pdi.Asset) => void, this);
+		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed, this);
 		return audioAsset;
 	}
 
@@ -96,7 +96,7 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		return new GlyphFactory(fontFamily, fontSize, baseline, fontColor, strokeWidth, strokeColor, strokeOnly, fontWeight);
 	}
 
-	_onAudioAssetDestroyed(asset: AudioAsset): void {
-		this._audioManager.removeAudioAsset(asset);
+	_onAudioAssetDestroyed(asset: pdi.Asset): void {
+		this._audioManager.removeAudioAsset(asset as AudioAsset);
 	}
 }
