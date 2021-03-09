@@ -37,7 +37,7 @@ export class ResourceFactory extends g.ResourceFactory {
 		var audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint);
 		if (audioAsset.onDestroyed) {
 			this._audioManager.registerAudioAsset(audioAsset);
-			audioAsset.onDestroyed.add(this._onAudioAssetDestroyed as (arg: g.Asset) => void, this);
+			audioAsset.onDestroyed.add(this._onAudioAssetDestroyed, this);
 		}
 		return audioAsset;
 	}
@@ -79,7 +79,7 @@ export class ResourceFactory extends g.ResourceFactory {
 		                        strokeWidth, strokeColor, strokeOnly, fontWeight);
 	}
 
-	_onAudioAssetDestroyed(asset: g.AudioAsset): void {
-		this._audioManager.removeAudioAsset(asset);
+	_onAudioAssetDestroyed(asset: g.Asset): void {
+		this._audioManager.removeAudioAsset(asset as g.AudioAsset);
 	}
 }
