@@ -72,7 +72,7 @@ export class ResourceFactory extends g.ResourceFactory {
 		                        strokeWidth, strokeColor, strokeOnly, fontWeight);
 	}
 
-	_onAudioAssetDestroyed(asset: g.AudioAsset): void {
-		this._audioManager.removeAudioAsset(asset);
+	_onAudioAssetDestroyed(asset: g.Asset): void {
+		this._audioManager.removeAudioAsset(asset as g.AudioAsset);
 	}
 }
