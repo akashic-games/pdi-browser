@@ -96,7 +96,7 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		return new GlyphFactory(fontFamily, fontSize, baseline, fontColor, strokeWidth, strokeColor, strokeOnly, fontWeight);
 	}
 
-	_onAudioAssetDestroyed(asset: AudioAsset): void {
-		this._audioManager.removeAudioAsset(asset);
+	_onAudioAssetDestroyed(asset: pdi.Asset): void {
+		this._audioManager.removeAudioAsset(asset as AudioAsset);
 	}
 }
