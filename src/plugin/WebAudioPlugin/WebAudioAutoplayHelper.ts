@@ -21,19 +21,19 @@ module WebAudioAutoplayHelper {
 	}
 }
 
-function resumeHandler() {
+function resumeHandler(): void {
 	var context = helper.getAudioContext();
 	context.resume();
 	clearUserInteractListener();
 }
 
-function setUserInteractListener() {
+function setUserInteractListener(): void {
 	document.addEventListener("keydown", resumeHandler, true);
 	document.addEventListener("mousedown", resumeHandler, true);
 	document.addEventListener("touchend", resumeHandler, true);
 }
 
-function clearUserInteractListener() {
+function clearUserInteractListener(): void {
 	document.removeEventListener("keydown", resumeHandler);
 	document.removeEventListener("mousedown", resumeHandler);
 	document.removeEventListener("touchend", resumeHandler);

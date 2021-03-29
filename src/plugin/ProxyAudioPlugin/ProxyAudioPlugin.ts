@@ -9,12 +9,12 @@ import { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
 import { ProxyAudioPlayer } from "./ProxyAudioPlayer";
 
 export class ProxyAudioPlugin implements AudioPlugin {
+	supportedFormats: string[] = [];
+	private _handlerSet: ProxyAudioHandlerSet;
+
 	static isSupported(): boolean {
 		return true;
 	}
-
-	supportedFormats: string[] = [];
-	private _handlerSet: ProxyAudioHandlerSet;
 
 	constructor(handlerSet: ProxyAudioHandlerSet) {
 		this._handlerSet = handlerSet;

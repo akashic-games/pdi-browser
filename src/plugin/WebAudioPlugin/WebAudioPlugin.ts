@@ -9,6 +9,8 @@ import * as autoPlayHelper from "./WebAudioAutoplayHelper";
 import { WebAudioPlayer } from "./WebAudioPlayer";
 
 export class WebAudioPlugin implements AudioPlugin {
+	private _supportedFormats: string[];
+
 	// AudioContextが存在するかどうかで判定する
 	// http://mohayonao.hatenablog.com/entry/2012/12/12/103009
 	// https://github.com/Modernizr/Modernizr/blob/master/feature-detects/audio/webaudio.js
@@ -21,7 +23,6 @@ export class WebAudioPlugin implements AudioPlugin {
 		return false;
 	}
 
-	private _supportedFormats: string[];
 
 	get supportedFormats(): string[] {
 		return this._supportedFormats;

@@ -16,7 +16,7 @@ export class AudioManager {
 			this.audioAssets.splice(index, 1);
 	}
 
-	setMasterVolume(volume: number) {
+	setMasterVolume(volume: number): void {
 		this._masterVolume = volume;
 
 		for (var i = 0; i < this.audioAssets.length; i++) {

@@ -12,7 +12,7 @@ var suspendedAudioElements: HTMLAudioElement[] = [];
 
 module HTMLAudioAutoplayHelper {
 	export function setupChromeMEIWorkaround(audio: HTMLAudioElement): void {
-		function playHandler() {
+		function playHandler(): void {
 			switch (state) {
 				case PlayableState.Unknown:
 				case PlayableState.WaitingInteraction: // 通常のケースではここには到達しないが、何らかの外因によって音を鳴らすことができた場合
@@ -27,7 +27,7 @@ module HTMLAudioAutoplayHelper {
 			clearTimeout(timer);
 		}
 
-		function suspendedHandler() {
+		function suspendedHandler(): void {
 			audio.removeEventListener("play", playHandler);
 			switch (state) {
 				case PlayableState.Unknown:
@@ -62,24 +62,24 @@ module HTMLAudioAutoplayHelper {
 	}
 }
 
-function resumeHandler() {
+function resumeHandler(): void {
 	playSuspendedAudioElements();
 	clearUserInteractListener();
 }
 
-function setUserInteractListener() {
+function setUserInteractListener(): void {
 	document.addEventListener("keydown", resumeHandler, true);
 	document.addEventListener("mousedown", resumeHandler, true);
 	document.addEventListener("touchend", resumeHandler, true);
 }
 
-function clearUserInteractListener() {
+function clearUserInteractListener(): void {
 	document.removeEventListener("keydown", resumeHandler);
 	document.removeEventListener("mousedown", resumeHandler);
 	document.removeEventListener("touchend", resumeHandler);
 }
 
-function playSuspendedAudioElements() {
+function playSuspendedAudioElements(): void {
 	state = PlayableState.Ready;
 	suspendedAudioElements.forEach((audio) => audio.play());
 	suspendedAudioElements = [];

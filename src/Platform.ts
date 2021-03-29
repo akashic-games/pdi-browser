@@ -147,7 +147,7 @@ export class Platform implements pdi.Platform {
 		return new RafLooper(fun);
 	}
 
-	sendToExternal(playId: string, data: any): void {
+	sendToExternal(_playId: string, _data: any): void {
 		// Nothing to do.
 	}
 
@@ -168,7 +168,7 @@ export class Platform implements pdi.Platform {
 	 *
 	 * @param volume マスター音量
 	 */
-	setMasterVolume(volume: number) {
+	setMasterVolume(volume: number): void {
 		if (this._audioManager)
 			this._audioManager.setMasterVolume(volume);
 	}

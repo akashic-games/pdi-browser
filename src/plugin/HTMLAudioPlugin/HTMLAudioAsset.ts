@@ -23,19 +23,19 @@ export class HTMLAudioAsset extends AudioAsset {
 		}
 
 		var audio = new Audio();
-		var startLoadingAudio = (path: string, handlers: MediaLoaderEventHandlerSet) => {
+		var startLoadingAudio = (path: string, handlers: MediaLoaderEventHandlerSet): void => {
 			// autoplay は preload よりも優先されるため明示的にfalseとする
 			audio.autoplay = false;
 			audio.preload = "none";
 			audio.src = path;
 			this._attachAll(audio, handlers);
-			/* tslint:disable */
+			/* eslint-disable max-len */
 			// Firefoxはpreload="auto"でないと読み込みされない
 			// preloadはブラウザに対するHint属性なので、どう扱うかはブラウザの実装次第となる
 			// https://html.spec.whatwg.org/multipage/embedded-content.html#attr-media-preload
 			// https://developer.mozilla.org/ja/docs/Web/HTML/Element/audio#attr-preload
 			// https://github.com/CreateJS/SoundJS/blob/e2d4842a84ff425ada861edb9f6e9b57f63d7caf/src/soundjs/htmlaudio/HTMLAudioSoundInstance.js#L147-147
-			/* tslint:enable:max-line-length */
+			/* eslint-enable: max-len */
 			audio.preload = "auto";
 			setAudioLoadInterval(audio, handlers);
 			audio.load();
@@ -56,7 +56,7 @@ export class HTMLAudioAsset extends AudioAsset {
 			}
 		};
 
-		var setAudioLoadInterval = (audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet) => {
+		var setAudioLoadInterval = (audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void => {
 			// IE11において、canplaythroughイベントが正常に発火しない問題が確認されたため、その対処として以下の処理を行っている。
 			// なお、canplaythroughはreadyStateの値が4になった時点で呼び出されるイベントである。
 			// インターバルとして指定している100msに根拠は無い。
