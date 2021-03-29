@@ -4,8 +4,8 @@ import { AudioAsset } from "../../asset/AudioAsset";
 import { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
 import { AudioPlugin } from "../AudioPlugin";
-import { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
 import { ProxyAudioAsset } from "./ProxyAudioAsset";
+import { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
 import { ProxyAudioPlayer } from "./ProxyAudioPlayer";
 
 export class ProxyAudioPlugin implements AudioPlugin {

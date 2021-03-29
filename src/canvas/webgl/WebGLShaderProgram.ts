@@ -14,7 +14,7 @@ export class WebGLShaderProgram {
 	program: WebGLProgram;
 
 	private static _DEFAULT_VERTEX_SHADER: string =
-		"#version 100\n" +
+	"#version 100\n" +
 		"precision mediump float;\n" +
 		"attribute vec4 aVertex;\n" +
 		"varying vec2 vTexCoord;\n" +
@@ -28,7 +28,7 @@ export class WebGLShaderProgram {
 		"}";
 
 	private static _DEFAULT_FRAGMENT_SHADER: string =
-		"#version 100\n" +
+	"#version 100\n" +
 		"precision mediump float;\n" +
 		"varying vec2 vTexCoord;\n" +
 		"varying vec4 vColor;\n" +
@@ -45,7 +45,7 @@ export class WebGLShaderProgram {
 
 	private _uniforms: {[key: string]: pdi.ShaderUniform};
 	private _uniformCaches: UniformCache[];
-	private _uniformSetterTable: { [type: string]: UniformSetter; };
+	private _uniformSetterTable: { [type: string]: UniformSetter };
 
 	private static _makeShader(gl: WebGLRenderingContext, typ: number, src: string): WebGLShader {
 		var shader = gl.createShader(typ);

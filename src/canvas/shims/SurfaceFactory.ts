@@ -1,6 +1,6 @@
 import { CanvasSurface } from "../CanvasSurface";
-import { RenderingHelper } from "../RenderingHelper";
 import { Context2DSurface } from "../context2d/Context2DSurface";
+import { RenderingHelper } from "../RenderingHelper";
 import { WebGLSharedObject } from "../webgl/WebGLSharedObject";
 
 export class SurfaceFactory {

@@ -1,7 +1,7 @@
 import * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
-import { ExceptionFactory } from "../../utils/ExceptionFactory";
 import { addExtname } from "../../PathUtil";
+import { ExceptionFactory } from "../../utils/ExceptionFactory";
 
 export interface MediaLoaderEventHandlerSet {
 	success: () => void;
@@ -39,7 +39,7 @@ export class HTMLAudioAsset extends AudioAsset {
 			audio.preload = "auto";
 			setAudioLoadInterval(audio, handlers);
 			audio.load();
-		}
+		};
 
 		var handlers: MediaLoaderEventHandlerSet = {
 			success: (): void => {
@@ -73,7 +73,7 @@ export class HTMLAudioAsset extends AudioAsset {
 					}
 				}
 			}, 100);
-		}
+		};
 
 		// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
 		// この対応を止める際には、HTMLAudioPluginのsupportedExtensionsからaacを除外する必要がある。

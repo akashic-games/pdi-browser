@@ -1,6 +1,6 @@
 import { WebGLBackSurfaceRenderer } from "./WebGLBackSurfaceRenderer";
-import { WebGLSurfaceTexture } from "./WebGLSharedObject";
 import { WebGLPrimarySurface } from "./WebGLPrimarySurface";
+import { WebGLSurfaceTexture } from "./WebGLSharedObject";
 
 export class WebGLBackSurface extends WebGLPrimarySurface {
 	_drawable: WebGLSurfaceTexture;

@@ -1,7 +1,7 @@
 "use strict";
 import * as pdi from "@akashic/pdi-types";
-import { AudioManager } from "../../AudioManager";
 import { AudioAsset } from "../../asset/AudioAsset";
+import { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
 import { AudioPlugin } from "../AudioPlugin";
 import { HTMLAudioAsset } from "./HTMLAudioAsset";

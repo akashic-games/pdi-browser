@@ -1,8 +1,8 @@
 import * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
+import { addExtname } from "../../PathUtil";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
 import { XHRLoader } from "../../utils/XHRLoader";
-import { addExtname } from "../../PathUtil";
 import * as helper from "./WebAudioHelper";
 
 export class WebAudioAsset extends AudioAsset {
