@@ -35,7 +35,7 @@ export class HTMLAudioAsset extends AudioAsset {
 			// https://html.spec.whatwg.org/multipage/embedded-content.html#attr-media-preload
 			// https://developer.mozilla.org/ja/docs/Web/HTML/Element/audio#attr-preload
 			// https://github.com/CreateJS/SoundJS/blob/e2d4842a84ff425ada861edb9f6e9b57f63d7caf/src/soundjs/htmlaudio/HTMLAudioSoundInstance.js#L147-147
-			/* eslint-enable: max-len */
+			/* eslint-enable max-len */
 			audio.preload = "auto";
 			setAudioLoadInterval(audio, handlers);
 			audio.load();
@@ -114,11 +114,11 @@ export class HTMLAudioAsset extends AudioAsset {
 
 	private _attachAll(audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void {
 		if (handlers.success) {
-			/* tslint:disable:max-line-length */
+			/* eslint-disable max-len */
 			// https://developer.mozilla.org/en-US/docs/Web/Events/canplaythrough
 			// https://github.com/goldfire/howler.js/blob/1dad25cdd9d6982232050454e8b45411902efe65/howler.js#L372
 			// https://github.com/CreateJS/SoundJS/blob/e2d4842a84ff425ada861edb9f6e9b57f63d7caf/src/soundjs/htmlaudio/HTMLAudioSoundInstance.js#L145-145
-			/* tslint:enable:max-line-length */
+			/* eslint-enable max-len */
 			audio.addEventListener("canplaythrough", handlers.success, false);
 		}
 		if (handlers.error) {
