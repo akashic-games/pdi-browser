@@ -23,7 +23,8 @@ export class AudioPluginManager {
 		for (var i = 0, len = plugins.length; i < len; i++) {
 			var p = plugins[i];
 			if ((p as any).isSupported) {
-				const PluginConstructor = (p as AudioPluginStatic);
+				// eslint-disable-next-line @typescript-eslint/naming-convention
+				const PluginConstructor = (p as AudioPluginStatic); // インスタンス化するので命名規則の lint を除外
 				if (PluginConstructor.isSupported()) {
 					this._activePlugin = new PluginConstructor();
 					return true;

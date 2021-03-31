@@ -2,7 +2,7 @@ import { RenderingHelper } from "../RenderingHelper";
 
 export module WebGLColor {
 
-	export var colorMap: {[key: string]: number[]; } = {
+	export var colorMap: {[key: string]: number[] } = {
 		"ALICEBLUE": [0xF0 / 255.0, 0xF8 / 255.0, 0xFF / 255.0, 1.0],
 		"ANTIQUEWHITE": [0xFA / 255.0, 0xEB / 255.0, 0xD7 / 255.0, 1.0],
 		"AQUA": [0x00 / 255.0, 0xFF / 255.0, 0xFF / 255.0, 1.0],

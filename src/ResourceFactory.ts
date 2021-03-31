@@ -2,14 +2,14 @@ import * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "./asset/AudioAsset";
 import { HTMLImageAsset } from "./asset/HTMLImageAsset";
 import { HTMLVideoAsset } from "./asset/HTMLVideoAsset";
-import { XHRTextAsset } from "./asset/XHRTextAsset";
 import { XHRScriptAsset } from "./asset/XHRScriptAsset";
-import { AudioPluginManager } from "./plugin/AudioPluginManager";
+import { XHRTextAsset } from "./asset/XHRTextAsset";
 import { AudioManager } from "./AudioManager";
-import { Platform } from "./Platform";
+import { CanvasSurface } from "./canvas/CanvasSurface";
 import { GlyphFactory } from "./canvas/GlyphFactory";
 import { SurfaceFactory } from "./canvas/shims/SurfaceFactory";
-import { CanvasSurface } from "./canvas/CanvasSurface";
+import { Platform } from "./Platform";
+import { AudioPluginManager } from "./plugin/AudioPluginManager";
 
 export interface ResourceFactoryParameterObject {
 	audioPluginManager: AudioPluginManager;

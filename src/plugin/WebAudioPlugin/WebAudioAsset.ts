@@ -1,8 +1,8 @@
 import * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
+import { addExtname } from "../../PathUtil";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
 import { XHRLoader } from "../../utils/XHRLoader";
-import { addExtname } from "../../PathUtil";
 import * as helper from "./WebAudioHelper";
 
 export class WebAudioAsset extends AudioAsset {
@@ -17,15 +17,15 @@ export class WebAudioAsset extends AudioAsset {
 			return;
 		}
 
-		var successHandler = (decodedAudio: AudioBuffer) => {
+		var successHandler = (decodedAudio: AudioBuffer): void => {
 			this.data = decodedAudio;
 			loader._onAssetLoad(this);
 		};
-		var errorHandler = () => {
+		var errorHandler = (): void => {
 			loader._onAssetError(this, ExceptionFactory.createAssetLoadError("WebAudioAsset unknown loading error"));
 		};
 
-		var onLoadArrayBufferHandler = (response: any) => {
+		var onLoadArrayBufferHandler = (response: any): void => {
 			var audioContext = helper.getAudioContext();
 			audioContext.decodeAudioData(
 				response,
@@ -35,9 +35,13 @@ export class WebAudioAsset extends AudioAsset {
 		};
 
 		var xhrLoader = new XHRLoader();
-		var loadArrayBuffer = (path: string, onSuccess: (response: any) => void, onFailed: (err: pdi.AssetLoadError) => void) => {
+		var loadArrayBuffer = (path: string, onSuccess: (response: any) => void, onFailed: (err: pdi.AssetLoadError) => void): void => {
 			xhrLoader.getArrayBuffer(path, (error, response) => {
-				error ? onFailed(error) : onSuccess(response);
+				if (error) {
+					onFailed(error);
+				} else {
+					onSuccess(response);
+				}
 			});
 		};
 

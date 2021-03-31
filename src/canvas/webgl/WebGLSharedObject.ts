@@ -293,7 +293,7 @@ export class WebGLSharedObject {
 		return texture;
 	}
 
-	getPrimaryRenderTarget(width: number, height: number): RenderTarget {
+	getPrimaryRenderTarget(_width: number, _height: number): RenderTarget {
 		return this._renderTarget;
 	}
 

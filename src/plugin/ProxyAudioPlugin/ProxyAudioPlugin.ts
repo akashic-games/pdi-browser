@@ -4,17 +4,17 @@ import { AudioAsset } from "../../asset/AudioAsset";
 import { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
 import { AudioPlugin } from "../AudioPlugin";
-import { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
 import { ProxyAudioAsset } from "./ProxyAudioAsset";
+import { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
 import { ProxyAudioPlayer } from "./ProxyAudioPlayer";
 
 export class ProxyAudioPlugin implements AudioPlugin {
+	supportedFormats: string[] = [];
+	private _handlerSet: ProxyAudioHandlerSet;
+
 	static isSupported(): boolean {
 		return true;
 	}
-
-	supportedFormats: string[] = [];
-	private _handlerSet: ProxyAudioHandlerSet;
 
 	constructor(handlerSet: ProxyAudioHandlerSet) {
 		this._handlerSet = handlerSet;

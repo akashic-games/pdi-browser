@@ -1,13 +1,15 @@
 "use strict";
 import * as pdi from "@akashic/pdi-types";
-import { AudioManager } from "../../AudioManager";
 import { AudioAsset } from "../../asset/AudioAsset";
+import { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
 import { AudioPlugin } from "../AudioPlugin";
 import { HTMLAudioAsset } from "./HTMLAudioAsset";
 import { HTMLAudioPlayer } from "./HTMLAudioPlayer";
 
 export class HTMLAudioPlugin implements AudioPlugin {
+	private _supportedFormats: string[];
+
 	// https://github.com/Modernizr/Modernizr/blob/master/feature-detects/audio.js
 	// https://github.com/CreateJS/SoundJS/blob/master/src/soundjs/htmlaudio/HTMLAudioPlugin.js
 	static isSupported(): boolean {
@@ -22,8 +24,6 @@ export class HTMLAudioPlugin implements AudioPlugin {
 
 		return result;
 	}
-
-	private _supportedFormats: string[];
 
 	constructor() {
 		this._supportedFormats = this._detectSupportedFormats();

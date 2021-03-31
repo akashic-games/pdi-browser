@@ -21,20 +21,19 @@ export interface PagePosition {
  * Down -> Move -> Up のフローにおける、Moveイベントのロックを管理する。
  */
 export class InputAbstractHandler {
-	// `start()` で設定するDOMイベントをサポートしているかを返す
-	static isSupported(): boolean {
-		return false;
-	}
-
 	inputView: HTMLElement;
 	pointTrigger: Trigger<pdi.PlatformPointEvent>;
 	_disablePreventDefault: boolean;
 
 	private _xScale: number;
 	private _yScale: number;
-
 	// 移動中にdownなしでmoveやupを発生してしまうのを防ぐためのロック
-	private pointerEventLock: {[key: number]: boolean};
+	private pointerEventLock: { [key: number]: boolean };
+
+	// `start()` で設定するDOMイベントをサポートしているかを返す
+	static isSupported(): boolean {
+		return false;
+	}
 
 	/**
 	 * @param inputView inputViewはDOMイベントを設定するHTMLElement

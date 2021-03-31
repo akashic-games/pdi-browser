@@ -5,6 +5,7 @@
 // http://qiita.com/mohayonao/items/d79e9fc56b4e9c157be1#polyfill
 // https://github.com/cwilso/webkitAudioContext-MonkeyPatch
 // https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext
+// eslint-disable-next-line @typescript-eslint/naming-convention
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 
 interface ExtWindow extends Window {

@@ -1,7 +1,7 @@
 import { WebGLBackSurface } from "./WebGLBackSurface";
-import { WebGLSharedObject } from "./WebGLSharedObject";
 import { WebGLRenderer } from "./WebGLRenderer";
 import { WebGLRenderingState } from "./WebGLRenderingState";
+import { WebGLSharedObject } from "./WebGLSharedObject";
 
 export class WebGLBackSurfaceRenderer extends WebGLRenderer {
 

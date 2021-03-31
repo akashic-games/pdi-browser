@@ -29,7 +29,15 @@ export class HTMLVideoAsset extends Asset implements pdi.VideoAsset {
 	_player: HTMLVideoPlayer;
 	_surface: VideoAssetSurface;
 
-	constructor(id: string, assetPath: string, width: number, height: number, system: pdi.VideoSystem, loop: boolean, useRealSize: boolean) {
+	constructor(
+		id: string,
+		assetPath: string,
+		width: number,
+		height: number,
+		system: pdi.VideoSystem,
+		loop: boolean,
+		useRealSize: boolean
+	) {
 		super(id, assetPath);
 		this.width = width;
 		this.height = height;

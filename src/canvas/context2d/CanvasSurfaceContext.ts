@@ -23,7 +23,7 @@ export class CanvasSurfaceContext {
 		this.currentState().fillStyle = fillStyle;
 	}
 
-	get fillStyle() {
+	get fillStyle(): string | CanvasGradient | CanvasPattern {
 		return this.currentState().fillStyle;
 	}
 
@@ -31,7 +31,7 @@ export class CanvasSurfaceContext {
 		this.currentState().globalAlpha = globalAlpha;
 	}
 
-	get globalAlpha() {
+	get globalAlpha(): number {
 		return this.currentState().globalAlpha;
 	}
 
@@ -39,7 +39,7 @@ export class CanvasSurfaceContext {
 		this.currentState().globalCompositeOperation = operation;
 	}
 
-	get globalCompositeOperation() {
+	get globalCompositeOperation(): string {
 		return this.currentState().globalCompositeOperation;
 	}
 
@@ -67,7 +67,7 @@ export class CanvasSurfaceContext {
 	}
 
 	drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap,
-	          srcX: number, srcY: number, srcW: number, srcH: number, dstX: number, dstY: number, dstW: number, dstH: number) {
+	          srcX: number, srcY: number, srcW: number, srcH: number, dstX: number, dstY: number, dstW: number, dstH: number): void {
 		this.prerender();
 		this._context.drawImage(image, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH);
 	}
@@ -97,12 +97,12 @@ export class CanvasSurfaceContext {
 		this._modifiedTransform = true;
 	}
 
-	setTransform(m11: number, m12: number, m21: number, m22: number, dx: number, dy: number) {
+	setTransform(m11: number, m12: number, m21: number, m22: number, dx: number, dy: number): void {
 		this.currentState().transformer.setTransform([m11, m12, m21, m22, dx, dy]);
 		this._modifiedTransform = true;
 	}
 
-	setGlobalAlpha(globalAlpha: number) {
+	setGlobalAlpha(globalAlpha: number): void {
 		this.currentState().globalAlpha = globalAlpha;
 	}
 
@@ -115,7 +115,7 @@ export class CanvasSurfaceContext {
 		this._context.putImageData(imagedata, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
 	}
 
-	prerender() {
+	prerender(): void {
 		const currentState = this.currentState();
 
 		if (currentState.fillStyle !== this._contextFillStyle) {
@@ -144,11 +144,11 @@ export class CanvasSurfaceContext {
 		}
 	}
 
-	private pushState(state: CanvasRenderingState) {
+	private pushState(state: CanvasRenderingState): void {
 		this._stateStack.push(state);
 	}
 
-	private popState() {
+	private popState(): void {
 		if (this._stateStack.length <= 1) {
 			return;
 		}
