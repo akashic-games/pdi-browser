@@ -14,7 +14,6 @@ export class WebGLShaderProgram {
 	program: WebGLProgram;
 
 	/* eslint-disable  @typescript-eslint/indent */
-	// GLSLの可読性のため、lint エラーを無効とする
 	private static _DEFAULT_VERTEX_SHADER: string =
 		"#version 100\n" +
 		"precision mediump float;\n" +
