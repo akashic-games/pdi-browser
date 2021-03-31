@@ -37,7 +37,11 @@ export class WebAudioAsset extends AudioAsset {
 		var xhrLoader = new XHRLoader();
 		var loadArrayBuffer = (path: string, onSuccess: (response: any) => void, onFailed: (err: pdi.AssetLoadError) => void): void => {
 			xhrLoader.getArrayBuffer(path, (error, response) => {
-				return error ? onFailed(error) : onSuccess(response);
+				if (error) {
+					onFailed(error);
+				} else {
+					onSuccess(response);
+				}
 			});
 		};
 
