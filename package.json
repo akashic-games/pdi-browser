@@ -38,20 +38,20 @@
     "@akashic/playlog": "~3.1.0",
     "@types/node": "9.6.61",
     "browserify": "16.5.2",
-    "es5-shim": "4.5.15",
+    "es5-shim": "4.6.2",
     "exorcist": "1.0.1",
     "glob": "7.1.6",
-    "jasmine": "3.6.4",
-    "jasmine-reporters": "2.3.2",
+    "jasmine": "3.9.0",
+    "jasmine-reporters": "2.5.0",
     "jasmine-terminal-reporter": "1.0.3",
     "phantomjs": "2.1.7",
     "remark-cli": "5.0.0",
     "remark-lint": "6.0.6",
     "shx": "0.3.3",
-    "testem": "3.2.0",
+    "testem": "3.5.0",
     "tslint": "5.20.1",
     "typescript": "3.9.9",
-    "uglify-js": "3.13.1"
+    "uglify-js": "3.14.1"
   },
   "dependencies": {
     "@akashic/akashic-engine": "~1.14.0"
