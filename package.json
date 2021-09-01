@@ -1,6 +1,6 @@
 {
   "name": "@akashic/pdi-browser",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "An akashic-pdi implementatation for Web browsers",
   "main": "index.js",
   "typings": "lib/full/index.d.ts",
@@ -40,9 +40,9 @@
     "index.js"
   ],
   "devDependencies": {
-    "@akashic/amflow": "~3.0.0",
+    "@akashic/amflow": "~3.1.0",
     "@akashic/eslint-config": "~0.1.2",
-    "@akashic/pdi-types": "~1.1.0",
+    "@akashic/pdi-types": "~1.2.0",
     "@akashic/playlog": "~3.1.0",
     "@types/node": "12.20.5",
     "@typescript-eslint/eslint-plugin": "4.19.0",

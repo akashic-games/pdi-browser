@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.1.0
+* @akashic/amflow@3.1.0, @akashic/pdi-types@1.2.0 に追従
+
 ## 2.0.0
 * @akashic/akashic-engine@3.0.0 への追従対応
 
