@@ -5,32 +5,25 @@
   "timezone": "Asia/Tokyo",
   "schedule": ["every weekend"],
   "labels": ["dependencies"],
-  "assignees": [""],
-  "reviewers": [""],
   "prConcurrentLimit": 0,
   "prHourlyLimit": 0,
   "separateMinorPatch": true,
-  "baseBranches": ["master", "ae1x-master"],
+  "pin": false,
+  "rangeStrategy": "bump",
   "packageRules": [
     {
-      "packagePatterns": ["^@akashic/"],
-      "enabled": false
+      "matchPackagePatterns": ["^@akashic/"],
+      "groupName": "all dependencies (akashic)"
     },
     {
-      "packageNames": ["remark-cli"],
-      "enabled": false
-    },
-    {
-      "updateTypes": ["minor"],
+      "matchUpdateTypes": ["minor"],
+      "excludePackagePatterns": ["^@akashic/"],
       "groupName": "all dependencies"
     },
     {
-      "updateTypes": ["patch"],
+      "matchUpdateTypes": ["patch"],
+      "excludePackagePatterns": ["^@akashic/"],
       "groupName": "all dependencies"
-    },
-    {
-      "updateTypes": ["major"],
-      "enabled": false
     }
   ]
 }
