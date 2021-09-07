@@ -52,7 +52,7 @@
     "eslint": "7.32.0",
     "eslint-plugin-import": "2.24.2",
     "eslint-plugin-jest": "24.4.0",
-    "exorcist": "1.0.1",
+    "exorcist": "2.0.0",
     "glob": "7.1.7",
     "jasmine": "3.9.0",
     "jasmine-reporters": "2.5.0",
