@@ -67,7 +67,7 @@ export class SVGImageAsset extends Asset implements pdi.VectorImageAsset {
 			throw new Error("SVGImageAsset#asSurface: not yet loaded.");
 		}
 		if (!this._surface) {
-			this._surface = new SVGImageAssetSurface(viewportWidth, viewportWidth, data);
+			this._surface = new SVGImageAssetSurface(viewportWidth, viewportHeight, data);
 		}
 
 		const surface = new Context2DSurface(width, height);
