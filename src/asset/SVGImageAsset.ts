@@ -73,8 +73,8 @@ export class SVGImageAsset extends Asset implements pdi.VectorImageAsset {
 		const surface = new Context2DSurface(width, height);
 		const renderer = surface.renderer();
 		renderer.save();
-		renderer.transform([width / viewportWidth, 0, 0, height / viewportHeight, 0, 0]);
-		renderer.drawImage(this._surface, sx, sy, width, height, sWidth, sHeight);
+		renderer.transform([width / sWidth, 0, 0, height / sHeight, 0, 0]);
+		renderer.drawImage(this._surface, sx, sy, sWidth, sHeight, 0, 0);
 		renderer.restore();
 		return surface;
 	}
