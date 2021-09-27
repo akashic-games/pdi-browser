@@ -59,8 +59,8 @@ export class SVGImageAsset extends Asset implements pdi.VectorImageAsset {
 		height: number,
 		sx: number = 0,
 		sy: number = 0,
-		sWidth: number = width,
-		sHeight: number = height
+		sWidth?: number,
+		sHeight?: number
 	): Surface | null {
 		const { width: viewportWidth, height: viewportHeight, data } = this;
 		if (!data) {
@@ -68,6 +68,12 @@ export class SVGImageAsset extends Asset implements pdi.VectorImageAsset {
 		}
 		if (!this._surface) {
 			this._surface = new SVGImageAssetSurface(viewportWidth, viewportHeight, data);
+		}
+		if (!sWidth) {
+			sWidth = viewportWidth;
+		}
+		if (!sHeight) {
+			sHeight = viewportHeight;
 		}
 
 		const surface = new Context2DSurface(width, height);
