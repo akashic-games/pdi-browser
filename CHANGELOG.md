@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.2.0
+* @akashic/pdi-types@1.3.0, @akashic/akashic-engine@3.2.0 に追従
+* `SVGImageAsset` の実装を追加
+
 ## 2.1.0
 * @akashic/amflow@3.1.0, @akashic/pdi-types@1.2.0 に追従
 
