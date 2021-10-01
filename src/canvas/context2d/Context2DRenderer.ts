@@ -1,4 +1,5 @@
 import * as pdi from "@akashic/pdi-types";
+import { Surface } from "../../Surface";
 import { CanvasSurfaceContext } from "./CanvasSurfaceContext";
 import { Context2DSurface } from "./Context2DSurface";
 
@@ -42,7 +43,7 @@ export class Context2DRenderer implements pdi.Renderer {
 	}
 
 	drawImage(
-		surface: Context2DSurface,
+		surface: Surface,
 		offsetX: number,
 		offsetY: number,
 		width: number,
@@ -54,7 +55,7 @@ export class Context2DRenderer implements pdi.Renderer {
 	}
 
 	drawSprites(
-		surface: Context2DSurface,
+		surface: Surface,
 		offsetX: number[],
 		offsetY: number[],
 		width: number[],

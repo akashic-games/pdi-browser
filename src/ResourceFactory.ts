@@ -2,6 +2,7 @@ import * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "./asset/AudioAsset";
 import { HTMLImageAsset } from "./asset/HTMLImageAsset";
 import { HTMLVideoAsset } from "./asset/HTMLVideoAsset";
+import { SVGImageAsset } from "./asset/SVGImageAsset";
 import { XHRScriptAsset } from "./asset/XHRScriptAsset";
 import { XHRTextAsset } from "./asset/XHRTextAsset";
 import { AudioManager } from "./AudioManager";
@@ -94,6 +95,10 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		fontWeight?: pdi.FontWeightString
 	): pdi.GlyphFactory {
 		return new GlyphFactory(fontFamily, fontSize, baseline, fontColor, strokeWidth, strokeColor, strokeOnly, fontWeight);
+	}
+
+	createVectorImageAsset(id: string, assetPath: string, width: number, height: number, hint?: pdi.ImageAssetHint): SVGImageAsset {
+		return new SVGImageAsset(id, assetPath, width, height, hint);
 	}
 
 	_onAudioAssetDestroyed(asset: pdi.Asset): void {
