@@ -18,12 +18,14 @@
     {
       "matchUpdateTypes": ["minor"],
       "excludePackagePatterns": ["^@akashic/"],
-      "groupName": "all dependencies"
+      "groupName": "all dependencies",
+      "automerge": true
     },
     {
       "matchUpdateTypes": ["patch"],
       "excludePackagePatterns": ["^@akashic/"],
-      "groupName": "all dependencies"
+      "groupName": "all dependencies",
+      "automerge": true
     }
   ]
 }
