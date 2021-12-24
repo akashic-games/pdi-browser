@@ -17,16 +17,16 @@ export class WebAudioAsset extends AudioAsset {
 			return;
 		}
 
-		var successHandler = (decodedAudio: AudioBuffer): void => {
+		const successHandler = (decodedAudio: AudioBuffer): void => {
 			this.data = decodedAudio;
 			loader._onAssetLoad(this);
 		};
-		var errorHandler = (): void => {
+		const errorHandler = (): void => {
 			loader._onAssetError(this, ExceptionFactory.createAssetLoadError("WebAudioAsset unknown loading error"));
 		};
 
-		var onLoadArrayBufferHandler = (response: any): void => {
-			var audioContext = helper.getAudioContext();
+		const onLoadArrayBufferHandler = (response: any): void => {
+			const audioContext = helper.getAudioContext();
 			audioContext.decodeAudioData(
 				response,
 				successHandler,
@@ -34,8 +34,8 @@ export class WebAudioAsset extends AudioAsset {
 			);
 		};
 
-		var xhrLoader = new XHRLoader();
-		var loadArrayBuffer = (path: string, onSuccess: (response: any) => void, onFailed: (err: pdi.AssetLoadError) => void): void => {
+		const xhrLoader = new XHRLoader();
+		const loadArrayBuffer = (path: string, onSuccess: (response: any) => void, onFailed: (err: pdi.AssetLoadError) => void): void => {
 			xhrLoader.getArrayBuffer(path, (error, response) => {
 				if (error) {
 					onFailed(error);

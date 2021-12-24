@@ -7,11 +7,13 @@ const enum PlayableState {
 	Ready
 }
 
-var state = PlayableState.Unknown;
-var suspendedAudioElements: HTMLAudioElement[] = [];
+let state = PlayableState.Unknown;
+let suspendedAudioElements: HTMLAudioElement[] = [];
 
 module HTMLAudioAutoplayHelper {
 	export function setupChromeMEIWorkaround(audio: HTMLAudioElement): void {
+		// TODO 短時間 (e.g. 同期的) に複数呼ばれると timer が上書きされそう
+		let timer: number | null = null;
 		function playHandler(): void {
 			switch (state) {
 				case PlayableState.Unknown:
@@ -24,7 +26,7 @@ module HTMLAudioAutoplayHelper {
 					// do nothing
 			}
 			state = PlayableState.Ready;
-			clearTimeout(timer);
+			clearTimeout(timer!);
 		}
 
 		function suspendedHandler(): void {
@@ -49,7 +51,7 @@ module HTMLAudioAutoplayHelper {
 		switch (state) {
 			case PlayableState.Unknown:
 				audio.addEventListener("play", playHandler, true);
-				var timer = setTimeout(suspendedHandler, 100); // 明確な根拠はないが100msec待ってもplayされなければ再生できないと判断する
+				timer = setTimeout(suspendedHandler, 100); // 明確な根拠はないが100msec待ってもplayされなければ再生できないと判断する
 				break;
 			case PlayableState.WaitingInteraction:
 				suspendedAudioElements.push(audio);

@@ -91,7 +91,7 @@ export class Platform implements pdi.Platform {
 	}
 
 	loadGameConfiguration(url: string, callback: (err: any, configuration: any) => void): void {
-		var a = new XHRTextAsset("(game.json)", url);
+		const a = new XHRTextAsset("(game.json)", url);
 		a._load({
 			_onAssetLoad: _asset => {
 				callback(null, JSON.parse(a.data));

@@ -1,7 +1,7 @@
 export module RenderingHelper {
 	export function toPowerOfTwo(x: number): number {
 		if ((x & (x - 1)) !== 0) {
-			var y = 1;
+			let y = 1;
 			while (y < x) {
 				y *= 2;
 			}
@@ -15,7 +15,7 @@ export module RenderingHelper {
 	}
 
 	export function usedWebGL(rendererCandidates?: string[]): boolean {
-		var used = false;
+		let used = false;
 		if (rendererCandidates && (0 < rendererCandidates.length)) {
 			used = (rendererCandidates[0] === "webgl");
 		}

@@ -7,7 +7,7 @@ export class MouseHandler extends InputAbstractHandler {
 
 	constructor(inputView: HTMLElement, disablePreventDefault: boolean) {
 		super(inputView, disablePreventDefault);
-		var identifier = 1;
+		const identifier = 1;
 		this.onMouseDown = (e: MouseEvent) => {
 			if (e.button !== 0) return; // NOTE: 左クリック以外を受け付けない
 			this.pointDown(identifier, this.getOffsetPositionFromInputView(e));

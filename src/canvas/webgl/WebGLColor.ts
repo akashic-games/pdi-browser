@@ -2,7 +2,7 @@ import { RenderingHelper } from "../RenderingHelper";
 
 export module WebGLColor {
 
-	export var colorMap: {[key: string]: number[] } = {
+	export const colorMap: {[key: string]: number[] } = {
 		"ALICEBLUE": [0xF0 / 255.0, 0xF8 / 255.0, 0xFF / 255.0, 1.0],
 		"ANTIQUEWHITE": [0xFA / 255.0, 0xEB / 255.0, 0xD7 / 255.0, 1.0],
 		"AQUA": [0x00 / 255.0, 0xFF / 255.0, 0xFF / 255.0, 1.0],
@@ -153,7 +153,7 @@ export module WebGLColor {
 	};
 
 	export function get(color: string|number[]): number[] {
-		var rgba = (typeof color === "string") ? WebGLColor._toColor(<string> color) : [color[0], color[1], color[2], color[3]];
+		let rgba = (typeof color === "string") ? WebGLColor._toColor(<string> color) : [color[0], color[1], color[2], color[3]];
 		rgba[3] = RenderingHelper.clamp(rgba[3]);
 		rgba[0] = RenderingHelper.clamp(rgba[0]) * rgba[3];
 		rgba[1] = RenderingHelper.clamp(rgba[1]) * rgba[3];
@@ -162,12 +162,12 @@ export module WebGLColor {
 	}
 
 	export function _hsl2rgb(hsl: number[]): number[] {
-		var h =  hsl[0] % 360;
-		var s =  hsl[1];
-		var l = (hsl[2] > 50) ? 100 - hsl[2] : hsl[2];
-		var a =  hsl[3];
-		var max = l + l * s;
-		var min = l - l * s;
+		const h =  hsl[0] % 360;
+		const s =  hsl[1];
+		const l = (hsl[2] > 50) ? 100 - hsl[2] : hsl[2];
+		const a =  hsl[3];
+		const max = l + l * s;
+		const min = l - l * s;
 
 		if (h < 60) {
 			return [max, (h / 60.0) * (max - min) + min, min, a];
@@ -186,9 +186,9 @@ export module WebGLColor {
 
 	export function _toColor(cssColor: string): number[] {
 		// 大文字化して空白を削除 (ncc: normalized css color)
-		var ncc: string = cssColor.toUpperCase().replace(/\s+/g, "");
+		const ncc: string = cssColor.toUpperCase().replace(/\s+/g, "");
 
-		var rgba = WebGLColor.colorMap[ncc];
+		const rgba = WebGLColor.colorMap[ncc];
 		if (rgba) {
 			return rgba;
 		}

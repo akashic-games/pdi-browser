@@ -29,7 +29,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		if (this.currentAudio) {
 			this.stop();
 		}
-		var audio = asset.cloneElement();
+		const audio = asset.cloneElement();
 		if (audio) {
 			autoPlayHelper.setupChromeMEIWorkaround(audio);
 			audio.volume = this._calculateVolume();

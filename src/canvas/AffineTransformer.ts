@@ -16,7 +16,7 @@ export class AffineTransformer {
 	}
 
 	scale(x: number, y: number): AffineTransformer {
-		var m = this.matrix;
+		const m = this.matrix;
 
 		m[0] *= x;
 		m[1] *= x;
@@ -27,7 +27,7 @@ export class AffineTransformer {
 	}
 
 	translate(x: number, y: number): AffineTransformer {
-		var m = this.matrix;
+		const m = this.matrix;
 
 		m[4] += m[0] * x + m[2] * y;
 		m[5] += m[1] * x + m[3] * y;
@@ -36,14 +36,14 @@ export class AffineTransformer {
 	}
 
 	transform(matrix: number[]): AffineTransformer {
-		var m = this.matrix;
+		const m = this.matrix;
 
-		var a = matrix[0] * m[0] + matrix[1] * m[2];
-		var b = matrix[0] * m[1] + matrix[1] * m[3];
-		var c = matrix[2] * m[0] + matrix[3] * m[2];
-		var d = matrix[2] * m[1] + matrix[3] * m[3];
-		var e = matrix[4] * m[0] + matrix[5] * m[2] + m[4];
-		var f = matrix[4] * m[1] + matrix[5] * m[3] + m[5];
+		const a = matrix[0] * m[0] + matrix[1] * m[2];
+		const b = matrix[0] * m[1] + matrix[1] * m[3];
+		const c = matrix[2] * m[0] + matrix[3] * m[2];
+		const d = matrix[2] * m[1] + matrix[3] * m[3];
+		const e = matrix[4] * m[0] + matrix[5] * m[2] + m[4];
+		const f = matrix[4] * m[1] + matrix[5] * m[3] + m[5];
 
 		m[0] = a;
 		m[1] = b;
@@ -56,7 +56,7 @@ export class AffineTransformer {
 	}
 
 	setTransform(matrix: number[]): void {
-		var m = this.matrix;
+		const m = this.matrix;
 
 		m[0] = matrix[0];
 		m[1] = matrix[1];

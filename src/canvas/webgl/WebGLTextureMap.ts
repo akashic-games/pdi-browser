@@ -48,8 +48,8 @@ export class WebGLTextureMap {
 			return 0;
 		}
 
-		var image = this._surface._drawable;
-		var a = image.width * image.height;
+		const image = this._surface._drawable;
+		let a = image.width * image.height;
 		if (this._left) {
 			a += this._left.area();
 		}
@@ -64,23 +64,23 @@ export class WebGLTextureMap {
 	}
 
 	insert(surface: pdi.Surface): WebGLTextureMap {
-		var image = surface._drawable;
+		const image = surface._drawable;
 
 		// マージンを考慮した領域を確保
-		var width = image.width + WebGLTextureMap.TEXTURE_MARGIN;
-		var height = image.height + WebGLTextureMap.TEXTURE_MARGIN;
+		const width = image.width + WebGLTextureMap.TEXTURE_MARGIN;
+		const height = image.height + WebGLTextureMap.TEXTURE_MARGIN;
 
 		// 再帰的にパッキング
 		if (this._surface) {
 			if (this._left) {
-				var left = this._left.insert(surface);
+				const left = this._left.insert(surface);
 				if (left) {
 					return left;
 				}
 			}
 
 			if (this._right) {
-				var right = this._right.insert(surface);
+				const right = this._right.insert(surface);
 				if (right) {
 					return right;
 				}
@@ -94,8 +94,8 @@ export class WebGLTextureMap {
 			return null;
 		}
 
-		var remainWidth = this._width - width;
-		var remainHeight = this._height - height;
+		const remainWidth = this._width - width;
+		const remainHeight = this._height - height;
 
 		if (remainWidth <= remainHeight) {
 			this._left = new WebGLTextureMap(this.texture, this.offsetX + width, this.offsetY, remainWidth, height);

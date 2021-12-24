@@ -58,14 +58,14 @@ export class WebAudioPlugin implements AudioPlugin {
 		if (navigator.userAgent.indexOf("Edge/") !== -1) return ["aac"];
 
 		// Audio要素を実際に作って、canPlayTypeで再生できるかを判定する
-		var audioElement = document.createElement("audio");
-		var supportedFormats: string[] = [];
+		const audioElement = document.createElement("audio");
+		const supportedFormats: string[] = [];
 		try {
-			var supportedExtensions = ["ogg", "aac", "mp4"];
-			for (var i = 0, len = supportedExtensions.length; i < len; i++) {
-				var ext = supportedExtensions[i];
-				var canPlay = audioElement.canPlayType("audio/" + ext) as string;
-				var supported = (canPlay !== "no" && canPlay !== "");
+			const supportedExtensions = ["ogg", "aac", "mp4"];
+			for (let i = 0, len = supportedExtensions.length; i < len; i++) {
+				const ext = supportedExtensions[i];
+				const canPlay = audioElement.canPlayType("audio/" + ext) as string;
+				const supported = (canPlay !== "no" && canPlay !== "");
 				if (supported) {
 					supportedFormats.push(ext);
 				}

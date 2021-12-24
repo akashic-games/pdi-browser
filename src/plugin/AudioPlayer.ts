@@ -27,7 +27,7 @@ export abstract class AudioPlayer implements pdi.AudioPlayer {
 	}
 
 	stop(): void {
-		var audio = this.currentAudio;
+		const audio = this.currentAudio;
 		if (!audio) return;
 		this.currentAudio = undefined;
 		this.onStop.fire({
