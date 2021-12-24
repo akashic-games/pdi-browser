@@ -31,7 +31,7 @@ export class XHRLoader {
 	}
 
 	private _getRequestObject(requestObject: XHRRequestObject, callback: (error: pdi.AssetLoadError, data?: any) => void): void {
-		var request = new XMLHttpRequest();
+		const request = new XMLHttpRequest();
 		request.open("GET", requestObject.url, true);
 		request.responseType = requestObject.responseType;
 		request.timeout = this.timeout;
@@ -41,7 +41,7 @@ export class XHRLoader {
 		request.addEventListener("load", () => {
 			if (request.status >= 200 && request.status < 300) {
 				// "text" とそれ以外で取得方法を分類する
-				var response = requestObject.responseType === "text" ? request.responseText : request.response;
+				const response = requestObject.responseType === "text" ? request.responseText : request.response;
 				callback(null, response);
 			} else {
 				callback(ExceptionFactory.createAssetLoadError("loading error. status: " + request.status));

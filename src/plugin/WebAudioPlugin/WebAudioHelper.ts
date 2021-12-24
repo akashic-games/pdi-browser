@@ -6,7 +6,7 @@
 // https://github.com/cwilso/webkitAudioContext-MonkeyPatch
 // https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext
 // eslint-disable-next-line @typescript-eslint/naming-convention
-var AudioContext = window.AudioContext || window.webkitAudioContext;
+const AudioContext = window.AudioContext || window.webkitAudioContext;
 
 interface ExtWindow extends Window {
 	__akashic__: {
@@ -44,7 +44,7 @@ module WebAudioHelper {
 	}
 
 	export function createBufferNode(context: AudioContext): AudioBufferSourceNode {
-		var sourceNode = context.createBufferSource();
+		const sourceNode = context.createBufferSource();
 		// startがあるなら問題ないので、拡張しないで返す
 		if (sourceNode.start) {
 			return sourceNode;

@@ -176,20 +176,20 @@ export class WebGLSharedObject {
 		if (this._currentCompositeOperation !== state.globalCompositeOperation) {
 			this._currentCompositeOperation = state.globalCompositeOperation;
 			this._commit();
-			var compositeOperation = this._compositeOps[this._currentCompositeOperation];
+			const compositeOperation = this._compositeOps[this._currentCompositeOperation];
 			this._context.blendFunc(compositeOperation[0], compositeOperation[1]);
 		}
 
-		var tw = 1.0 / surfaceTexture.textureWidth;
-		var th = 1.0 / surfaceTexture.textureHeight;
+		const tw = 1.0 / surfaceTexture.textureWidth;
+		const th = 1.0 / surfaceTexture.textureHeight;
 
-		var ox = surfaceTexture.textureOffsetX;
-		var oy = surfaceTexture.textureOffsetY;
+		const ox = surfaceTexture.textureOffsetX;
+		const oy = surfaceTexture.textureOffsetY;
 
-		var s = tw * (ox + offsetX + width );
-		var t = th * (oy + offsetY + height);
-		var u = tw * (ox + offsetX);
-		var v = th * (oy + offsetY);
+		const s = tw * (ox + offsetX + width );
+		const t = th * (oy + offsetY + height);
+		const u = tw * (ox + offsetX);
+		const v = th * (oy + offsetY);
 
 		// 変換行列を設定
 		this._register(
@@ -269,7 +269,7 @@ export class WebGLSharedObject {
 	}
 
 	makeTexture(data: HTMLImageElement|HTMLCanvasElement|ImageData): WebGLTexture {
-		var texture = this._context.createTexture();
+		const texture = this._context.createTexture();
 		this._context.bindTexture(this._context.TEXTURE_2D, texture);
 		this._context.pixelStorei(this._context.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
 		this._context.texParameteri(this._context.TEXTURE_2D, this._context.TEXTURE_WRAP_S, this._context.CLAMP_TO_EDGE);
@@ -367,7 +367,7 @@ export class WebGLSharedObject {
 	}
 
 	private _init(): void {
-		var program = new WebGLShaderProgram(this._context);
+		const program = new WebGLShaderProgram(this._context);
 
 		// 描画用リソース
 		this._textureAtlas = new WebGLTextureAtlas();

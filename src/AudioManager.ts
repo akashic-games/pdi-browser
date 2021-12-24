@@ -11,7 +11,7 @@ export class AudioManager {
 	}
 
 	removeAudioAsset(asset: AudioAsset): void {
-		var index = this.audioAssets.indexOf(asset);
+		const index = this.audioAssets.indexOf(asset);
 		if (index === -1)
 			this.audioAssets.splice(index, 1);
 	}
@@ -19,7 +19,7 @@ export class AudioManager {
 	setMasterVolume(volume: number): void {
 		this._masterVolume = volume;
 
-		for (var i = 0; i < this.audioAssets.length; i++) {
+		for (let i = 0; i < this.audioAssets.length; i++) {
 			if (this.audioAssets[i]._lastPlayedPlayer) {
 				(this.audioAssets[i]._lastPlayedPlayer as AudioPlayer).notifyMasterVolumeChanged();
 			}

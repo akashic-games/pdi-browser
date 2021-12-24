@@ -111,8 +111,8 @@ export class InputAbstractHandler {
 
 	getOffsetPositionFromInputView(position: PagePosition): OffsetPosition {
 		// windowの左上を0,0とした時のinputViewのoffsetを取得する
-		var bounding = this.inputView.getBoundingClientRect();
-		var scale = this.getScale();
+		const bounding = this.inputView.getBoundingClientRect();
+		const scale = this.getScale();
 		return {
 			offsetX: (position.pageX - Math.round(window.pageXOffset + bounding.left)) / scale.x,
 			offsetY: (position.pageY - Math.round(window.pageYOffset + bounding.top)) / scale.y

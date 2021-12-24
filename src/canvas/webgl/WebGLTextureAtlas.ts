@@ -26,7 +26,7 @@ export class WebGLTextureAtlas {
 	 * 新しいシーンに遷移したとき呼ぶ。
 	 */
 	clear(): void {
-		for (var i = 0; i < this._maps.length; ++i) {
+		for (let i = 0; i < this._maps.length; ++i) {
 			this._maps[i].dispose();
 		}
 	}
@@ -35,7 +35,7 @@ export class WebGLTextureAtlas {
 	 * 現在のテクスチャ領域使用効率を表示する。
 	 */
 	showOccupancy(): void {
-		for (var i = 0; i < this._maps.length; ++i) {
+		for (let i = 0; i < this._maps.length; ++i) {
 			console.log("occupancy[" + i + "]: " + this._maps[i].occupancy());
 		}
 	}
@@ -44,26 +44,26 @@ export class WebGLTextureAtlas {
 	 * pdi.Surface 用にテクスチャを作成する。
 	 */
 	makeTextureForSurface(shared: WebGLSharedObject, surface: pdi.Surface): void {
-		var image = surface._drawable;
+		let image = surface._drawable;
 		if (!image || image.texture) {
 			return;
 		}
 
-		var width: number = image.width;
-		var height: number = image.height;
+		const width: number = image.width;
+		const height: number = image.height;
 
 		// サイズが大きいので単体のテクスチャとして扱う
 		if ((width >= WebGLTextureAtlas.TEXTURE_SIZE) || (height >= WebGLTextureAtlas.TEXTURE_SIZE)) {
 
 			// 画像サイズが 2^n でないときはリサイズする
-			var w = RenderingHelper.toPowerOfTwo(image.width);
-			var h = RenderingHelper.toPowerOfTwo(image.height);
+			const w = RenderingHelper.toPowerOfTwo(image.width);
+			const h = RenderingHelper.toPowerOfTwo(image.height);
 			if ((w !== image.width) || (h !== image.height)) {
-				var canvas = document.createElement("canvas");
+				const canvas = document.createElement("canvas");
 				canvas.width = w;
 				canvas.height = h;
 
-				var canvasContext = canvas.getContext("2d");
+				const canvasContext = canvas.getContext("2d");
 				canvasContext.globalCompositeOperation = "copy";
 				canvasContext.drawImage(image, 0, 0);
 
@@ -86,8 +86,8 @@ export class WebGLTextureAtlas {
 	 */
 	private _assign(shared: WebGLSharedObject, surface: pdi.Surface, maps: WebGLTextureMap[]): void {
 		// テクスチャアトラスに割り当てる
-		var map: WebGLTextureMap;
-		for (var i = 0; i < maps.length; ++i) {
+		let map: WebGLTextureMap;
+		for (let i = 0; i < maps.length; ++i) {
 			map = maps[(i + this._insertPos) % maps.length].insert(surface);
 			if (map) {
 				// 登録する

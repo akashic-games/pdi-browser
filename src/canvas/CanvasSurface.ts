@@ -50,7 +50,7 @@ export abstract class CanvasSurface extends Surface {
 		 - http://havelog.ayumusato.com/develop/performance/e554-paint_gpu_acceleration_problems.html
 		 - http://buccchi.jp/blog/2013/03/android_canvas_deathpoint/
 		 */
-		var canvasStyle = this.canvas.style as any;
+		const canvasStyle = this.canvas.style as any;
 		if ("transform" in canvasStyle) {
 			canvasStyle.transformOrigin = "0 0";
 			canvasStyle.transform = "scale(" + xScale + "," + yScale + ")";

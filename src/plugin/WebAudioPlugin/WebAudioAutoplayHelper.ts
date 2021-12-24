@@ -5,12 +5,12 @@ import * as helper from "./WebAudioHelper";
 
 module WebAudioAutoplayHelper {
 	export function setupChromeMEIWorkaround(): void {
-		var context = helper.getAudioContext();
+		const context = helper.getAudioContext();
 		if (context && typeof context.resume !== "function") return;
-		var gain = helper.createGainNode(context);
+		const gain = helper.createGainNode(context);
 
 		// テスト用の音源を用意する
-		var osc = context.createOscillator();
+		const osc = context.createOscillator();
 		osc.type = "sawtooth";
 		osc.frequency.value = 440; // 何でも良いがドの音
 		osc.connect(gain);
@@ -22,7 +22,7 @@ module WebAudioAutoplayHelper {
 }
 
 function resumeHandler(): void {
-	var context = helper.getAudioContext();
+	const context = helper.getAudioContext();
 	context.resume();
 	clearUserInteractListener();
 }

@@ -40,7 +40,7 @@ export class WebAudioPlayer extends AudioPlayer {
 			this.stop();
 		}
 		if (asset.data) {
-			var bufferNode = helper.createBufferNode(this._audioContext);
+			const bufferNode = helper.createBufferNode(this._audioContext);
 			bufferNode.loop = asset.loop;
 			bufferNode.buffer = asset.data;
 			this._gainNode.gain.value = this._calculateVolume();

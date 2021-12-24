@@ -28,7 +28,7 @@ export class InputHandlerLayer {
 	/**
 	 * @example
 	 *
-	 * var inputHandlerLayer = new InputHandlerLayer();
+	 * const inputHandlerLayer = new InputHandlerLayer();
 	 * inputHandlerLayer.pointEventTrigger.add(function(pointEvent){
 	 *   console.log(pointEvent);
 	 * });
@@ -59,7 +59,7 @@ export class InputHandlerLayer {
 	}
 
 	setOffset(offset: pdi.CommonOffset): void {
-		var inputViewStyle = `position:relative; left:${offset.x}px; top:${offset.y}px`;
+		const inputViewStyle = `position:relative; left:${offset.x}px; top:${offset.y}px`;
 		this._inputHandler.inputView.setAttribute("style", inputViewStyle);
 	}
 
@@ -70,7 +70,7 @@ export class InputHandlerLayer {
 	}
 
 	private _createInputView(width: number, height: number): HTMLDivElement {
-		var view = document.createElement("div");
+		const view = document.createElement("div");
 		view.setAttribute("tabindex", "1");
 		view.className = "input-handler";
 		view.setAttribute("style", "display:inline-block; outline:none;");

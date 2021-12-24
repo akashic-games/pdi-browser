@@ -8,9 +8,9 @@ export class TouchHandler extends MouseHandler {
 	constructor(inputView: HTMLElement, disablePreventDefault: boolean) {
 		super(inputView, disablePreventDefault);
 		this.onTouchDown = (e: TouchEvent) => {
-			var touches = e.changedTouches;
-			for (var i = 0, len = touches.length; i < len; i++) {
-				var touch = touches[i];
+			const touches = e.changedTouches;
+			for (let i = 0, len = touches.length; i < len; i++) {
+				const touch = touches[i];
 				this.pointDown(touch.identifier, this.getOffsetPositionFromInputView(touch));
 			}
 			if (!this._disablePreventDefault) {
@@ -19,9 +19,9 @@ export class TouchHandler extends MouseHandler {
 			}
 		};
 		this.onTouchMove = (e: TouchEvent) => {
-			var touches = e.changedTouches;
-			for (var i = 0, len = touches.length; i < len; i++) {
-				var touch = touches[i];
+			const touches = e.changedTouches;
+			for (let i = 0, len = touches.length; i < len; i++) {
+				const touch = touches[i];
 				this.pointMove(touch.identifier, this.getOffsetPositionFromInputView(touch));
 			}
 			if (!this._disablePreventDefault) {
@@ -30,9 +30,9 @@ export class TouchHandler extends MouseHandler {
 			}
 		};
 		this.onTouchUp = (e: TouchEvent) => {
-			var touches = e.changedTouches;
-			for (var i = 0, len = touches.length; i < len; i++) {
-				var touch = touches[i];
+			const touches = e.changedTouches;
+			for (let i = 0, len = touches.length; i < len; i++) {
+				const touch = touches[i];
 				this.pointUp(touch.identifier, this.getOffsetPositionFromInputView(touch));
 			}
 			if (!this._disablePreventDefault) {
