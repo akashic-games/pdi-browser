@@ -86,7 +86,7 @@ function calcGlyphArea(imageData: ImageData): pdi.GlyphArea {
 
 	for (let y = 0, height = imageData.height; y < height; y = (y + 1) | 0) {
 		for (let x = 0, width = imageData.width; x < width; x = (x + 1) | 0) {
-			var a = imageData.data[currentPos + 3]; // get alpha value
+			const a = imageData.data[currentPos + 3]; // get alpha value
 			if (a !== 0) {
 				if (x < sx) {
 					sx = x;

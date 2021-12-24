@@ -72,7 +72,7 @@ export class WebGLRenderer implements pdi.Renderer {
 
 	drawSprites(surface: WebGLBackSurface, offsetX: number[], offsetY: number[], width: number[], height: number[],
 	            canvasOffsetX: number[], canvasOffsetY: number[], count: number): void {
-		for (var i = 0; i < count; ++i) {
+		for (let i = 0; i < count; ++i) {
 			this.drawImage(surface, offsetX[i], offsetY[i],
 				width[i], height[i], canvasOffsetX[i], canvasOffsetY[i]);
 		}
@@ -177,14 +177,14 @@ export class WebGLRenderer implements pdi.Renderer {
 
 	private _reallocation(newCapacity: number): void {
 		// 指数的成長ポリシーの再割当:
-		var oldCapacity = this._capacity;
+		const oldCapacity = this._capacity;
 		if (oldCapacity < newCapacity) {
 			if (newCapacity < (oldCapacity * 2)) {
 				this._capacity *= 2;
 			} else {
 				this._capacity = newCapacity;
 			}
-			for (var i = oldCapacity; i < this._capacity; ++i) {
+			for (let i = oldCapacity; i < this._capacity; ++i) {
 				this._stateStack.push(new WebGLRenderingState());
 			}
 		}

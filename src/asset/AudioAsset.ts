@@ -28,7 +28,7 @@ export abstract class AudioAsset extends Asset implements pdi.AudioAsset {
 
 	stop(): void {
 		const players = this._system.findPlayers(this);
-		for (var i = 0; i < players.length; ++i) players[i].stop();
+		for (let i = 0; i < players.length; ++i) players[i].stop();
 	}
 
 	inUse(): boolean {

@@ -20,8 +20,8 @@ export class AudioPluginManager {
 
 	// Audioプラグインに登録を行い、どれか一つでも成功ならtrue、それ以外はfalseを返す
 	tryInstallPlugin(plugins: (AudioPluginStatic | AudioPlugin)[]): boolean {
-		for (var i = 0, len = plugins.length; i < len; i++) {
-			var p = plugins[i];
+		for (let i = 0, len = plugins.length; i < len; i++) {
+			const p = plugins[i];
 			if ((p as any).isSupported) {
 				// eslint-disable-next-line @typescript-eslint/naming-convention
 				const PluginConstructor = (p as AudioPluginStatic); // インスタンス化するので命名規則の lint を除外

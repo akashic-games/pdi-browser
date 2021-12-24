@@ -13,7 +13,7 @@ export class RafLooper implements Looper {
 	}
 
 	start(): void {
-		var onAnimationFrame = (deltaTime: number): void => {
+		const onAnimationFrame = (deltaTime: number): void => {
 			if (this._timerId == null) {
 				// NOTE: Firefox Quantum 57.0.2の不具合(？)(cancelAnimationFrame()が機能しないことがある)暫定対策
 				return;
@@ -22,7 +22,7 @@ export class RafLooper implements Looper {
 			this._fun(deltaTime - this._prev);
 			this._prev = deltaTime;
 		};
-		var onFirstFrame = (deltaTime: number): void => {
+		const onFirstFrame = (deltaTime: number): void => {
 			this._timerId = requestAnimationFrame(onAnimationFrame);
 			this._fun(0);
 			this._prev = deltaTime;

@@ -50,11 +50,11 @@ export class WebGLShaderProgram {
 	private _uniformSetterTable: { [type: string]: UniformSetter };
 
 	private static _makeShader(gl: WebGLRenderingContext, typ: number, src: string): WebGLShader {
-		var shader = gl.createShader(typ);
+		const shader = gl.createShader(typ);
 		gl.shaderSource(shader, src);
 		gl.compileShader(shader);
 		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-			var msg = gl.getShaderInfoLog(shader);
+			const msg = gl.getShaderInfoLog(shader);
 			gl.deleteShader(shader);
 			throw new Error(msg);
 		}
@@ -62,19 +62,19 @@ export class WebGLShaderProgram {
 	}
 
 	private static _makeShaderProgram(gl: WebGLRenderingContext, vSrc: string, fSrc: string): WebGLProgram {
-		var program = gl.createProgram();
+		const program = gl.createProgram();
 
-		var vShader = WebGLShaderProgram._makeShader(gl, gl.VERTEX_SHADER, vSrc);
+		const vShader = WebGLShaderProgram._makeShader(gl, gl.VERTEX_SHADER, vSrc);
 		gl.attachShader(program, vShader);
 		gl.deleteShader(vShader);
 
-		var fShader = WebGLShaderProgram._makeShader(gl, gl.FRAGMENT_SHADER, fSrc);
+		const fShader = WebGLShaderProgram._makeShader(gl, gl.FRAGMENT_SHADER, fSrc);
 		gl.attachShader(program, fShader);
 		gl.deleteShader(fShader);
 
 		gl.linkProgram(program);
 		if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-			var msg = gl.getProgramInfoLog(program);
+			const msg = gl.getProgramInfoLog(program);
 			gl.deleteProgram(program);
 			throw new Error(msg);
 		}
@@ -83,8 +83,8 @@ export class WebGLShaderProgram {
 	}
 
 	constructor(context: WebGLRenderingContext, fSrc?: string, uniforms?: {[key: string]: pdi.ShaderUniform}) {
-		var vSrc = WebGLShaderProgram._DEFAULT_VERTEX_SHADER;
-		var fSrc = fSrc || WebGLShaderProgram._DEFAULT_FRAGMENT_SHADER;
+		const vSrc = WebGLShaderProgram._DEFAULT_VERTEX_SHADER;
+		fSrc = fSrc || WebGLShaderProgram._DEFAULT_FRAGMENT_SHADER;
 
 		const program = WebGLShaderProgram._makeShaderProgram(context, vSrc, fSrc);
 

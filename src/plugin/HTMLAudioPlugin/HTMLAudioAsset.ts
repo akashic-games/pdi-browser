@@ -22,8 +22,8 @@ export class HTMLAudioAsset extends AudioAsset {
 			return;
 		}
 
-		var audio = new Audio();
-		var startLoadingAudio = (path: string, handlers: MediaLoaderEventHandlerSet): void => {
+		const audio = new Audio();
+		const startLoadingAudio = (path: string, handlers: MediaLoaderEventHandlerSet): void => {
 			// autoplay は preload よりも優先されるため明示的にfalseとする
 			audio.autoplay = false;
 			audio.preload = "none";
@@ -41,7 +41,7 @@ export class HTMLAudioAsset extends AudioAsset {
 			audio.load();
 		};
 
-		var handlers: MediaLoaderEventHandlerSet = {
+		const handlers: MediaLoaderEventHandlerSet = {
 			success: (): void => {
 				this._detachAll(audio, handlers);
 				this.data = audio;
@@ -56,7 +56,7 @@ export class HTMLAudioAsset extends AudioAsset {
 			}
 		};
 
-		var setAudioLoadInterval = (audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void => {
+		const setAudioLoadInterval = (audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void => {
 			// IE11において、canplaythroughイベントが正常に発火しない問題が確認されたため、その対処として以下の処理を行っている。
 			// なお、canplaythroughはreadyStateの値が4になった時点で呼び出されるイベントである。
 			// インターバルとして指定している100msに根拠は無い。
@@ -80,7 +80,7 @@ export class HTMLAudioAsset extends AudioAsset {
 		const delIndex = this.path.indexOf("?");
 		const basePath = delIndex >= 0 ? this.path.substring(0, delIndex) : this.path;
 		if (basePath.slice(-4) === ".aac" && HTMLAudioAsset.supportedFormats.indexOf("mp4") !== -1) {
-			var altHandlers: MediaLoaderEventHandlerSet = {
+			const altHandlers: MediaLoaderEventHandlerSet = {
 				success: handlers.success,
 				error: () => {
 					this._detachAll(audio, altHandlers);

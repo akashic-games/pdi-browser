@@ -64,7 +64,7 @@ export class Context2DRenderer implements pdi.Renderer {
 		canvasOffsetY: number[],
 		count: number
 	): void {
-		for (var i = 0; i < count; ++i) {
+		for (let i = 0; i < count; ++i) {
 			this.drawImage(surface, offsetX[i], offsetY[i], width[i], height[i], canvasOffsetX[i], canvasOffsetY[i]);
 		}
 	}
