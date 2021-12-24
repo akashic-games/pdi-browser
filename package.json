@@ -63,7 +63,7 @@
     "remark-lint": "6.0.6",
     "shx": "0.3.3",
     "testem": "3.6.0",
-    "typescript": "3.9.10",
+    "typescript": "4.5.4",
     "uglify-js": "3.14.5"
   },
   "dependencies": {
