@@ -1,5 +1,5 @@
 "use strict";
-import { AudioPlugin } from "./AudioPlugin";
+import type { AudioPlugin } from "./AudioPlugin";
 
 export interface AudioPluginStatic {
 	// Audio Pluginの実装すべきStatic methodについての定義

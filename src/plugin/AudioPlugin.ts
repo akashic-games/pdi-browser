@@ -1,8 +1,8 @@
 "use strict";
-import * as pdi from "@akashic/pdi-types";
-import { AudioAsset } from "../asset/AudioAsset";
-import { AudioManager } from "../AudioManager";
-import { AudioPlayer } from "./AudioPlayer";
+import type * as pdi from "@akashic/pdi-types";
+import type { AudioAsset } from "../asset/AudioAsset";
+import type { AudioManager } from "../AudioManager";
+import type { AudioPlayer } from "./AudioPlayer";
 
 // Audioプラグインの詳細は docs/audio-plugin.md
 // Audio Pluginの実装すべきInterface

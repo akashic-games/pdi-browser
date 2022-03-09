@@ -1,7 +1,7 @@
-import * as pdi from "@akashic/pdi-types";
-import { AudioManager } from "../../AudioManager";
+import type * as pdi from "@akashic/pdi-types";
+import type { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
-import { WebAudioAsset } from "./WebAudioAsset";
+import type { WebAudioAsset } from "./WebAudioAsset";
 import * as helper from "./WebAudioHelper";
 
 export class WebAudioPlayer extends AudioPlayer {

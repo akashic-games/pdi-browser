@@ -1,8 +1,8 @@
-import * as pdi from "@akashic/pdi-types";
-import { AudioManager } from "../../AudioManager";
+import type * as pdi from "@akashic/pdi-types";
+import type { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
-import { ProxyAudioAsset } from "./ProxyAudioAsset";
-import { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
+import type { ProxyAudioAsset } from "./ProxyAudioAsset";
+import type { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
 
 export class ProxyAudioPlayer extends AudioPlayer {
 	private static _audioPlayerIdCounter: number = 0;

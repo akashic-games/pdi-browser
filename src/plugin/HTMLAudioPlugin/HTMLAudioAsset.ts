@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/pdi-types";
+import type * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
 import { addExtname } from "../../PathUtil";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";

@@ -1,7 +1,7 @@
 import { CanvasSurface } from "../CanvasSurface";
 import { WebGLPrimarySurfaceRenderer } from "./WebGLPrimarySurfaceRenderer";
-import { WebGLRenderer } from "./WebGLRenderer";
-import { WebGLSharedObject } from "./WebGLSharedObject";
+import type { WebGLRenderer } from "./WebGLRenderer";
+import type { WebGLSharedObject } from "./WebGLSharedObject";
 
 export class WebGLPrimarySurface extends CanvasSurface {
 	protected _shared: WebGLSharedObject;

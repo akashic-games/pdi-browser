@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/pdi-types";
+import type * as pdi from "@akashic/pdi-types";
 
 interface UniformCache {
 	name: string;
@@ -167,7 +167,7 @@ export class WebGLShaderProgram {
 	 * ユーザ定義されたシェーダの uniform 変数を初期化する。
 	 */
 	initializeUniforms(): void {
-		let uniformCaches: UniformCache[] = [];
+		const uniformCaches: UniformCache[] = [];
 		const uniforms = this._uniforms;
 
 		if (uniforms != null) {

@@ -1,8 +1,8 @@
-import * as pdi from "@akashic/pdi-types";
-import { AffineTransformer } from "../AffineTransformer";
+import type * as pdi from "@akashic/pdi-types";
+import type { AffineTransformer } from "../AffineTransformer";
 import { WebGLBackSurface } from "./WebGLBackSurface";
 import { WebGLPrimarySurface } from "./WebGLPrimarySurface";
-import { WebGLRenderingState } from "./WebGLRenderingState";
+import type { WebGLRenderingState } from "./WebGLRenderingState";
 import { WebGLShaderProgram } from "./WebGLShaderProgram";
 import { WebGLTextureAtlas } from "./WebGLTextureAtlas";
 

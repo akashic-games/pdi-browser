@@ -153,7 +153,7 @@ export module WebGLColor {
 	};
 
 	export function get(color: string|number[]): number[] {
-		let rgba = (typeof color === "string") ? WebGLColor._toColor(<string> color) : [color[0], color[1], color[2], color[3]];
+		const rgba = (typeof color === "string") ? WebGLColor._toColor(<string> color) : [color[0], color[1], color[2], color[3]];
 		rgba[3] = RenderingHelper.clamp(rgba[3]);
 		rgba[0] = RenderingHelper.clamp(rgba[0]) * rgba[3];
 		rgba[1] = RenderingHelper.clamp(rgba[1]) * rgba[3];

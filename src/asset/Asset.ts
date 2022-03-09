@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/pdi-types";
+import type * as pdi from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
 
 export abstract class Asset implements pdi.Asset {
