@@ -1,12 +1,12 @@
 "use strict";
-import { AMFlow } from "@akashic/amflow";
-import * as pdi from "@akashic/pdi-types";
+import type { AMFlow } from "@akashic/amflow";
+import type * as pdi from "@akashic/pdi-types";
 import { XHRTextAsset } from "./asset/XHRTextAsset";
 import { AudioManager } from "./AudioManager";
 import { ContainerController } from "./ContainerController";
 import { AudioPluginManager } from "./plugin/AudioPluginManager";
 import { AudioPluginRegistry } from "./plugin/AudioPluginRegistry";
-import { AudioPluginStatic } from "./plugin/AudioPluginStatic";
+import type { AudioPluginStatic } from "./plugin/AudioPluginStatic";
 import { RafLooper } from "./RafLooper";
 import { ResourceFactory } from "./ResourceFactory";
 

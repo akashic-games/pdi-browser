@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/pdi-types";
+import type * as pdi from "@akashic/pdi-types";
 
 export class WebGLTextureMap {
 	// 各テクスチャを配置する際のマージンピクセル数

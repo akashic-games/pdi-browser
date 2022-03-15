@@ -1,8 +1,8 @@
-import * as pdi from "@akashic/pdi-types";
-import { WebGLBackSurface } from "./WebGLBackSurface";
+import type * as pdi from "@akashic/pdi-types";
+import type { WebGLBackSurface } from "./WebGLBackSurface";
 import { WebGLColor } from "./WebGLColor";
 import { WebGLRenderingState } from "./WebGLRenderingState";
-import { RenderTarget, WebGLSharedObject } from "./WebGLSharedObject";
+import type { RenderTarget, WebGLSharedObject } from "./WebGLSharedObject";
 
 export class WebGLRenderer implements pdi.Renderer {
 	static DEFAULT_CAPACITY: number = 16;

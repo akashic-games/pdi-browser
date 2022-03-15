@@ -1,7 +1,7 @@
 "use strict";
-import * as pdi from "@akashic/pdi-types";
+import type * as pdi from "@akashic/pdi-types";
 import { ExceptionFactory } from "./ExceptionFactory";
-import { XHRLoaderOption } from "./XHRLoaderOption";
+import type { XHRLoaderOption } from "./XHRLoaderOption";
 export interface XHRRequestObject {
 	url: string;
 	responseType: XMLHttpRequestResponseType;

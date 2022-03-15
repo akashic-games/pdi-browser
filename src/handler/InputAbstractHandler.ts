@@ -1,7 +1,7 @@
 "use strict";
 import * as pdi from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
-import { OffsetPosition } from "./OffsetPosition";
+import type { OffsetPosition } from "./OffsetPosition";
 
 export interface Scale {
 	x: number;

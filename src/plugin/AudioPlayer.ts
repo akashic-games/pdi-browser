@@ -1,6 +1,6 @@
-import * as pdi from "@akashic/pdi-types";
+import type * as pdi from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
-import { AudioAsset } from "../asset/AudioAsset";
+import type { AudioAsset } from "../asset/AudioAsset";
 
 export abstract class AudioPlayer implements pdi.AudioPlayer {
 	currentAudio: AudioAsset | undefined;

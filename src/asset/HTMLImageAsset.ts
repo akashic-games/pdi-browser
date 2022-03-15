@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/pdi-types";
+import type * as pdi from "@akashic/pdi-types";
 import { Surface } from "../Surface";
 import { ExceptionFactory } from "../utils/ExceptionFactory";
 import { Asset } from "./Asset";
