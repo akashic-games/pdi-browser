@@ -1,5 +1,5 @@
 import { WebGLRenderer } from "./WebGLRenderer";
-import { WebGLSharedObject, RenderTarget } from "./WebGLSharedObject";
+import type { WebGLSharedObject, RenderTarget } from "./WebGLSharedObject";
 
 export class WebGLPrimarySurfaceRenderer extends WebGLRenderer {
 

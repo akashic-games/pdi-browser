@@ -1,5 +1,5 @@
-import { AudioAsset } from "./asset/AudioAsset";
-import { AudioPlayer } from "./plugin/AudioPlayer";
+import type { AudioAsset } from "./asset/AudioAsset";
+import type { AudioPlayer } from "./plugin/AudioPlayer";
 
 export class AudioManager {
 	audioAssets: AudioAsset[] = [];

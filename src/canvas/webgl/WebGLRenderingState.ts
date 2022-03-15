@@ -1,4 +1,4 @@
-import * as pdi from "@akashic/pdi-types";
+import type * as pdi from "@akashic/pdi-types";
 import { AffineTransformer } from "../AffineTransformer";
 
 export class WebGLRenderingState {

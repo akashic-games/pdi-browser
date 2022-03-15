@@ -1,6 +1,6 @@
 "use strict";
-import { AudioPlugin } from "./AudioPlugin";
-import { AudioPluginStatic } from "./AudioPluginStatic";
+import type { AudioPlugin } from "./AudioPlugin";
+import type { AudioPluginStatic } from "./AudioPluginStatic";
 /*
  Audioプラグインを登録し、現在登録しているプラグインを管理するクラス
 

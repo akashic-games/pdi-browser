@@ -1,9 +1,9 @@
 "use strict";
-import * as pdi from "@akashic/pdi-types";
+import type * as pdi from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
-import { CanvasSurface } from "./canvas/CanvasSurface";
+import type { CanvasSurface } from "./canvas/CanvasSurface";
 import { InputHandlerLayer } from "./InputHandlerLayer";
-import { ResourceFactory } from "./ResourceFactory";
+import type { ResourceFactory } from "./ResourceFactory";
 
 export interface ContainerControllerInitializeParameterObject {
 	rendererRequirement: pdi.RendererRequirement;

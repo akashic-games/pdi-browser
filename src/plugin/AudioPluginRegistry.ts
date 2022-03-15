@@ -1,5 +1,5 @@
 "use strict";
-import { AudioPluginStatic } from "./AudioPluginStatic";
+import type { AudioPluginStatic } from "./AudioPluginStatic";
 
 let audioPlugins: AudioPluginStatic[] = [];
 

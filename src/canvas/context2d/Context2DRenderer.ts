@@ -1,7 +1,7 @@
-import * as pdi from "@akashic/pdi-types";
-import { Surface } from "../../Surface";
-import { CanvasSurfaceContext } from "./CanvasSurfaceContext";
-import { Context2DSurface } from "./Context2DSurface";
+import type * as pdi from "@akashic/pdi-types";
+import type { Surface } from "../../Surface";
+import type { CanvasSurfaceContext } from "./CanvasSurfaceContext";
+import type { Context2DSurface } from "./Context2DSurface";
 
 const compositeOperationTable: { [P in pdi.CompositeOperationString]: string } = {
 	"source-over": "source-over",

@@ -1,7 +1,7 @@
-import * as pdi from "@akashic/pdi-types";
+import type * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
-import { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
+import type { ProxyAudioHandlerSet } from "./ProxyAudioHandlerSet";
 
 export class ProxyAudioAsset extends AudioAsset {
 	private _handlerSet: ProxyAudioHandlerSet;

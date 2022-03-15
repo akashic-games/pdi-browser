@@ -1,4 +1,4 @@
-import { CanvasSurface } from "../CanvasSurface";
+import type { CanvasSurface } from "../CanvasSurface";
 import { Context2DSurface } from "../context2d/Context2DSurface";
 import { RenderingHelper } from "../RenderingHelper";
 import { WebGLSharedObject } from "../webgl/WebGLSharedObject";
