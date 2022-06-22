@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.2.1
+* `AudioPlayer` の生成時、 volume と mute に `AudioSystem` の値を設定している問題を修正
+
 ## 2.2.0
 * @akashic/pdi-types@1.3.0 に追従
 * `SVGImageAsset` の実装を追加
