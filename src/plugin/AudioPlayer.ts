@@ -13,8 +13,8 @@ export abstract class AudioPlayer implements pdi.AudioPlayer {
 	_system: pdi.AudioSystem;
 
 	constructor(system: pdi.AudioSystem) {
-		this.volume = system.volume;
-		this._muted = system._muted;
+		this.volume = 1;
+		this._muted = false;
 		this._system = system;
 	}
 
