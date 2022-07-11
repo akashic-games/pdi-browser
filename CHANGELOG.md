@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.2.2
+* @akashic/trigger 更新に伴うバージョンアップ
+
 ## 2.2.1
 * `AudioPlayer` の生成時、 volume と mute に `AudioSystem` の値を設定している問題を修正
 
