@@ -44,9 +44,9 @@ export abstract class AudioPlayer implements pdi.AudioPlayer {
 		this.volume = volume;
 	}
 
-	// 歴史的経緯のためこの名前になっているが、対称性を考えればこのメソッドの正しい名前は _notifyMutedChanged() である。引数の muted は使っていない。
-	_changeMuted(muted: boolean): void {
-		this._muted = muted;
+	// 歴史的経緯のためこの名前になっているが、対称性を考えればこのメソッドの正しい名前は _notifyMutedChanged() である。
+	_changeMuted(_muted: boolean): void {
+		// this._muted が未使用のため何もしない。
 	}
 
 	_notifyVolumeChanged(): void {

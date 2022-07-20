@@ -23,7 +23,8 @@ export class ProxyAudioPlayer extends AudioPlayer {
 		this._notifyVolumeToHandler();
 	}
 
-	_changeMuted(_muted: boolean): void {
+	_changeMuted(muted: boolean): void {
+		super._changeMuted(muted);
 		this._notifyVolumeToHandler();
 	}
 
