@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 2.2.3
-* `AudioPlayer#_muted` が未使用のっため変更する箇所を削除
+* `AudioPlayer#_muted` が未使用のため `_muted` を変更する箇所を削除
 
 ## 2.2.2
 * @akashic/trigger 更新に伴うバージョンアップ
