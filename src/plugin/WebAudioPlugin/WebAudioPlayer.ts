@@ -30,8 +30,7 @@ export class WebAudioPlayer extends AudioPlayer {
 		this._gainNode.gain.value = this._calculateVolume();
 	}
 
-	_changeMuted(muted: boolean): void {
-		super._changeMuted(muted);
+	_changeMuted(_muted: boolean): void {
 		this._gainNode.gain.value = this._calculateVolume();
 	}
 

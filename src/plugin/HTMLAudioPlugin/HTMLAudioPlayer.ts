@@ -73,8 +73,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		}
 	}
 
-	_changeMuted(muted: boolean): void {
-		super._changeMuted(muted);
+	_changeMuted(_muted: boolean): void {
 		if (this._audioInstance) {
 			this._audioInstance.volume = this._calculateVolume();
 		}

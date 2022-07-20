@@ -9,7 +9,7 @@ export abstract class AudioPlayer implements pdi.AudioPlayer {
 	volume: number;
 	played: Trigger<pdi.AudioPlayerEvent> = this.onPlay;
 	stopped: Trigger<pdi.AudioPlayerEvent> = this.onStop;
-	_muted: boolean;
+	_muted: boolean; // 未使用。歴史的経緯のため残されている
 	_system: pdi.AudioSystem;
 
 	constructor(system: pdi.AudioSystem) {
@@ -44,6 +44,7 @@ export abstract class AudioPlayer implements pdi.AudioPlayer {
 		this.volume = volume;
 	}
 
+	// 歴史的経緯のためこの名前になっているが、対称性を考えればこのメソッドの正しい名前は _notifyMutedChanged() である。引数の muted は使っていない。
 	_changeMuted(muted: boolean): void {
 		this._muted = muted;
 	}
