@@ -25,7 +25,6 @@ export class ResourceFactory implements pdi.ResourceFactory {
 	_rendererCandidates: string[];
 	_surfaceFactory: SurfaceFactory;
 	_platform: Platform;
-	_dynamicGeneratedAssetsCount: number = 0;
 
 	constructor(param: ResourceFactoryParameterObject) {
 		this._audioPluginManager = param.audioPluginManager;
