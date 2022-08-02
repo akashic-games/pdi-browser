@@ -1,5 +1,6 @@
 import type * as pdi from "@akashic/pdi-types";
 import type { AudioAsset } from "./asset/AudioAsset";
+import { DynamicSVGImageAsset } from "./asset/DynamicSVGImageAsset";
 import { HTMLImageAsset } from "./asset/HTMLImageAsset";
 import { HTMLVideoAsset } from "./asset/HTMLVideoAsset";
 import { SVGImageAsset } from "./asset/SVGImageAsset";
@@ -24,6 +25,7 @@ export class ResourceFactory implements pdi.ResourceFactory {
 	_rendererCandidates: string[];
 	_surfaceFactory: SurfaceFactory;
 	_platform: Platform;
+	_dynamicGeneratedAssetsCount: number = 0;
 
 	constructor(param: ResourceFactoryParameterObject) {
 		this._audioPluginManager = param.audioPluginManager;
@@ -99,6 +101,10 @@ export class ResourceFactory implements pdi.ResourceFactory {
 
 	createVectorImageAsset(id: string, assetPath: string, width: number, height: number, hint?: pdi.ImageAssetHint): SVGImageAsset {
 		return new SVGImageAsset(id, assetPath, width, height, hint);
+	}
+
+	createVectorImageAssetFromString(id: string, data: string): SVGImageAsset {
+		return new DynamicSVGImageAsset(id, id, data);
 	}
 
 	_onAudioAssetDestroyed(asset: pdi.Asset): void {
