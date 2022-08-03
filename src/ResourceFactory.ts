@@ -102,8 +102,8 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		return new SVGImageAsset(id, assetPath, width, height, hint);
 	}
 
-	createVectorImageAssetFromString(id: string, data: string): SVGImageAsset {
-		return new DynamicSVGImageAsset(id, id, data);
+	createVectorImageAssetFromString(id: string, assetPath: string, data: string): SVGImageAsset {
+		return new DynamicSVGImageAsset(id, assetPath, data);
 	}
 
 	_onAudioAssetDestroyed(asset: pdi.Asset): void {
