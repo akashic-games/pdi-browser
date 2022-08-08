@@ -22,6 +22,7 @@ export class GeneratedSVGImageAsset extends SVGImageAsset {
 	_load(loader: pdi.AssetLoadHandler): void {
 		const svgString = this._svgString;
 		const parser = new DOMParser();
+		let base64SVG: string;
 
 		try {
 			const doc = parser.parseFromString(svgString, "text/xml");
@@ -42,19 +43,12 @@ export class GeneratedSVGImageAsset extends SVGImageAsset {
 				throw new Error("the height in the root element must be given in \"px\" units");
 			}
 
+			base64SVG = window.btoa((new XMLSerializer().serializeToString(inlineSVG)));
+
 			// 小数は切り上げる
 			this.width = Math.ceil(parseFloat(stringWidth));
 			this.height = Math.ceil(parseFloat(stringHeight));
 
-		} catch (e) {
-			loader._onAssetError(this, ExceptionFactory.createAssetLoadError(e.message, false, e));
-			return;
-		}
-
-		let base64SVG: string;
-
-		try {
-			base64SVG = btoa(this._svgString);
 		} catch (e) {
 			loader._onAssetError(this, ExceptionFactory.createAssetLoadError(e.message, false, e));
 			return;
