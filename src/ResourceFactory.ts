@@ -1,6 +1,6 @@
 import type * as pdi from "@akashic/pdi-types";
 import type { AudioAsset } from "./asset/AudioAsset";
-import { DynamicSVGImageAsset } from "./asset/DynamicSVGImageAsset";
+import { GeneratedSVGImageAsset } from "./asset/GeneratedSVGImageAsset";
 import { HTMLImageAsset } from "./asset/HTMLImageAsset";
 import { HTMLVideoAsset } from "./asset/HTMLVideoAsset";
 import { SVGImageAsset } from "./asset/SVGImageAsset";
@@ -103,7 +103,7 @@ export class ResourceFactory implements pdi.ResourceFactory {
 	}
 
 	createVectorImageAssetFromString(id: string, assetPath: string, data: string): SVGImageAsset {
-		return new DynamicSVGImageAsset(id, assetPath, data);
+		return new GeneratedSVGImageAsset(id, assetPath, data);
 	}
 
 	_onAudioAssetDestroyed(asset: pdi.Asset): void {
