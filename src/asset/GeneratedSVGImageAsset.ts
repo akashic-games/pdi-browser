@@ -74,9 +74,10 @@ export class GeneratedSVGImageAsset extends SVGImageAsset {
 }
 
 /**
- * "1.00", "10%", "20px" などの文字列の単位が px かどうかチェックする。
+ * "1.00", "1.0e2", "10%", "20px" などの文字列の単位が px かどうかチェックする。
  */
 function isPixelUnits(value: string): boolean {
-	// NOTE: 簡易実装。値の妥当性 (2つ以上の "." を含むなど) は検証しない。
-	return /^[0-9.]+(?:px)?$/.test(value);
+	// @see https://developer.mozilla.org/en-US/docs/Web/SVG/Content_type#number
+	// [+-]? [0-9]* "." [0-9]+ ([Ee] integer)?
+	return /^[+-]?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?(?:px)?$/.test(value);
 }
