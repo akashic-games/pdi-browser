@@ -43,7 +43,7 @@ export class GeneratedSVGImageAsset extends SVGImageAsset {
 				throw new Error("the height in the root element must be given in \"px\" units");
 			}
 
-			base64SVG = window.btoa((new XMLSerializer().serializeToString(inlineSVG)));
+			base64SVG = window.btoa(svgString);
 
 			// 小数は切り上げる
 			this.width = Math.ceil(parseFloat(stringWidth));
