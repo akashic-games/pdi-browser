@@ -55,9 +55,6 @@ export class GeneratedSVGImageAsset extends SVGImageAsset {
 
 		const image = new Image();
 
-		if (this.hint?.untainted) {
-			image.crossOrigin = "anonymous";
-		}
 		image.onerror = (e) => {
 			loader._onAssetError(
 				this,
