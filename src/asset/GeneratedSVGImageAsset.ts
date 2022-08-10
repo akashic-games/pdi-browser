@@ -45,9 +45,8 @@ export class GeneratedSVGImageAsset extends SVGImageAsset {
 
 			base64SVG = window.btoa(svgString);
 
-			// 小数は切り上げる
-			this.width = Math.ceil(parseFloat(stringWidth));
-			this.height = Math.ceil(parseFloat(stringHeight));
+			this.width = parseFloat(stringWidth);
+			this.height = parseFloat(stringHeight);
 
 		} catch (e) {
 			loader._onAssetError(this, ExceptionFactory.createAssetLoadError(e.message, false, e));
