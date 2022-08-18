@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 2.3.0
+* @akashic/pdi-types@1.4.0 に追従
+
+## 2.3.0-beta.0
+* @akashic/pdi-types@1.4.0-beta.1 に追従
+
 ## 2.2.3
 * `AudioPlayer#_muted` が未使用のため `_muted` を変更する箇所を削除
 
