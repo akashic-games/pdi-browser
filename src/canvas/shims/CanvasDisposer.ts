@@ -4,6 +4,10 @@ export class CanvasDisposer {
 	private _registry: FinalizationRegistry<string>;
 
 	constructor() {
+		// FIXME: PhantomJS の利用停止後に削除
+		if (typeof FinalizationRegistry === "undefined") {
+			return;
+		}
 		this._registry = new FinalizationRegistry(this._dispose.bind(this));
 	}
 
