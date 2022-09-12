@@ -7,7 +7,7 @@ export class CanvasDisposer {
 		this._registry = typeof FinalizationRegistry !== "undefined" ? new FinalizationRegistry(this._dispose.bind(this)) : null;
 	}
 
-	register(target: any, canvas: HTMLCanvasElement): void {
+	register(target: object, canvas: HTMLCanvasElement): void {
 		if (!this.register) return;
 		const id = `${this._idCounter++}`;
 		this._canvasMap[id] = canvas;
