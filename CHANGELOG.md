@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## unreleased changes
+## 2.3.1
 * 参照されなくなった HTMLCanvasElement のメモリリークを検知して開放するように
 
 ## 2.3.0
