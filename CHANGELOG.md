@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.3.1
+* 参照されなくなった HTMLCanvasElement のメモリリークを検知して開放するように
+
 ## 2.3.0
 * @akashic/pdi-types@1.4.0 に追従
 

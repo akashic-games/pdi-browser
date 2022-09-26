@@ -2,9 +2,11 @@ import type { CanvasSurface } from "../CanvasSurface";
 import { Context2DSurface } from "../context2d/Context2DSurface";
 import { RenderingHelper } from "../RenderingHelper";
 import { WebGLSharedObject } from "../webgl/WebGLSharedObject";
+import { CanvasDisposer } from "./CanvasDisposer";
 
 export class SurfaceFactory {
 	_shared: WebGLSharedObject;
+	_disposer: CanvasDisposer = new CanvasDisposer();
 
 	createPrimarySurface(width: number, height: number, rendererCandidates?: string[]): CanvasSurface {
 		if (RenderingHelper.usedWebGL(rendererCandidates)) {
@@ -18,10 +20,10 @@ export class SurfaceFactory {
 	}
 
 	createBackSurface(width: number, height: number, rendererCandidates?: string[]): CanvasSurface {
-		if (RenderingHelper.usedWebGL(rendererCandidates)) {
-			return this._shared.createBackSurface(width, height);
-		} else {
-			return new Context2DSurface(width, height);
-		}
+		const surface = RenderingHelper.usedWebGL(rendererCandidates)
+			? this._shared.createBackSurface(width, height)
+			: new Context2DSurface(width, height);
+		this._disposer.register(surface, surface.getHTMLElement() as HTMLCanvasElement);
+		return surface;
 	}
 }
