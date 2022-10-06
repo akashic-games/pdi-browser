@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.3.2
+* `FinalizationRegistry` がない環境で例外が発生する問題を修正
+
 ## 2.3.1
 * 参照されなくなった HTMLCanvasElement のメモリリークを検知して開放するように
 
