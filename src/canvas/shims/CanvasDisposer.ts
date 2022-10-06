@@ -8,7 +8,7 @@ export class CanvasDisposer {
 	}
 
 	register(target: object, canvas: HTMLCanvasElement): void {
-		if (!this.register) return;
+		if (!this._registry) return;
 		const id = `${this._idCounter++}`;
 		this._canvasMap[id] = canvas;
 		this._registry.register(target, id);
