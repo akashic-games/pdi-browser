@@ -144,7 +144,7 @@ export class WebGLSharedObject {
 
 			// シェーダプログラム変更時は全ての設定をクリア
 			this._currentCompositeOperation = null;
-			this._currentAlpha = 1.0;
+			this._currentAlpha = null!; // TODO: 型定義の見直し
 			this._currentColor = [];
 			this._currentTexture = null;
 		}
