@@ -15,7 +15,7 @@ export abstract class CanvasSurface extends Surface {
 	destroy(): void {
 		this.canvas.width = 1;
 		this.canvas.height = 1;
-		this.canvas = null;
+		this.canvas = undefined!;
 		super.destroy();
 	}
 

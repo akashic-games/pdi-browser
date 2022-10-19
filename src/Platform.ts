@@ -55,9 +55,9 @@ export class Platform implements pdi.Platform {
 	audioPluginManager: AudioPluginManager;
 	amflow: AMFlow;
 
-	_platformEventHandler: pdi.PlatformEventHandler;
+	_platformEventHandler: pdi.PlatformEventHandler | null;
 	_resourceFactory: ResourceFactory;
-	_rendererReq: pdi.RendererRequirement;
+	_rendererReq: pdi.RendererRequirement | null;
 	_disablePreventDefault: boolean;
 	_audioManager: AudioManager;
 
@@ -114,7 +114,7 @@ export class Platform implements pdi.Platform {
 		}
 
 		this._rendererReq = requirement;
-		this._resourceFactory._rendererCandidates = this._rendererReq.rendererCandidates;
+		this._resourceFactory._rendererCandidates = this._rendererReq.rendererCandidates ?? [];
 
 		// Note: this.containerController.inputHandlerLayer の存在により this.containerController が初期化されているかを判定
 		if (this.containerController && ! this.containerController.inputHandlerLayer) {
@@ -179,6 +179,8 @@ export class Platform implements pdi.Platform {
 	getMasterVolume(): number {
 		if (this._audioManager)
 			return this._audioManager.getMasterVolume();
+
+		return 1.0;
 	}
 
 	destroy(): void {

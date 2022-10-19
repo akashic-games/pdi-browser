@@ -22,7 +22,7 @@ export interface ResourceFactoryParameterObject {
 export class ResourceFactory implements pdi.ResourceFactory {
 	_audioPluginManager: AudioPluginManager;
 	_audioManager: AudioManager;
-	_rendererCandidates: string[];
+	_rendererCandidates: string[] | undefined;
 	_surfaceFactory: SurfaceFactory;
 	_platform: Platform;
 
@@ -42,6 +42,9 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		hint: pdi.AudioAssetHint
 	): AudioAsset {
 		const activePlugin = this._audioPluginManager.getActivePlugin();
+		if (!activePlugin) {
+			throw new Error("ResourceFactory#createAudioAsset(): could not initialize ActivePlugin");
+		}
 		const audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint);
 		this._audioManager.registerAudioAsset(audioAsset);
 		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed, this);
@@ -50,6 +53,9 @@ export class ResourceFactory implements pdi.ResourceFactory {
 
 	createAudioPlayer(system: pdi.AudioSystem): pdi.AudioPlayer {
 		const activePlugin = this._audioPluginManager.getActivePlugin();
+		if (!activePlugin) {
+			throw new Error("ResourceFactory#createAudioAsset(): could not initialize ActivePlugin");
+		}
 		return activePlugin.createPlayer(system, this._audioManager);
 	}
 

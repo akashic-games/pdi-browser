@@ -7,7 +7,7 @@ import { WebGLShaderProgram } from "./WebGLShaderProgram";
 import { WebGLTextureAtlas } from "./WebGLTextureAtlas";
 
 export interface WebGLSurfaceTexture {
-	texture: WebGLTexture;
+	texture: WebGLTexture | null;
 	textureOffsetX: number;
 	textureOffsetY: number;
 	textureWidth: number;
@@ -19,34 +19,35 @@ export interface RenderTarget {
 	height: number;
 	viewportWidth: number;
 	viewportHeight: number;
-	framebuffer: WebGLFramebuffer;
-	texture: WebGLTexture;
+	framebuffer: WebGLFramebuffer | null;
+	texture: WebGLTexture | null;
 }
 
 export class WebGLSharedObject {
 	private _context: WebGLRenderingContext;
 	private _surface: WebGLPrimarySurface;
-	private _renderTarget: RenderTarget;
 
-	private _defaultShaderProgram: WebGLShaderProgram;
-	private _textureAtlas: WebGLTextureAtlas;
-	private _fillRectTexture: WebGLTexture;
-	private _fillRectSurfaceTexture: WebGLSurfaceTexture;
+	// NOTE: _init() で初期化されるプロパティについては `!` を付与
+	private _renderTarget!: RenderTarget;
+	private _defaultShaderProgram!: WebGLShaderProgram;
+	private _textureAtlas!: WebGLTextureAtlas;
+	private _fillRectTexture!: WebGLTexture;
+	private _fillRectSurfaceTexture!: WebGLSurfaceTexture;
 
-	private _maxSpriteCount: number;
-	private _vertices: WebGLBuffer;
-	private _verticesCache: Float32Array;
-	private _numSprites: number;
-	private _renderTargetStack: RenderTarget[];
+	private _maxSpriteCount!: number;
+	private _vertices!: WebGLBuffer;
+	private _verticesCache!: Float32Array;
+	private _numSprites!: number;
+	private _renderTargetStack!: RenderTarget[];
 
-	private _currentTexture: WebGLTexture;
-	private _currentColor: number[];
-	private _currentAlpha: number;
-	private _currentCompositeOperation: pdi.CompositeOperationString;
-	private _currentShaderProgram: WebGLShaderProgram;
+	private _currentTexture!: WebGLTexture | null;
+	private _currentColor!: number[];
+	private _currentAlpha!: number;
+	private _currentCompositeOperation!: pdi.CompositeOperationString | null;
+	private _currentShaderProgram!: WebGLShaderProgram;
 
-	private _compositeOps: {[key in pdi.CompositeOperationString]: [number, number]; };
-	private _deleteRequestedTargets: RenderTarget[];
+	private _compositeOps!: {[key in pdi.CompositeOperationString]: [number, number]; };
+	private _deleteRequestedTargets!: RenderTarget[];
 
 	constructor(width: number, height: number) {
 		const surface = new WebGLPrimarySurface(this, width, height);
@@ -143,7 +144,7 @@ export class WebGLSharedObject {
 
 			// シェーダプログラム変更時は全ての設定をクリア
 			this._currentCompositeOperation = null;
-			this._currentAlpha = null;
+			this._currentAlpha = 1.0;
 			this._currentColor = [];
 			this._currentTexture = null;
 		}
@@ -251,8 +252,12 @@ export class WebGLSharedObject {
 		this._context.bindTexture(this._context.TEXTURE_2D, this._currentTexture);
 	}
 
-	makeTextureRaw(width: number, height: number, pixels: Uint8Array = null): WebGLTexture {
+	makeTextureRaw(width: number, height: number, pixels: Uint8Array | null = null): WebGLTexture {
 		const texture = this._context.createTexture();
+		if (!texture) {
+			throw new Error("WebGLSharedObject#makeTextureRaw(): could not create WebGLTexture");
+		}
+
 		this._context.bindTexture(this._context.TEXTURE_2D, texture);
 		this._context.pixelStorei(this._context.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
 		this._context.texParameteri(this._context.TEXTURE_2D, this._context.TEXTURE_WRAP_S, this._context.CLAMP_TO_EDGE);
@@ -270,6 +275,10 @@ export class WebGLSharedObject {
 
 	makeTexture(data: HTMLImageElement|HTMLCanvasElement|ImageData): WebGLTexture {
 		const texture = this._context.createTexture();
+		if (!texture) {
+			throw new Error("WebGLSharedObject#makeTexture(): could not create WebGLTexture");
+		}
+
 		this._context.bindTexture(this._context.TEXTURE_2D, texture);
 		this._context.pixelStorei(this._context.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1);
 		this._context.texParameteri(this._context.TEXTURE_2D, this._context.TEXTURE_WRAP_S, this._context.CLAMP_TO_EDGE);
@@ -350,7 +359,7 @@ export class WebGLSharedObject {
 		return this._defaultShaderProgram;
 	}
 
-	initializeShaderProgram(shaderProgram: pdi.ShaderProgram | null): pdi.ShaderProgram {
+	initializeShaderProgram(shaderProgram: pdi.ShaderProgram | null): pdi.ShaderProgram | null {
 		if (shaderProgram) {
 			if (!shaderProgram._program) {
 				const program = new WebGLShaderProgram(
@@ -438,6 +447,10 @@ export class WebGLSharedObject {
 
 	private _makeBuffer(data: any): WebGLBuffer {
 		const buffer = this._context.createBuffer();
+		if (!buffer) {
+			throw new Error("WebGLSharedObject#_makeBuffer(): could not create WebGLBuffer");
+		}
+
 		this._context.bindBuffer(this._context.ARRAY_BUFFER, buffer);
 		this._context.bufferData(this._context.ARRAY_BUFFER, data, this._context.DYNAMIC_DRAW);
 		return buffer;

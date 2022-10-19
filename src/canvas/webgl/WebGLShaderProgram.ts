@@ -51,18 +51,24 @@ export class WebGLShaderProgram {
 
 	private static _makeShader(gl: WebGLRenderingContext, typ: number, src: string): WebGLShader {
 		const shader = gl.createShader(typ);
+		if (!shader) {
+			throw new Error("WebGLShaderProgram._makeShader(): WebGLShader could not initialize");
+		}
 		gl.shaderSource(shader, src);
 		gl.compileShader(shader);
 		if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
 			const msg = gl.getShaderInfoLog(shader);
 			gl.deleteShader(shader);
-			throw new Error(msg);
+			throw new Error(msg ?? "WebGLShaderProgram._makeShader(): unknown gl error");
 		}
 		return shader;
 	}
 
 	private static _makeShaderProgram(gl: WebGLRenderingContext, vSrc: string, fSrc: string): WebGLProgram {
 		const program = gl.createProgram();
+		if (!program) {
+			throw new Error("WebGLShaderProgram._makeShaderProgram(): WebGLProgram could not initialize");
+		}
 
 		const vShader = WebGLShaderProgram._makeShader(gl, gl.VERTEX_SHADER, vSrc);
 		gl.attachShader(program, vShader);
@@ -76,13 +82,13 @@ export class WebGLShaderProgram {
 		if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
 			const msg = gl.getProgramInfoLog(program);
 			gl.deleteProgram(program);
-			throw new Error(msg);
+			throw new Error(msg ?? "WebGLShaderProgram._makeShaderProgram(): unknown gl error");
 		}
 
 		return program;
 	}
 
-	constructor(context: WebGLRenderingContext, fSrc?: string, uniforms?: {[key: string]: pdi.ShaderUniform}) {
+	constructor(context: WebGLRenderingContext, fSrc?: string, uniforms: {[key: string]: pdi.ShaderUniform} = Object.create(null)) {
 		const vSrc = WebGLShaderProgram._DEFAULT_VERTEX_SHADER;
 		fSrc = fSrc || WebGLShaderProgram._DEFAULT_FRAGMENT_SHADER;
 
@@ -91,9 +97,22 @@ export class WebGLShaderProgram {
 		this.program = program;
 		this._context = context;
 		this._aVertex = context.getAttribLocation(this.program, "aVertex");
-		this._uColor = context.getUniformLocation(this.program, "uColor");
-		this._uAlpha = context.getUniformLocation(this.program, "uAlpha");
-		this._uSampler = context.getUniformLocation(this.program, "uSampler");
+
+		const uColor = context.getUniformLocation(this.program, "uColor");
+		if (!uColor) {
+			throw new Error("WebGLShaderProgram#constructor: could not get UniformLocation of 'uColor'");
+		}
+		const uAlpha = context.getUniformLocation(this.program, "uAlpha");
+		if (!uAlpha) {
+			throw new Error("WebGLShaderProgram#constructor: could not get UniformLocation of 'uAlpha'");
+		}
+		const uSampler = context.getUniformLocation(this.program, "uSampler");
+		if (!uSampler) {
+			throw new Error("WebGLShaderProgram#constructor: could not get UniformLocation of 'uSampler'");
+		}
+		this._uColor = uColor;
+		this._uAlpha = uAlpha;
+		this._uSampler = uSampler;
 
 		this._uniforms = uniforms;
 		this._uniformCaches = [];
@@ -180,9 +199,12 @@ export class WebGLShaderProgram {
 				}
 				const update = this._uniformSetterTable[type];
 				if (!update) {
-					throw new Error(
-						"WebGLShaderProgram#initializeUniforms: Uniform type '" + type + "' is not supported."
-					);
+					throw new Error(`WebGLShaderProgram#initializeUniforms: Uniform type '${type}' is not supported.`);
+				}
+
+				const loc = this._context.getUniformLocation(this.program, k);
+				if (!loc) {
+					throw new Error(`WebGLShaderProgram#initializeUniforms: could not get UniformLocation of '${k}'.`);
 				}
 
 				uniformCaches.push({
@@ -190,7 +212,7 @@ export class WebGLShaderProgram {
 					update,
 					beforeValue: null,
 					isArray,
-					loc: this._context.getUniformLocation(this.program, k)
+					loc
 				});
 			});
 		}

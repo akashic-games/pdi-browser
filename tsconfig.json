@@ -5,10 +5,10 @@
     "types": [],
     "noImplicitAny": true,
     "noImplicitThis": true,
+    "strict": true,
     "alwaysStrict": true,
-    "strictBindCallApply": true,
-    "strictFunctionTypes": true,
     "declaration": true,
+    "useUnknownInCatchVariables": false,
     "module": "commonjs",
     "outDir": "./lib/full"
   },

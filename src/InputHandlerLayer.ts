@@ -22,7 +22,8 @@ export class InputHandlerLayer {
 	// DOMで起きたイベントを通知するTrigger
 	pointEventTrigger: Trigger<pdi.PlatformPointEvent>;
 
-	_inputHandler: InputAbstractHandler;
+	// NOTE: _createInputView() で初期化されるプロパティについては `!` を付与
+	_inputHandler!: InputAbstractHandler;
 	private _disablePreventDefault: boolean;
 
 	/**
@@ -36,7 +37,6 @@ export class InputHandlerLayer {
 	 */
 	constructor(param: InputHandlerLayerParameterObject) {
 		this.view = this._createInputView(param.width, param.height);
-		this._inputHandler = undefined;
 		this.pointEventTrigger = new Trigger<pdi.PlatformPointEvent>();
 
 		this._disablePreventDefault = !!param.disablePreventDefault;

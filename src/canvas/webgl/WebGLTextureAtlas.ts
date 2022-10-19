@@ -64,6 +64,9 @@ export class WebGLTextureAtlas {
 				canvas.height = h;
 
 				const canvasContext = canvas.getContext("2d");
+				if (!canvasContext) {
+					throw new Error("WebGLTextureAtlas#makeTextureForSurface(): could not initialize CanvasRenderingContext2D");
+				}
 				canvasContext.globalCompositeOperation = "copy";
 				canvasContext.drawImage(image, 0, 0);
 
@@ -86,7 +89,7 @@ export class WebGLTextureAtlas {
 	 */
 	private _assign(shared: WebGLSharedObject, surface: pdi.Surface, maps: WebGLTextureMap[]): void {
 		// テクスチャアトラスに割り当てる
-		let map: WebGLTextureMap;
+		let map: WebGLTextureMap | null = null;
 		for (let i = 0; i < maps.length; ++i) {
 			map = maps[(i + this._insertPos) % maps.length].insert(surface);
 			if (map) {
@@ -100,7 +103,7 @@ export class WebGLTextureAtlas {
 
 		// テクスチャ容量があふれるので古いやつを消して再利用する
 		if (maps.length >= WebGLTextureAtlas.TEXTURE_COUNT) {
-			map = maps.shift();
+			map = maps.shift()!;
 			shared.disposeTexture(map.texture);
 			map.dispose();
 			shared.clearTexture(this.emptyTexturePixels, WebGLTextureAtlas.TEXTURE_SIZE, WebGLTextureAtlas.TEXTURE_SIZE, map.texture);
@@ -120,7 +123,7 @@ export class WebGLTextureAtlas {
 
 		// 登録する
 		maps.push(map);
-		map = map.insert(surface);
+		map = map.insert(surface)!; // NOTE: 上の条件分岐で必ず insert() できると仮定
 		this._register(shared, map, surface._drawable);
 	}
 
