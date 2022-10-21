@@ -22,7 +22,7 @@ export function setupChromeMEIWorkaround(audio: HTMLAudioElement): void {
 			case PlayableState.Ready:
 				break;
 			default:
-					// do nothing
+				// do nothing
 		}
 		state = PlayableState.Ready;
 		clearTimeout(timer!);
@@ -43,7 +43,7 @@ export function setupChromeMEIWorkaround(audio: HTMLAudioElement): void {
 				audio.play(); // suspendedHandler が呼ばれるまでに音が鳴らせるようになった場合
 				break;
 			default:
-					// do nothing;
+				// do nothing;
 		}
 	}
 
@@ -60,7 +60,7 @@ export function setupChromeMEIWorkaround(audio: HTMLAudioElement): void {
 		case PlayableState.Ready:
 			break;
 		default:
-				// do nothing
+			// do nothing
 	}
 }
 
