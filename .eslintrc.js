@@ -2,10 +2,10 @@ module.exports = {
   root: true,
   extends: "@akashic/eslint-config",
   ignorePatterns: [
-    "*.js"
+    "*.js",
   ],
   parserOptions: {
-    project: "tsconfig.json",
+    project: "tsconfig.jest.json",
     sourceType: "module"
   }
 }
