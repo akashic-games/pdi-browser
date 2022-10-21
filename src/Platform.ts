@@ -169,18 +169,14 @@ export class Platform implements pdi.Platform {
 	 * @param volume マスター音量
 	 */
 	setMasterVolume(volume: number): void {
-		if (this._audioManager)
-			this._audioManager.setMasterVolume(volume);
+		this._audioManager.setMasterVolume(volume);
 	}
 
 	/**
 	 * 最終的に出力されるマスター音量を取得する
 	 */
 	getMasterVolume(): number {
-		if (this._audioManager)
-			return this._audioManager.getMasterVolume();
-
-		return 1.0;
+		return this._audioManager.getMasterVolume();
 	}
 
 	destroy(): void {
