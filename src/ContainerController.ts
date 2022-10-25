@@ -24,11 +24,10 @@ export interface ContainerControllerInitializeParameterObject {
 export class ContainerController {
 	resourceFactory: ResourceFactory;
 
-	// NOTE: _init() で初期化されるプロパティについては `!` を付与
-	container!: DocumentFragment;
-	surface!: CanvasSurface;
-	inputHandlerLayer!: InputHandlerLayer;
-	rootView!: HTMLElement;
+	container: DocumentFragment = undefined!;
+	surface: CanvasSurface = undefined!;
+	inputHandlerLayer: InputHandlerLayer = undefined!;
+	rootView: HTMLElement = undefined!;
 
 	/**
 	 * ゲームコンテンツのCanvas拡大・縮小時に内部のコンテキスト領域のリサイズを行うかどうか。初期値はfalse。
@@ -39,8 +38,7 @@ export class ContainerController {
 
 	pointEventTrigger: Trigger<pdi.PlatformPointEvent> = new Trigger<pdi.PlatformPointEvent>();
 
-	// NOTE: _init() で初期化されるプロパティについては `!` を付与
-	private _rendererReq!: pdi.RendererRequirement;
+	private _rendererReq: pdi.RendererRequirement = undefined!;
 	private _disablePreventDefault: boolean = false;
 
 	constructor(resourceFactory: ResourceFactory) {
