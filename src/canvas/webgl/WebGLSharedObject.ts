@@ -27,27 +27,26 @@ export class WebGLSharedObject {
 	private _context: WebGLRenderingContext;
 	private _surface: WebGLPrimarySurface;
 
-	// NOTE: _init() で初期化されるプロパティについては `!` を付与
-	private _renderTarget!: RenderTarget;
-	private _defaultShaderProgram!: WebGLShaderProgram;
-	private _textureAtlas!: WebGLTextureAtlas;
-	private _fillRectTexture!: WebGLTexture;
-	private _fillRectSurfaceTexture!: WebGLSurfaceTexture;
+	private _renderTarget: RenderTarget = undefined!;
+	private _defaultShaderProgram: WebGLShaderProgram = undefined!;
+	private _textureAtlas: WebGLTextureAtlas = undefined!;
+	private _fillRectTexture: WebGLTexture = undefined!;
+	private _fillRectSurfaceTexture: WebGLSurfaceTexture = undefined!;
 
-	private _maxSpriteCount!: number;
-	private _vertices!: WebGLBuffer;
-	private _verticesCache!: Float32Array;
-	private _numSprites!: number;
-	private _renderTargetStack!: RenderTarget[];
+	private _maxSpriteCount: number = undefined!;
+	private _vertices: WebGLBuffer = undefined!;
+	private _verticesCache: Float32Array = undefined!;
+	private _numSprites: number = undefined!;
+	private _renderTargetStack: RenderTarget[] = undefined!;
 
-	private _currentTexture!: WebGLTexture | null;
-	private _currentColor!: number[];
-	private _currentAlpha!: number;
-	private _currentCompositeOperation!: pdi.CompositeOperationString | null;
-	private _currentShaderProgram!: WebGLShaderProgram;
+	private _currentTexture: WebGLTexture | null = undefined!;
+	private _currentColor: number[] = undefined!;
+	private _currentAlpha: number = undefined!;
+	private _currentCompositeOperation: pdi.CompositeOperationString | null = undefined!;
+	private _currentShaderProgram: WebGLShaderProgram = undefined!;
 
-	private _compositeOps!: {[key in pdi.CompositeOperationString]: [number, number]; };
-	private _deleteRequestedTargets!: RenderTarget[];
+	private _compositeOps: {[key in pdi.CompositeOperationString]: [number, number]; } = undefined!;
+	private _deleteRequestedTargets: RenderTarget[] = undefined!;
 
 	constructor(width: number, height: number) {
 		const surface = new WebGLPrimarySurface(this, width, height);
