@@ -49,7 +49,11 @@ export class WebAudioPlayer extends AudioPlayer {
 			// Chromeだとevent listerで指定した場合に動かないことがある
 			// https://github.com/mozilla-appmaker/appmaker/issues/1984
 			this._sourceNode.onended = this._endedEventHandler;
-			this._sourceNode.start(0);
+			if (asset.duration > 0) {
+				this._sourceNode.start(0, asset.offset / 1000, asset.duration / 1000);
+			} else {
+				this._sourceNode.start(0, asset.offset / 1000);
+			}
 		} else {
 			// 再生できるオーディオがない場合。duration後に停止処理だけ行う(処理のみ進め音は鳴らさない)
 			this._dummyDurationWaitTimer = setTimeout(this._endedEventHandler, asset.duration);

@@ -44,9 +44,10 @@ export class WebAudioPlugin implements AudioPlugin {
 		duration: number,
 		system: pdi.AudioSystem,
 		loop: boolean,
-		hint: pdi.AudioAssetHint
+		hint: pdi.AudioAssetHint,
+		offset: number
 	): AudioAsset {
-		return new WebAudioAsset(id, assetPath, duration, system, loop, hint);
+		return new WebAudioAsset(id, assetPath, duration, system, loop, hint, offset);
 	}
 
 	createPlayer(system: pdi.AudioSystem, manager: AudioManager): AudioPlayer {

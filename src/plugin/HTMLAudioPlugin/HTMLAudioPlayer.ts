@@ -33,6 +33,10 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		if (audio) {
 			autoPlayHelper.setupChromeMEIWorkaround(audio);
 			audio.volume = this._calculateVolume();
+
+			// TODO asset.offset, asset.duration に対応する。
+			// audio.currentTime と setInterval() で実現できるはずだが、併せて this に紐づいてしまっている _dummyDurationWaitTimer の整理が必要。
+
 			audio.play().catch((_err) => { /* user interactの前にplay()を呼ぶとエラーになる。これはHTMLAudioAutoplayHelperで吸収する */});
 
 			audio.loop = asset.loop;

@@ -39,10 +39,11 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		duration: number,
 		system: pdi.AudioSystem,
 		loop: boolean,
-		hint: pdi.AudioAssetHint
+		hint: pdi.AudioAssetHint,
+		offset: number = 0
 	): AudioAsset {
 		const activePlugin = this._audioPluginManager.getActivePlugin();
-		const audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint);
+		const audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint, offset);
 		this._audioManager.registerAudioAsset(audioAsset);
 		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed, this);
 		return audioAsset;

@@ -18,7 +18,8 @@ export interface AudioPlugin {
 		duration: number,
 		system: pdi.AudioSystem,
 		loop: boolean,
-		hint: pdi.AudioAssetHint
+		hint: pdi.AudioAssetHint,
+		offset: number
 	) => AudioAsset;
 
 	createPlayer: (system: pdi.AudioSystem, manager: AudioManager) => AudioPlayer;
