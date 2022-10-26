@@ -2,7 +2,7 @@ import type * as pdi from "@akashic/pdi-types";
 import type { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
 import type { HTMLAudioAsset } from "./HTMLAudioAsset";
-import * as autoPlayHelper from "./HTMLAudioAutoplayHelper";
+import { setupChromeMEIWorkaround } from "./HTMLAudioAutoplayHelper";
 
 export class HTMLAudioPlayer extends AudioPlayer {
 	private _endedEventHandler: () => void;
@@ -31,7 +31,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		}
 		const audio = asset.cloneElement();
 		if (audio) {
-			autoPlayHelper.setupChromeMEIWorkaround(audio);
+			setupChromeMEIWorkaround(audio);
 			audio.volume = this._calculateVolume();
 			audio.play().catch((_err) => { /* user interactの前にplay()を呼ぶとエラーになる。これはHTMLAudioAutoplayHelperで吸収する */});
 
