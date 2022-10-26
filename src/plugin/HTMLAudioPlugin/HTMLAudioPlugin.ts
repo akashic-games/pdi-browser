@@ -39,7 +39,15 @@ export class HTMLAudioPlugin implements AudioPlugin {
 		HTMLAudioAsset.supportedFormats = supportedFormats;
 	}
 
-	createAsset(id: string, path: string, duration: number, system: pdi.AudioSystem, loop: boolean, hint: pdi.AudioAssetHint, offset: number): AudioAsset {
+	createAsset(
+		id: string,
+		path: string,
+		duration: number,
+		system: pdi.AudioSystem,
+		loop: boolean,
+		hint: pdi.AudioAssetHint,
+		offset: number
+	): AudioAsset {
 		return new HTMLAudioAsset(id, path, duration, system, loop, hint, offset);
 	}
 
