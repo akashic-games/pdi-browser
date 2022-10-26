@@ -8,13 +8,13 @@ import type { AudioPluginStatic } from "./AudioPluginStatic";
  PluginManagerが状態をもたずにGame自体にpluginを登録する方式もあり
  */
 export class AudioPluginManager {
-	private _activePlugin: AudioPlugin;
+	private _activePlugin: AudioPlugin | null;
 
 	constructor() {
 		this._activePlugin = null;
 	}
 
-	getActivePlugin(): AudioPlugin {
+	getActivePlugin(): AudioPlugin | null {
 		return this._activePlugin;
 	}
 

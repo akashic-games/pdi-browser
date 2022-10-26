@@ -71,6 +71,7 @@ export class WebAudioAsset extends AudioAsset {
 		}
 		// ここで検出されるのは最初にアクセスを試みるオーディオアセットのファイルパスなので、
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない
-		return null;
+		// TODO: _assetPathFilter() における戻り値 `null` の扱い
+		return null!;
 	}
 }

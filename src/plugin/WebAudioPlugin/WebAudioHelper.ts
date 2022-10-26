@@ -45,7 +45,7 @@ module WebAudioHelper {
 
 	export function createBufferNode(context: AudioContext): AudioBufferSourceNode {
 		const sourceNode = context.createBufferSource();
-		// startがあるなら問題ないので、拡張しないで返す
+		// @ts-ignore startがあるなら問題ないので、拡張しないで返す
 		if (sourceNode.start) {
 			return sourceNode;
 		}
