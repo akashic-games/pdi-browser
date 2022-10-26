@@ -47,7 +47,7 @@ export class HTMLAudioPlugin implements AudioPlugin {
 		return new HTMLAudioPlayer(system, manager);
 	}
 
-	private _detectSupportedFormats(): string[] {
+	protected _detectSupportedFormats(): string[] {
 		// Edgeは再生できるファイル形式とcanPlayTypeの結果が一致しないため、固定でAACを利用する
 		if (navigator.userAgent.indexOf("Edge/") !== -1) return ["aac"];
 

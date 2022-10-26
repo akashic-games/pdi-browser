@@ -26,4 +26,5 @@ module.exports = {
     "<rootDir>/src/**/*.spec.ts"
   ],
   globalSetup: "<rootDir>/src/__tests__/setup.ts",
+  globalTeardown: "<rootDir>/src/__tests__/teardown.ts"
 };

@@ -4,20 +4,21 @@ import { MockAudioSystem } from "../../__tests__/helpers/MockAudioSystem";
 import { HTMLAudioAsset } from "../HTMLAudioAsset";
 import type { HTMLAudioPlayer } from "../HTMLAudioPlayer";
 import { HTMLAudioPlugin } from "../HTMLAudioPlugin";
+import { MockHTMLAudioPlugin } from "./helpers/MockHTMLAudioPlugin";
 
-xdescribe("HTMLAudioPlugin", () => {
-	if (!HTMLAudioPlugin.isSupported()) {
-		// HTMLAudioをサポートしてない環境ではSkipする
-		// NOTE: jest の仕様上ひとつ以上のテストケースが存在しない場合エラーとなるためダミーのテストを追加
-		it("skipped", () => {
-			expect(1).toBe(1);
-		});
-		return;
-	}
-	const audioAssetPath = "/spec/fixtures/audio/bgm";
+let supportedFormats: string[] = [];
+
+jest.spyOn(window.HTMLAudioElement.prototype, "canPlayType")
+	.mockImplementation(type => supportedFormats.some(f => f === type) ? "maybe" : "");
+
+describe("HTMLAudioPlugin", () => {
+	const audioAssetPath = "audio/bgm";
+	const audioAsset2Path = "audio/bgm2";
+
 	it("サポートしてる実行環境ではtrueを返す", () => {
 		expect(HTMLAudioPlugin.isSupported()).toBeTruthy();
 	});
+
 	describe("#createAsset", () => {
 		it("should HTMLAudioAsset", () => {
 			const plugin = new HTMLAudioPlugin();
@@ -26,26 +27,33 @@ xdescribe("HTMLAudioPlugin", () => {
 			expect(asset).toBeInstanceOf(HTMLAudioAsset);
 		});
 	});
+
 	describe("HTMLAudioAsset", () => {
+		beforeEach(() => {
+			supportedFormats = [];
+		});
+
 		it("#loadするとaudio dataが取得できる", (done) => {
-			const plugin = new HTMLAudioPlugin();
+			supportedFormats = ["audio/ogg"];
+			const plugin = new MockHTMLAudioPlugin();
 			const system = new MockAudioSystem({id: "voice"});
 			const asset = plugin.createAsset("id", audioAssetPath, 100, system, false, {});
 			const loader: AssetLoadHandler = {
 				_onAssetLoad: (asset: AudioAsset) => {
 					expect(asset.data).not.toBeUndefined();
-					console.log(asset, audioAssetPath);
-					expect(asset.path).toBe(audioAssetPath);
+					expect(asset.path).toContain(audioAssetPath);
 					done();
 				},
 				_onAssetError: (_asset, error) => {
-					done.fail(error);
+					done(error);
 				}
 			};
 			asset._load(loader);
 		});
+
 		it("オーディオアセットの拡張子がファイル名の末尾につく", (done) => {
-			const plugin = new HTMLAudioPlugin();
+			supportedFormats = ["audio/ogg"];
+			const plugin = new MockHTMLAudioPlugin();
 			const system = new MockAudioSystem({id: "voice"});
 			const query = "rev=1234";
 			const asset = plugin.createAsset("id", audioAssetPath + "?" + query, 100, system, false, {});
@@ -55,18 +63,21 @@ xdescribe("HTMLAudioPlugin", () => {
 					done();
 				},
 				_onAssetError: (_asset, error) => {
-					done.fail(error);
+					done(error);
 				}
 			};
 			asset._load(loader);
 		});
+
 		it("存在しないファイルを#loadするとonAssetErrorが呼ばれる", (done) => {
-			const plugin = new HTMLAudioPlugin();
+			supportedFormats = ["audio/ogg"];
+			const plugin = new MockHTMLAudioPlugin();
 			const system = new MockAudioSystem({id: "voice"});
+
 			const asset = plugin.createAsset("id", "not_found_audio", 100, system, false, {});
 			const loader: AssetLoadHandler = {
 				_onAssetLoad: (_asset) => {
-					done.fail();
+					done(new Error("failed"));
 				},
 				_onAssetError: (asset: AudioAsset, error) => {
 					expect(asset.data).not.toBeUndefined();
@@ -77,11 +88,11 @@ xdescribe("HTMLAudioPlugin", () => {
 			};
 			asset._load(loader);
 		});
+
 		it("サポートされているファイルの種類でロードが行われる", (done) => {
-			const supportedFormat = "ogg";
-			const plugin = new HTMLAudioPlugin();
 			// aacとoggがサポート対象にあるが、このテストではどちらか一方のみサポートしてると限定して行う
-			plugin.supportedFormats = plugin.supportedFormats.length >= 2 ? [supportedFormat] : plugin.supportedFormats;
+			supportedFormats = ["audio/ogg"];
+			const plugin = new MockHTMLAudioPlugin();
 			const system = new MockAudioSystem({id: "voice"});
 			const asset = plugin.createAsset("id", audioAssetPath, 100, system, false, {});
 			const loader: AssetLoadHandler = {
@@ -90,16 +101,16 @@ xdescribe("HTMLAudioPlugin", () => {
 					done();
 				},
 				_onAssetError: (_asset, error) => {
-					done.fail(error);
+					done(error);
 				}
 			};
 			asset._load(loader);
 		});
+
 		it("aacファイルが存在しない場合mp4ファイルが読み込まれる", (done) => {
-			const plugin = new HTMLAudioPlugin();
-			plugin.supportedFormats = ["aac", "mp4"];
+			supportedFormats = ["audio/aac", "audio/mp4"];
+			const plugin = new MockHTMLAudioPlugin();
 			const system = new MockAudioSystem({id: "voice"});
-			const audioAsset2Path = "/spec/fixtures/audio/bgm2";
 			const query = "rev=4321";
 			const asset = plugin.createAsset("id", audioAsset2Path + "?" + query, 100, system, false, {});
 			const loader: AssetLoadHandler = {
@@ -108,18 +119,20 @@ xdescribe("HTMLAudioPlugin", () => {
 					done();
 				},
 				_onAssetError: (_asset, error) => {
-					done.fail(error);
+					done(error);
 				}
 			};
 			asset._load(loader);
 		});
 	});
+
 	describe("HTMLAudioPlayer", () => {
-		const seAssetPath = "/spec/fixtures/audio/se";
-		// 音の再生検知はtestemでサポートされていないので無効にしておく
-		xit("#playすると音を再生できる", (done) => {
+		const seAssetPath = "audio/se";
+
+		it("#playすると音を再生できる", (done) => {
+			supportedFormats = ["audio/aac", "audio/mp4"];
 			const manager = new AudioManager();
-			const plugin = new HTMLAudioPlugin();
+			const plugin = new MockHTMLAudioPlugin();
 			const system = new MockAudioSystem({id: "voice"});
 			const asset = plugin.createAsset("id", seAssetPath, 100, system, false, {});
 			const player = plugin.createPlayer(system, manager) as HTMLAudioPlayer;
@@ -134,7 +147,7 @@ xdescribe("HTMLAudioPlugin", () => {
 					player.play(asset);
 				},
 				_onAssetError: (_asset, _error) => {
-					done.fail(new Error("not found audio asset"));
+					done(new Error("not found audio asset"));
 				}
 			};
 			asset._load(loader);
