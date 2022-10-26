@@ -7,7 +7,7 @@ import * as helper from "./WebAudioHelper";
 export class WebAudioPlayer extends AudioPlayer {
 	_endedEventHandler: () => void;
 	private _gainNode: GainNode;
-	private _sourceNode: AudioBufferSourceNode;
+	private _sourceNode: AudioBufferSourceNode | undefined;
 	private _audioContext: AudioContext;
 	private _manager: AudioManager;
 	private _dummyDurationWaitTimer: any;
@@ -18,7 +18,6 @@ export class WebAudioPlayer extends AudioPlayer {
 		this._manager = manager;
 		this._gainNode = helper.createGainNode(this._audioContext);
 		this._gainNode.connect(this._audioContext.destination);
-		this._sourceNode = undefined;
 		this._dummyDurationWaitTimer = null;
 		this._endedEventHandler = () => {
 			this._onAudioEnded();

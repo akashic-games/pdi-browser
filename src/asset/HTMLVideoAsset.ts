@@ -4,7 +4,7 @@ import { Asset } from "./Asset";
 import { HTMLVideoPlayer } from "./HTMLVideoPlayer";
 
 class VideoAssetSurface extends Surface {
-	constructor(width: number, height: number, drawable: HTMLVideoElement) {
+	constructor(width: number, height: number, drawable?: HTMLVideoElement) {
 		super(width, height, drawable);
 	}
 
@@ -47,7 +47,7 @@ export class HTMLVideoAsset extends Asset implements pdi.VideoAsset {
 		this._loop = loop;
 		this._useRealSize = useRealSize;
 		this._player = new HTMLVideoPlayer();
-		this._surface = new VideoAssetSurface(width, height, null);
+		this._surface = new VideoAssetSurface(width, height);
 	}
 
 	play(_loop?: boolean): pdi.VideoPlayer {

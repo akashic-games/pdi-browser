@@ -5,7 +5,7 @@ import { WebGLSharedObject } from "../webgl/WebGLSharedObject";
 import { CanvasDisposer } from "./CanvasDisposer";
 
 export class SurfaceFactory {
-	_shared: WebGLSharedObject;
+	_shared: WebGLSharedObject | undefined;
 	_disposer: CanvasDisposer = new CanvasDisposer();
 
 	createPrimarySurface(width: number, height: number, rendererCandidates?: string[]): CanvasSurface {
@@ -21,7 +21,7 @@ export class SurfaceFactory {
 
 	createBackSurface(width: number, height: number, rendererCandidates?: string[]): CanvasSurface {
 		const surface = RenderingHelper.usedWebGL(rendererCandidates)
-			? this._shared.createBackSurface(width, height)
+			? this._shared!.createBackSurface(width, height)
 			: new Context2DSurface(width, height);
 		this._disposer.register(surface, surface.getHTMLElement() as HTMLCanvasElement);
 		return surface;

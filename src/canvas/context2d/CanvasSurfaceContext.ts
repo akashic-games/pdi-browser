@@ -112,7 +112,7 @@ export class CanvasSurfaceContext {
 
 	putImageData(imagedata: ImageData, dx: number, dy: number,
 	             dirtyX?: number, dirtyY?: number, dirtyWidth?: number, dirtyHeight?: number): void {
-		this._context.putImageData(imagedata, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight);
+		this._context.putImageData(imagedata, dx, dy, dirtyX!, dirtyY!, dirtyWidth!, dirtyHeight!);
 	}
 
 	prerender(): void {
@@ -127,7 +127,7 @@ export class CanvasSurfaceContext {
 			this._contextGlobalAlpha = currentState.globalAlpha;
 		}
 		if (currentState.globalCompositeOperation !== this._contextGlobalCompositeOperation) {
-			this._context.globalCompositeOperation = currentState.globalCompositeOperation;
+			this._context.globalCompositeOperation = currentState.globalCompositeOperation as GlobalCompositeOperation;
 			this._contextGlobalCompositeOperation = currentState.globalCompositeOperation;
 		}
 		if (this._modifiedTransform) {

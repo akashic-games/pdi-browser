@@ -4,7 +4,7 @@ import { Asset } from "./Asset";
 
 export class XHRTextAsset extends Asset implements pdi.TextAsset {
 	type: "text" = "text";
-	data: string | undefined;
+	data: string = ""; // _load() までは空文字が代入されている点に注意
 
 	constructor(id: string, path: string) {
 		super(id, path);
@@ -17,13 +17,23 @@ export class XHRTextAsset extends Asset implements pdi.TextAsset {
 				handler._onAssetError(this, error);
 				return;
 			}
+			if (!responseText) {
+				handler._onAssetError(
+					this,
+					{
+						name: "AssetLoadError",
+						message: "XHRTextAsset#_load(): no data received",
+						retriable: false
+					});
+				return;
+			}
 			this.data = responseText;
 			handler._onAssetLoad(this);
 		});
 	}
 
 	destroy(): void {
-		this.data = undefined;
+		this.data = undefined!;
 		super.destroy();
 	}
 }
