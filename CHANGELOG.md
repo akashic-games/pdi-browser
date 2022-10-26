@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 2.3.3-beta.0
+## 2.4.0-beta.0
 * @akashic/pdi-types@1.5.0-beta.0 に追従
 
 ## 2.3.2
