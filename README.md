@@ -37,10 +37,22 @@ require("@akashic/pdi-browser/lib/canvas");  // WebGLを利用するRenderer実�
 
 ## テスト方法
 
-testem経由で実際にWebブラウザを起動するテストが実行されます。
-
 ```sh
 npm test
+```
+
+### jest によるユニットテスト
+
+```sh
+npm run jest:unit
+```
+
+### jest による E2E テスト
+
+実行前に `npm run build` で `./build/pdi-browser.js` が生成されていることを確認してください。
+
+```sh
+npm run jest:e2e
 ```
 
 ## ライセンス

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="./pdi-browser.js"></script>
+  <script type="module">
+    import { MockAudioSystem } from "./helpers/MockAudioSystem.js";
+    window.__mock__ = window.__mock__ || {};
+    window.__mock__.MockAudioSystem = MockAudioSystem;
+  </script>
+  <title>E2E Test</title>
+</head>
+<body>
+</body>
+</html>
