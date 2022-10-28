@@ -13,9 +13,10 @@ export class ProxyAudioAsset extends AudioAsset {
 		duration: number,
 		system: pdi.AudioSystem,
 		loop: boolean,
-		hint: pdi.AudioAssetHint
+		hint: pdi.AudioAssetHint,
+		offset: number
 	) {
-		super(id, assetPath, duration, system, loop, hint);
+		super(id, assetPath, duration, system, loop, hint, offset);
 		this._handlerSet = handlerSet;
 	}
 
@@ -30,7 +31,8 @@ export class ProxyAudioAsset extends AudioAsset {
 			assetPath: this.path,
 			duration: this.duration,
 			loop: this.loop,
-			hint: this.hint
+			hint: this.hint,
+			offset: this.offset
 		}, (err?: any) => {
 			if (err) {
 				loader._onAssetError(this, ExceptionFactory.createAssetLoadError(err));

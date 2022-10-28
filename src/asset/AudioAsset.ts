@@ -7,15 +7,25 @@ export abstract class AudioAsset extends Asset implements pdi.AudioAsset {
 	duration: number;
 	loop: boolean;
 	hint: pdi.AudioAssetHint;
+	offset: number;
 	_system: pdi.AudioSystem;
 	_lastPlayedPlayer: pdi.AudioPlayer | undefined;
 
-	constructor(id: string, path: string, duration: number, system: pdi.AudioSystem, loop: boolean, hint: pdi.AudioAssetHint) {
+	constructor(
+		id: string,
+		path: string,
+		duration: number,
+		system: pdi.AudioSystem,
+		loop: boolean,
+		hint: pdi.AudioAssetHint,
+		offset: number
+	) {
 		super(id, path);
 		this.duration = duration;
 		this.loop = loop;
 		this.hint = hint;
 		this._system = system;
+		this.offset = offset;
 	}
 
 	play(): pdi.AudioPlayer {
