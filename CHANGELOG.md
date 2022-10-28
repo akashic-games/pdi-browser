@@ -1,7 +1,7 @@
 # CHANGELOG
 
-## 2.4.0-beta.0
-* @akashic/pdi-types@1.5.0-beta.0 に追従
+## 2.4.0
+* @akashic/pdi-types@1.5.0 に追従
 
 ## 2.3.2
 * `FinalizationRegistry` がない環境で例外が発生する問題を修正
