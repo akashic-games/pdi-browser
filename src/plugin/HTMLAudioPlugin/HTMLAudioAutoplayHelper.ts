@@ -10,57 +10,55 @@ const enum PlayableState {
 let state = PlayableState.Unknown;
 let suspendedAudioElements: HTMLAudioElement[] = [];
 
-module HTMLAudioAutoplayHelper {
-	export function setupChromeMEIWorkaround(audio: HTMLAudioElement): void {
-		// TODO 短時間 (e.g. 同期的) に複数呼ばれると timer が上書きされそう
-		let timer: number | null = null;
-		function playHandler(): void {
-			switch (state) {
-				case PlayableState.Unknown:
-				case PlayableState.WaitingInteraction: // 通常のケースではここには到達しないが、何らかの外因によって音を鳴らすことができた場合
-					playSuspendedAudioElements();
-					break;
-				case PlayableState.Ready:
-					break;
-				default:
-					// do nothing
-			}
-			state = PlayableState.Ready;
-			clearTimeout(timer!);
-		}
-
-		function suspendedHandler(): void {
-			audio.removeEventListener("play", playHandler);
-			switch (state) {
-				case PlayableState.Unknown:
-					suspendedAudioElements.push(audio);
-					state = PlayableState.WaitingInteraction;
-					setUserInteractListener();
-					break;
-				case PlayableState.WaitingInteraction:
-					suspendedAudioElements.push(audio);
-					break;
-				case PlayableState.Ready:
-					audio.play(); // suspendedHandler が呼ばれるまでに音が鳴らせるようになった場合
-					break;
-				default:
-					// do nothing;
-			}
-		}
-
+export function setupChromeMEIWorkaround(audio: HTMLAudioElement): void {
+	// TODO 短時間 (e.g. 同期的) に複数呼ばれると timer が上書きされそう
+	let timer: number | null = null;
+	function playHandler(): void {
 		switch (state) {
 			case PlayableState.Unknown:
-				audio.addEventListener("play", playHandler, true);
-				timer = setTimeout(suspendedHandler, 100); // 明確な根拠はないが100msec待ってもplayされなければ再生できないと判断する
-				break;
-			case PlayableState.WaitingInteraction:
-				suspendedAudioElements.push(audio);
+			case PlayableState.WaitingInteraction: // 通常のケースではここには到達しないが、何らかの外因によって音を鳴らすことができた場合
+				playSuspendedAudioElements();
 				break;
 			case PlayableState.Ready:
 				break;
 			default:
 				// do nothing
 		}
+		state = PlayableState.Ready;
+		clearTimeout(timer!);
+	}
+
+	function suspendedHandler(): void {
+		audio.removeEventListener("play", playHandler);
+		switch (state) {
+			case PlayableState.Unknown:
+				suspendedAudioElements.push(audio);
+				state = PlayableState.WaitingInteraction;
+				setUserInteractListener();
+				break;
+			case PlayableState.WaitingInteraction:
+				suspendedAudioElements.push(audio);
+				break;
+			case PlayableState.Ready:
+				audio.play(); // suspendedHandler が呼ばれるまでに音が鳴らせるようになった場合
+				break;
+			default:
+				// do nothing;
+		}
+	}
+
+	switch (state) {
+		case PlayableState.Unknown:
+			audio.addEventListener("play", playHandler, true);
+			timer = window.setTimeout(suspendedHandler, 100); // 明確な根拠はないが100msec待ってもplayされなければ再生できないと判断する
+			break;
+		case PlayableState.WaitingInteraction:
+			suspendedAudioElements.push(audio);
+			break;
+		case PlayableState.Ready:
+			break;
+		default:
+			// do nothing
 	}
 }
 
@@ -86,5 +84,3 @@ function playSuspendedAudioElements(): void {
 	suspendedAudioElements.forEach((audio) => audio.play());
 	suspendedAudioElements = [];
 }
-
-export = HTMLAudioAutoplayHelper;
