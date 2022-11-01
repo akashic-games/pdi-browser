@@ -160,7 +160,7 @@ describe("WebAudio", () => {
 	describe("WebAudioPlayer", () => {
 		const seAssetPath = "audio/se";
 
-		// 音の再生は AudioSystem の実装側の責務となっているので一旦無効にしておく
+		// この箇所で AudioPlayer のインスタンスを取得する手段が存在しないため、一旦無効にしておく
 		xit("#play() すると音を再生できる", async () => {
 			const [asset, player] = await page.evaluate((seAssetPath) => {
 				const { WebAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
