@@ -1,3 +1,5 @@
+// referred to https://jestjs.io/ja/docs/puppeteer
+
 const { readFile } = require("fs").promises;
 const os = require("os");
 const path = require("path");
