@@ -26,9 +26,10 @@ export class ProxyAudioPlugin implements AudioPlugin {
 		duration: number,
 		system: pdi.AudioSystem,
 		loop: boolean,
-		hint: pdi.AudioAssetHint
+		hint: pdi.AudioAssetHint,
+		offset: number
 	): AudioAsset {
-		return new ProxyAudioAsset(this._handlerSet, id, assetPath, duration, system, loop, hint);
+		return new ProxyAudioAsset(this._handlerSet, id, assetPath, duration, system, loop, hint, offset);
 	}
 
 	createPlayer(system: pdi.AudioSystem, manager: AudioManager): AudioPlayer {

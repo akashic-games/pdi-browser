@@ -50,9 +50,7 @@ export function setupChromeMEIWorkaround(audio: HTMLAudioElement): void {
 	switch (state) {
 		case PlayableState.Unknown:
 			audio.addEventListener("play", playHandler, true);
-			if (timer != null) {
-				timer = window.setTimeout(suspendedHandler, 100); // 明確な根拠はないが100msec待ってもplayされなければ再生できないと判断する
-			}
+			timer = window.setTimeout(suspendedHandler, 100); // 明確な根拠はないが100msec待ってもplayされなければ再生できないと判断する
 			break;
 		case PlayableState.WaitingInteraction:
 			suspendedAudioElements.push(audio);
