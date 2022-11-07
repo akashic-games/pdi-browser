@@ -39,7 +39,7 @@ describe("HTMLAudio", () => {
 				const { HTMLAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
 				const plugin = new HTMLAudioPlugin();
 				const system = new window.__mock__.MockAudioSystem({id: "voice"});
-				const asset = plugin.createAsset("id", audioAssetPath, 100, system, false, {});
+				const asset = plugin.createAsset("id", audioAssetPath, 100, system, false, {}, 10);
 				return new Promise<AudioAsset>((resolve, reject) => {
 					const loader: AssetLoadHandler = {
 						_onAssetLoad: (asset: AudioAsset) => {
@@ -55,6 +55,8 @@ describe("HTMLAudio", () => {
 
 			expect(asset.data).not.toBeUndefined();
 			expect(asset.path).toContain(audioAssetPath);
+			expect(asset.duration).toBe(100);
+			expect(asset.offset).toBe(10);
 		});
 
 		it("オーディオアセットの拡張子がファイル名の末尾につく", async () => {
@@ -63,7 +65,7 @@ describe("HTMLAudio", () => {
 				const { HTMLAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
 				const plugin = new HTMLAudioPlugin();
 				const system = new window.__mock__.MockAudioSystem({id: "voice"});
-				const asset = plugin.createAsset("id", audioAssetPath + "?" + query, 100, system, false, {});
+				const asset = plugin.createAsset("id", audioAssetPath + "?" + query, 100, system, false, {}, 0);
 				return new Promise<AudioAsset>((resolve, reject) => {
 					const loader: AssetLoadHandler = {
 						_onAssetLoad: (asset: AudioAsset) => {
@@ -85,7 +87,7 @@ describe("HTMLAudio", () => {
 				const { HTMLAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
 				const plugin = new HTMLAudioPlugin();
 				const system = new window.__mock__.MockAudioSystem({id: "voice"});
-				const asset = plugin.createAsset("id", "not_found_audio", 100, system, false, {});
+				const asset = plugin.createAsset("id", "not_found_audio", 100, system, false, {}, 0);
 				return new Promise<AssetLoadError>((resolve, reject) => {
 					const loader: AssetLoadHandler = {
 						_onAssetLoad: (_asset: AudioAsset) => {
@@ -110,7 +112,7 @@ describe("HTMLAudio", () => {
 					const plugin = new HTMLAudioPlugin();
 					plugin.supportedFormats = [format];
 					const system = new window.__mock__.MockAudioSystem({id: "voice"});
-					const asset = plugin.createAsset("id", audioAssetPath, 100, system, false, {});
+					const asset = plugin.createAsset("id", audioAssetPath, 100, system, false, {}, 0);
 					return new Promise<AudioAsset>((resolve) => {
 						const loader: AssetLoadHandler = {
 							_onAssetLoad: (asset: AudioAsset) => {
@@ -137,7 +139,7 @@ describe("HTMLAudio", () => {
 				const plugin = new HTMLAudioPlugin();
 				plugin.supportedFormats = ["aac", "mp4"];
 				const system = new window.__mock__.MockAudioSystem({id: "voice"});
-				const asset = plugin.createAsset("id", audioAsset2Path + "?" + query, 100, system, false, {});
+				const asset = plugin.createAsset("id", audioAsset2Path + "?" + query, 100, system, false, {}, 0);
 				return new Promise<AudioAsset>((resolve) => {
 					const loader: AssetLoadHandler = {
 						_onAssetLoad: (asset: AudioAsset) => {
@@ -166,7 +168,7 @@ describe("HTMLAudio", () => {
 				const plugin = new HTMLAudioPlugin();
 				plugin.supportedFormats = ["aac", "mp4"];
 				const system = new window.__mock__.MockAudioSystem({id: "voice"});
-				const asset = plugin.createAsset("id", seAssetPath, 100, system, false, {});
+				const asset = plugin.createAsset("id", seAssetPath, 100, system, false, {}, 0);
 				const player = asset.play();
 				player.changeVolume(0.1);
 				return new Promise<[AudioAsset, AudioPlayer]>((resolve, reject) => {
