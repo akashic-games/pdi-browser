@@ -22,7 +22,7 @@ export class HTMLAudioAsset extends AudioAsset {
 			return;
 		}
 
-		const audio = new Audio();
+		const audio = this.createAudioElement();
 		const startLoadingAudio = (path: string, handlers: MediaLoaderEventHandlerSet): void => {
 			// autoplay は preload よりも優先されるため明示的にfalseとする
 			audio.autoplay = false;
@@ -97,7 +97,7 @@ export class HTMLAudioAsset extends AudioAsset {
 	}
 
 	cloneElement(): HTMLAudioElement | null {
-		return this.data ? new Audio(this.data.src) : null;
+		return this.data ? this.createAudioElement(this.data.src) : null;
 	}
 
 	_assetPathFilter(path: string): string {
@@ -111,6 +111,10 @@ export class HTMLAudioAsset extends AudioAsset {
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない
 		// TODO: _assetPathFilter() における戻り値 `null` の扱い
 		return null!;
+	}
+
+	protected createAudioElement(src?: string): HTMLAudioElement {
+		return new Audio(src);
 	}
 
 	private _attachAll(audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void {

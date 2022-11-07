@@ -9,3 +9,4 @@ build
 lib
 tmp
 .idea
+e2e/public/pdi-browser.js
