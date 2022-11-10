@@ -84,6 +84,8 @@ describe("Renderer", () => {
 			}, rendererCandidate, compositeOperations);
 
 			await page.screenshot({ path: join(__dirname, "results", `composite-operations-rects-${rendererCandidate}.png`) });
+
+			// TODO: Canvas と WebGL で描画差異が無いことを確認 (現状は描画差異があるのでテストは不実行)
 		});
 
 		it(`rendering (${rendererCandidate}) - compares composite operations with rects`, async () => {
@@ -144,6 +146,8 @@ describe("Renderer", () => {
 			}, rendererCandidate, compositeOperations);
 
 			await page.screenshot({ path: join(__dirname, "results", `composite-operations-images-${rendererCandidate}.png`) });
+
+			// TODO: Canvas と WebGL で描画差異が無いことを確認 (現状は描画差異があるのでテストは不実行)
 		});
 	}
 });
