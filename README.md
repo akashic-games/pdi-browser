@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://github.com/akashic-games/pdi-browser/blob/master/img/akashic.png"/>
+<img src="https://raw.githubusercontent.com/akashic-games/pdi-browser/main/img/akashic.png"/>
 </p>
 
 # pdi-browser
@@ -54,6 +54,10 @@ npm run jest:unit
 ```sh
 npm run jest:e2e
 ```
+
+#### レンダラの E2E テスト
+
+Canvas, WebGL による E2E テストの描画結果は `./e2e/tests/renderer/results/` に出力されます。
 
 ## ライセンス
 本リポジトリは MIT License の元で公開されています。

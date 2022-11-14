@@ -7,11 +7,14 @@
   <script src="./pdi-browser.js"></script>
   <script type="module">
     import { MockAudioSystem } from "./helpers/MockAudioSystem.js";
+    import { preparePlatform } from "./helpers/preparePlatform.js";
     window.__mock__ = window.__mock__ || {};
     window.__mock__.MockAudioSystem = MockAudioSystem;
+    window.__mock__.preparePlatform = preparePlatform;
   </script>
   <title>E2E Test</title>
 </head>
 <body>
+  <div id="container-view"></div>
 </body>
 </html>

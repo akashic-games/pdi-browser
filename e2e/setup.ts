@@ -2,6 +2,7 @@ import { mkdir, writeFile } from "fs/promises";
 import * as http from "http";
 import { tmpdir } from "os";
 import * as path from "path";
+import type { Platform, RendererRequirement } from "@akashic/pdi-types";
 import { getPortPromise } from "portfinder";
 import type { Browser } from "puppeteer";
 import { launch } from "puppeteer";
@@ -24,6 +25,7 @@ declare global {
 
 	interface Window {
 		__mock__: {
+			preparePlatform: (rendererRequirement: RendererRequirement) => Platform;
 			MockAudioSystem: any;
 		};
 	}

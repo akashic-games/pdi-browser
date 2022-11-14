@@ -3,9 +3,9 @@
 
 import type { AssetLoadError, AssetLoadHandler, AudioAsset, AudioPlayer } from "@akashic/pdi-types";
 import type { Page } from "puppeteer";
-import type * as index from "../../src";
+import type * as index from "../../../src";
 
-describe("HTMLAudio", () => {
+describe("WebAudio", () => {
 	const audioAssetPath = "audio/bgm";
 	const timeout = 5000;
 
@@ -24,20 +24,20 @@ describe("HTMLAudio", () => {
 		await page.reload();
 	});
 
-	it("サポートしてる実行環境ではtrueを返す", async () => {
+	it("サポートしてる実行環境では true を返す", async () => {
 		const isSupported = await page.evaluate(() => {
-			const { HTMLAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
-			return HTMLAudioPlugin.isSupported();
+			const { WebAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
+			return WebAudioPlugin.isSupported();
 		});
 
 		expect(isSupported).toBe(true);
 	});
 
-	describe("HTMLAudioAsset", () => {
+	describe("WebAudioAsset", () => {
 		it("#load() すると audio data が取得できる", async () => {
 			const asset = await page.evaluate((audioAssetPath) => {
-				const { HTMLAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
-				const plugin = new HTMLAudioPlugin();
+				const { WebAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
+				const plugin = new WebAudioPlugin();
 				const system = new window.__mock__.MockAudioSystem({id: "voice"});
 				const asset = plugin.createAsset("id", audioAssetPath, 100, system, false, {}, 10);
 				return new Promise<AudioAsset>((resolve, reject) => {
@@ -53,7 +53,7 @@ describe("HTMLAudio", () => {
 				});
 			}, audioAssetPath);
 
-			expect(asset.data).not.toBeUndefined();
+			expect(asset.data).toBeDefined();
 			expect(asset.path).toContain(audioAssetPath);
 			expect(asset.duration).toBe(100);
 			expect(asset.offset).toBe(10);
@@ -62,8 +62,8 @@ describe("HTMLAudio", () => {
 		it("オーディオアセットの拡張子がファイル名の末尾につく", async () => {
 			const query = "rev=1234";
 			const asset = await page.evaluate((audioAssetPath, query) => {
-				const { HTMLAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
-				const plugin = new HTMLAudioPlugin();
+				const { WebAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
+				const plugin = new WebAudioPlugin();
 				const system = new window.__mock__.MockAudioSystem({id: "voice"});
 				const asset = plugin.createAsset("id", audioAssetPath + "?" + query, 100, system, false, {}, 0);
 				return new Promise<AudioAsset>((resolve, reject) => {
@@ -84,8 +84,8 @@ describe("HTMLAudio", () => {
 
 		it("存在しないファイルを #load() すると onAssetError が呼ばれる", async () => {
 			const error = await page.evaluate(() => {
-				const { HTMLAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
-				const plugin = new HTMLAudioPlugin();
+				const { WebAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
+				const plugin = new WebAudioPlugin();
 				const system = new window.__mock__.MockAudioSystem({id: "voice"});
 				const asset = plugin.createAsset("id", "not_found_audio", 100, system, false, {}, 0);
 				return new Promise<AssetLoadError>((resolve, reject) => {
@@ -101,6 +101,7 @@ describe("HTMLAudio", () => {
 				});
 			});
 
+
 			expect(error.name).toEqual("AssetLoadError");
 			expect(typeof error.message).toEqual("string");
 		});
@@ -108,8 +109,8 @@ describe("HTMLAudio", () => {
 		it("サポートされているファイルの種類でロードが行われる", async () => {
 			for (const format of ["ogg", "aac"]) {
 				const asset = await page.evaluate((audioAssetPath, format) => {
-					const { HTMLAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
-					const plugin = new HTMLAudioPlugin();
+					const { WebAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
+					const plugin = new WebAudioPlugin();
 					plugin.supportedFormats = [format];
 					const system = new window.__mock__.MockAudioSystem({id: "voice"});
 					const asset = plugin.createAsset("id", audioAssetPath, 100, system, false, {}, 0);
@@ -135,9 +136,9 @@ describe("HTMLAudio", () => {
 			const audioAsset2Path = "audio/bgm2";
 			const query = "rev=4321";
 			const asset = await page.evaluate((audioAsset2Path, query) => {
-				const { HTMLAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
-				const plugin = new HTMLAudioPlugin();
-				plugin.supportedFormats = ["aac", "mp4"];
+				const { WebAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
+				const plugin = new WebAudioPlugin();
+				plugin.supportedFormats = ["aac"];
 				const system = new window.__mock__.MockAudioSystem({id: "voice"});
 				const asset = plugin.createAsset("id", audioAsset2Path + "?" + query, 100, system, false, {}, 0);
 				return new Promise<AudioAsset>((resolve) => {
@@ -158,15 +159,14 @@ describe("HTMLAudio", () => {
 		});
 	});
 
-	describe("HTMLAudioPlayer", () => {
+	describe("WebAudioPlayer", () => {
 		const seAssetPath = "audio/se";
 
 		// この箇所で AudioPlayer のインスタンスを取得する手段が存在しないため、一旦無効にしておく
 		xit("#play() すると音を再生できる", async () => {
 			const [asset, player] = await page.evaluate((seAssetPath) => {
-				const { HTMLAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
-				const plugin = new HTMLAudioPlugin();
-				plugin.supportedFormats = ["aac", "mp4"];
+				const { WebAudioPlugin } = require("@akashic/pdi-browser") as typeof index;
+				const plugin = new WebAudioPlugin();
 				const system = new window.__mock__.MockAudioSystem({id: "voice"});
 				const asset = plugin.createAsset("id", seAssetPath, 100, system, false, {}, 0);
 				const player = asset.play();
