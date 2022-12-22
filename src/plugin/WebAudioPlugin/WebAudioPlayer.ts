@@ -57,12 +57,6 @@ export class WebAudioPlayer extends AudioPlayer {
 				bufferNode.loop = asset.loop;
 				this._sourceNode.start(0);
 			}
-
-			if (asset.duration > 0) {
-				this._sourceNode.start(0, asset.offset / 1000, asset.duration / 1000);
-			} else {
-				this._sourceNode.start(0, asset.offset / 1000);
-			}
 		} else {
 			// 再生できるオーディオがない場合。duration後に停止処理だけ行う(処理のみ進め音は鳴らさない)
 			this._dummyDurationWaitTimer = setTimeout(this._endedEventHandler, asset.duration);
