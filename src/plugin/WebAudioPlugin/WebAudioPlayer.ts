@@ -47,7 +47,8 @@ export class WebAudioPlayer extends AudioPlayer {
 			// Chromeだとevent listerで指定した場合に動かないことがある
 			// https://github.com/mozilla-appmaker/appmaker/issues/1984
 			this._sourceNode.onended = this._endedEventHandler;
-			if (asset._system.id === "music") {
+			// loop時にoffsetを指定すると正しく動作しないことがあるため、暫定対応としてloopが真の場合はoffsetを指定しない
+			if (asset.loop) {
 				bufferNode.loop = asset.loop;
 				this._sourceNode.start(0);
 			} else {
