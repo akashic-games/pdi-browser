@@ -40,7 +40,6 @@ export class WebAudioPlayer extends AudioPlayer {
 		}
 		if (asset.data) {
 			const bufferNode = helper.createBufferNode(this._audioContext);
-			bufferNode.loop = asset.loop;
 			bufferNode.buffer = asset.data;
 			this._gainNode.gain.value = this._calculateVolume();
 			bufferNode.connect(this._gainNode);
@@ -48,10 +47,17 @@ export class WebAudioPlayer extends AudioPlayer {
 			// Chromeだとevent listerで指定した場合に動かないことがある
 			// https://github.com/mozilla-appmaker/appmaker/issues/1984
 			this._sourceNode.onended = this._endedEventHandler;
-			if (asset.duration > 0) {
-				this._sourceNode.start(0, asset.offset / 1000, asset.duration / 1000);
+			// loop時にoffsetを指定すると正しく動作しないことがあるため、暫定対応としてloopが真の場合はoffsetを指定しない
+			if (asset.loop) {
+				bufferNode.loop = asset.loop;
+				this._sourceNode.start(0);
 			} else {
-				this._sourceNode.start(0, asset.offset / 1000);
+                const offset = (asset.offset ?? 0) / 1000;
+				if (asset.duration > 0) {
+					this._sourceNode.start(0, offset, asset.duration / 1000);
+				} else {
+					this._sourceNode.start(0, offset);
+				}
 			}
 		} else {
 			// 再生できるオーディオがない場合。duration後に停止処理だけ行う(処理のみ進め音は鳴らさない)
