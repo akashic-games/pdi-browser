@@ -52,7 +52,7 @@ export class WebAudioPlayer extends AudioPlayer {
 				bufferNode.loop = asset.loop;
 				this._sourceNode.start(0);
 			} else {
-                const offset = (asset.offset ?? 0) / 1000;
+				const offset = (asset.offset ?? 0) / 1000;
 				if (asset.duration > 0) {
 					this._sourceNode.start(0, offset, asset.duration / 1000);
 				} else {
