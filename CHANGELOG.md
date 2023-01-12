@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.4.1
+* WebAudioPlugin で music がループ再生されない問題を修正
+
 ## 2.4.0
 * @akashic/pdi-types@1.5.0 に追従
 
