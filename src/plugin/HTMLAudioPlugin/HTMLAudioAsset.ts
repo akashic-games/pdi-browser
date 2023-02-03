@@ -14,6 +14,19 @@ export class HTMLAudioAsset extends AudioAsset {
 	private _intervalId: number = -1;
 	private _intervalCount: number = 0;
 
+	constructor(
+		id: string,
+		path: string,
+		duration: number,
+		system: pdi.AudioSystem,
+		loop: boolean,
+		hint: pdi.AudioAssetHint,
+		offset: number
+	) {
+		super(id, path, duration, system, loop, hint, offset);
+		this.path = this._getPathFromExtensions() ?? this.path;
+	}
+
 	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {
 			// 再生可能な形式がない。実際には鳴らない音声としてロード成功しておく
@@ -98,6 +111,17 @@ export class HTMLAudioAsset extends AudioAsset {
 
 	cloneElement(): HTMLAudioElement | null {
 		return this.data ? this.createAudioElement(this.data.src) : null;
+	}
+
+	_getPathFromExtensions(): string | null {
+		if (this.hint.extensions && this.hint.extensions.length > 0) {
+			for (const ext of this.hint.extensions) {
+				if (HTMLAudioAsset.supportedFormats.indexOf(ext) !== -1) {
+					return addExtname(this.originalPath, ext);
+				}
+			}
+		}
+		return null;
 	}
 
 	_assetPathFilter(path: string): string {

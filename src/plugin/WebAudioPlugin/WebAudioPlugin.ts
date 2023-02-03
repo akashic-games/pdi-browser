@@ -62,7 +62,7 @@ export class WebAudioPlugin implements AudioPlugin {
 		const audioElement = document.createElement("audio");
 		const supportedFormats: string[] = [];
 		try {
-			const supportedExtensions = ["ogg", "aac", "mp4"];
+			const supportedExtensions = ["ogg", "aac", "mp4", "m4a"];
 			for (let i = 0, len = supportedExtensions.length; i < len; i++) {
 				const ext = supportedExtensions[i];
 				const canPlay = audioElement.canPlayType("audio/" + ext) as string;

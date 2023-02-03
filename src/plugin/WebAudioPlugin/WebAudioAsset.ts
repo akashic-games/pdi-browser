@@ -9,6 +9,20 @@ export class WebAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[] = [];
 
+	constructor(
+		id: string,
+		path: string,
+		duration: number,
+		system: pdi.AudioSystem,
+		loop: boolean,
+		hint: pdi.AudioAssetHint,
+		offset: number
+	) {
+		super(id, path, duration, system, loop, hint, offset);
+		this.path = this._getPathFromExtensions() ?? this.path;
+	}
+
+
 	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {
 			// 再生可能な形式がない。実際には鳴らない音声としてロード成功しておく
@@ -60,6 +74,17 @@ export class WebAudioAsset extends AudioAsset {
 			return;
 		}
 		loadArrayBuffer(this.path, onLoadArrayBufferHandler, errorHandler);
+	}
+
+	_getPathFromExtensions(): string | null {
+		if (this.hint.extensions && this.hint.extensions.length > 0) {
+			for (const ext of this.hint.extensions) {
+				if (WebAudioAsset.supportedFormats.indexOf(ext) !== -1) {
+					return addExtname(this.originalPath, ext);
+				}
+			}
+		}
+		return null;
 	}
 
 	_assetPathFilter(path: string): string {
