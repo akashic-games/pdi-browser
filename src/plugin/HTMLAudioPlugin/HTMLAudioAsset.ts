@@ -14,19 +14,6 @@ export class HTMLAudioAsset extends AudioAsset {
 	private _intervalId: number = -1;
 	private _intervalCount: number = 0;
 
-	constructor(
-		id: string,
-		path: string,
-		duration: number,
-		system: pdi.AudioSystem,
-		loop: boolean,
-		hint: pdi.AudioAssetHint,
-		offset: number
-	) {
-		super(id, path, duration, system, loop, hint, offset);
-		this.path = this._getPathFromExtensions() ?? this.path;
-	}
-
 	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {
 			// 再生可能な形式がない。実際には鳴らない音声としてロード成功しておく
@@ -113,17 +100,6 @@ export class HTMLAudioAsset extends AudioAsset {
 		return this.data ? this.createAudioElement(this.data.src) : null;
 	}
 
-	_getPathFromExtensions(): string | null {
-		if (this.hint.extensions && this.hint.extensions.length > 0) {
-			for (const ext of this.hint.extensions) {
-				if (HTMLAudioAsset.supportedFormats.indexOf(ext) !== -1) {
-					return addExtname(this.originalPath, ext);
-				}
-			}
-		}
-		return null;
-	}
-
 	_assetPathFilter(path: string): string {
 		if (HTMLAudioAsset.supportedFormats.indexOf("ogg") !== -1) {
 			return addExtname(path, "ogg");
@@ -135,6 +111,17 @@ export class HTMLAudioAsset extends AudioAsset {
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない
 		// TODO: _assetPathFilter() における戻り値 `null` の扱い
 		return null!;
+	}
+
+	_getPathFromExtensions(): string | null {
+		if (this.hint && this.hint.extensions && this.hint.extensions.length > 0) {
+			for (const ext of this.hint.extensions) {
+				if (HTMLAudioAsset.supportedFormats.indexOf(ext) !== -1) {
+					return addExtname(this.originalPath, ext);
+				}
+			}
+		}
+		return null;
 	}
 
 	protected createAudioElement(src?: string): HTMLAudioElement {
