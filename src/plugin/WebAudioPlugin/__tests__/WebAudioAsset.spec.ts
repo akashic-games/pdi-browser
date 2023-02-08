@@ -20,11 +20,10 @@ describe("HTMLAudioAsset", () => {
 		expect(asset._system).toEqual(system);
 	});
 
-	it("can decide path by hint.extensions", () => {
-		// hint.extensionsで指定されている拡張子が優先的に選択される
+	it("hint.extensionsで指定されている拡張子が優先的に選択される", () => {
 		const system = new MockAudioSystem({ id: "audio-system" });
-		const asset1 = new WebAudioAsset(
-			"audio-asset1",
+		const asset = new WebAudioAsset(
+			"audio-asset",
 			"/path/to/audio",
 			100,
 			system,
@@ -32,12 +31,14 @@ describe("HTMLAudioAsset", () => {
 			{ streaming: false, extensions: ["m4a", "aac"] },
 			10
 		);
-		expect(asset1.id).toBe("audio-asset1");
-		expect(asset1.path).toBe("/path/to/audio.m4a");
+		expect(asset.id).toBe("audio-asset");
+		expect(asset.path).toBe("/path/to/audio.m4a");
+	});
 
-		// hint.extensionsで指定されている拡張子でもサポートされていないものは選択されない
-		const asset2 = new WebAudioAsset(
-			"audio-asset2",
+	it("hint.extensionsで指定されている拡張子でもサポートされていないものは選択されない", () => {
+		const system = new MockAudioSystem({ id: "audio-system" });
+		const asset = new WebAudioAsset(
+			"audio-asset",
 			"/path/to/audio",
 			100,
 			system,
@@ -45,7 +46,7 @@ describe("HTMLAudioAsset", () => {
 			{ streaming: false, extensions: ["mp4", "aac"] },
 			10
 		);
-		expect(asset2.id).toBe("audio-asset2");
-		expect(asset2.path).toBe("/path/to/audio.aac");
+		expect(asset.id).toBe("audio-asset");
+		expect(asset.path).toBe("/path/to/audio.aac");
 	});
 });
