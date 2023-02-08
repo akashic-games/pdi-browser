@@ -26,8 +26,7 @@ export abstract class AudioAsset extends Asset implements pdi.AudioAsset {
 		this.hint = hint;
 		this._system = system;
 		this.offset = offset;
-		// hint情報を親クラスから参照できないため、親クラスで取得したパスをhint情報を考慮したパスに書き換える対応を行う
-		this.path = this._getPathFromExtensions() ?? this.path;
+		this.path = this._modifyPath(this.path);
 	}
 
 	play(): pdi.AudioPlayer {
@@ -59,5 +58,6 @@ export abstract class AudioAsset extends Asset implements pdi.AudioAsset {
 
 	abstract _assetPathFilter(path: string): string;
 
-	abstract _getPathFromExtensions(): string | null;
+	// this._assetPathFilter() の呼び出しタイミングでは hint 等のプロパティを参照することができないため、それらのプロパティを考慮してパスを書き換えるために用意したメソッド
+	abstract _modifyPath(path: string): string;
 }

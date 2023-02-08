@@ -113,7 +113,7 @@ export class HTMLAudioAsset extends AudioAsset {
 		return null!;
 	}
 
-	_getPathFromExtensions(): string | null {
+	_modifyPath(path: string): string {
 		if (this.hint && this.hint.extensions && this.hint.extensions.length > 0) {
 			for (const ext of this.hint.extensions) {
 				if (HTMLAudioAsset.supportedFormats.indexOf(ext) !== -1) {
@@ -121,7 +121,7 @@ export class HTMLAudioAsset extends AudioAsset {
 				}
 			}
 		}
-		return null;
+		return path;
 	}
 
 	protected createAudioElement(src?: string): HTMLAudioElement {

@@ -46,7 +46,7 @@ export class ProxyAudioAsset extends AudioAsset {
 		return path;
 	}
 
-	_getPathFromExtensions(): string | null {
-		return null;
+	_modifyPath(path: string): string {
+		return path;
 	}
 }
