@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.4.2
+* HTMLAudioPlugin で offset を利用できるよう修正
+
 ## 2.4.1
 * WebAudioPlugin で music がループ再生されない問題を修正
 
