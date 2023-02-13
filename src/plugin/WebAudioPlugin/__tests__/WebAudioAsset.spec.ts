@@ -5,7 +5,7 @@ import { WebAudioAsset } from "../WebAudioAsset";
 
 describe("HTMLAudioAsset", () => {
 	beforeEach(() => {
-		WebAudioAsset.supportedFormats = ["ogg", "aac", "m4a"];
+		WebAudioAsset.supportedFormats = ["m4a", "ogg", "aac"];
 	});
 
 	it("can instantiate", () => {

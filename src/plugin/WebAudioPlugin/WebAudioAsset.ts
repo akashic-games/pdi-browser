@@ -77,8 +77,8 @@ export class WebAudioAsset extends AudioAsset {
 
 	_modifyPath(path: string): string {
 		if (this.hint && this.hint.extensions && this.hint.extensions.length > 0) {
-			for (const ext of this.hint.extensions) {
-				if (WebAudioAsset.supportedFormats.indexOf(ext) !== -1) {
+			for (const ext of WebAudioAsset.supportedFormats) {
+				if (this.hint.extensions.indexOf(ext) !== -1) {
 					return addExtname(this.originalPath, ext);
 				}
 			}

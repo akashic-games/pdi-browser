@@ -115,8 +115,8 @@ export class HTMLAudioAsset extends AudioAsset {
 
 	_modifyPath(path: string): string {
 		if (this.hint && this.hint.extensions && this.hint.extensions.length > 0) {
-			for (const ext of this.hint.extensions) {
-				if (HTMLAudioAsset.supportedFormats.indexOf(ext) !== -1) {
+			for (const ext of HTMLAudioAsset.supportedFormats) {
+				if (this.hint.extensions.indexOf(ext) !== -1) {
 					return addExtname(this.originalPath, ext);
 				}
 			}

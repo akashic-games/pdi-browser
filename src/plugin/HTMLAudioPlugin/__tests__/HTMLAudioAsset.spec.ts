@@ -3,7 +3,7 @@ import { HTMLAudioAsset } from "../HTMLAudioAsset";
 
 describe("HTMLAudioAsset", () => {
 	beforeEach(() => {
-		HTMLAudioAsset.supportedFormats = ["ogg", "aac", "m4a"];
+		HTMLAudioAsset.supportedFormats = ["m4a", "ogg", "aac"];
 	});
 
 	it("can instantiate", () => {
