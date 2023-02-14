@@ -20,7 +20,7 @@ describe("HTMLAudioAsset", () => {
 		expect(asset._system).toEqual(system);
 	});
 
-	it("hint.extensionsで指定されている拡張子が優先的に選択される", () => {
+	it("hint.extensionsが指定されている場合、supportredFormats の登録順の早いものが優先的に選択される", () => {
 		const system = new MockAudioSystem({ id: "audio-system" });
 		const asset = new WebAudioAsset(
 			"audio-asset",
@@ -35,7 +35,7 @@ describe("HTMLAudioAsset", () => {
 		expect(asset.path).toBe("/path/to/audio.m4a");
 	});
 
-	it("hint.extensionsで指定されている拡張子でもサポートされていないものは選択されない", () => {
+	it("hint.extensionsで指定されている拡張子でもsupportredFormatsに登録されていないものは選択されない", () => {
 		const system = new MockAudioSystem({ id: "audio-system" });
 		const asset = new WebAudioAsset(
 			"audio-asset",
