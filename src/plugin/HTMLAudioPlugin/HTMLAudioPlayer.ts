@@ -33,14 +33,14 @@ export class HTMLAudioPlayer extends AudioPlayer {
 
 		if (audio) {
 			audio.currentTime = asset.offset ?? 0;
-            const offset = (asset.offset ?? 0) / 1000;
-            const durationSec = asset.duration / 1000;
+			const offset = (asset.offset ?? 0) / 1000;
 			audio.currentTime = offset;
-			if (asset.loop) {
-				const durationMargin = 1; // 最後の ontimeupdate はオーディオの末端で発火するとは限らないため、若干の手前で止まってもループできるようにする
-				audio.ontimeupdate = () => {
-					if (durationSec <= audio.currentTime - offset + durationMargin) audio.currentTime = offset;
+			if (offset > 0) {
+				audio.onended = () => {
+					audio.currentTime = offset;
 				};
+			} else {
+				audio.loop = asset.loop;
 			}
 
 			setupChromeMEIWorkaround(audio);
