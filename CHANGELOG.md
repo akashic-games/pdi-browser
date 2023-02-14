@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased changes
+## 2.4.2
 * AudioAsset の拡張子を AudioAsset#hint で指定できるように
 
 ## 2.4.1
