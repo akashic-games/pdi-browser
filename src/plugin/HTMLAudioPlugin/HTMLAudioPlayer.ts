@@ -35,9 +35,10 @@ export class HTMLAudioPlayer extends AudioPlayer {
 			audio.currentTime = asset.offset ?? 0;
 			const offset = (asset.offset ?? 0) / 1000;
 			audio.currentTime = offset;
-			if (offset > 0) {
+			if (asset.loop && offset > 0) {
 				audio.onended = () => {
 					audio.currentTime = offset;
+					audio.play().catch(function (_err) { });
 				};
 			} else {
 				audio.loop = asset.loop;
