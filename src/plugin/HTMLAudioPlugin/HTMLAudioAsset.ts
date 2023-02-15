@@ -113,6 +113,17 @@ export class HTMLAudioAsset extends AudioAsset {
 		return null!;
 	}
 
+	_modifyPath(path: string): string {
+		if (this.hint && this.hint.extensions && this.hint.extensions.length > 0) {
+			for (const ext of HTMLAudioAsset.supportedFormats) {
+				if (this.hint.extensions.indexOf(ext) !== -1) {
+					return addExtname(this.originalPath, ext);
+				}
+			}
+		}
+		return path;
+	}
+
 	protected createAudioElement(src?: string): HTMLAudioElement {
 		return new Audio(src);
 	}

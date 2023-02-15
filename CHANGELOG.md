@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.4.2
+* AudioAsset の拡張子を AudioAsset#hint で指定できるように
+
 ## 2.4.1
 * WebAudioPlugin で music がループ再生されない問題を修正
 

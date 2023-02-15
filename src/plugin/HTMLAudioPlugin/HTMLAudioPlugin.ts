@@ -8,7 +8,7 @@ import { HTMLAudioAsset } from "./HTMLAudioAsset";
 import { HTMLAudioPlayer } from "./HTMLAudioPlayer";
 
 export class HTMLAudioPlugin implements AudioPlugin {
-	private _supportedFormats: string[];
+	private _supportedFormats: string[] = [];
 
 	// https://github.com/Modernizr/Modernizr/blob/master/feature-detects/audio.js
 	// https://github.com/CreateJS/SoundJS/blob/master/src/soundjs/htmlaudio/HTMLAudioPlugin.js
@@ -26,8 +26,7 @@ export class HTMLAudioPlugin implements AudioPlugin {
 	}
 
 	constructor() {
-		this._supportedFormats = this._detectSupportedFormats();
-		HTMLAudioAsset.supportedFormats = this.supportedFormats;
+		this.supportedFormats = this._detectSupportedFormats();
 	}
 
 	get supportedFormats(): string[] {
@@ -63,7 +62,8 @@ export class HTMLAudioPlugin implements AudioPlugin {
 		const audioElement = document.createElement("audio");
 		const supportedFormats: string[] = [];
 		try {
-			const supportedExtensions = ["ogg", "aac", "mp4"];
+			// AudioAssetにhint.extensionsが指定されている場合、この配列順をそのまま優先順位として利用する拡張子が決まる
+			const supportedExtensions = ["m4a", "ogg", "aac", "mp4"];
 			for (let i = 0, len = supportedExtensions.length; i < len; i++) {
 				const ext = supportedExtensions[i];
 				const canPlay = audioElement.canPlayType("audio/" + ext) as string;
