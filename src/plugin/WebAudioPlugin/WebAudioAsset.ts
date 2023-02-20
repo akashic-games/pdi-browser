@@ -74,4 +74,15 @@ export class WebAudioAsset extends AudioAsset {
 		// TODO: _assetPathFilter() における戻り値 `null` の扱い
 		return null!;
 	}
+
+	_modifyPath(path: string): string {
+		if (this.hint && this.hint.extensions && this.hint.extensions.length > 0) {
+			for (const ext of WebAudioAsset.supportedFormats) {
+				if (this.hint.extensions.indexOf(ext) !== -1) {
+					return addExtname(this.originalPath, ext);
+				}
+			}
+		}
+		return path;
+	}
 }
