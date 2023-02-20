@@ -40,7 +40,7 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		system: pdi.AudioSystem,
 		loop: boolean,
 		hint: pdi.AudioAssetHint,
-		offset: number = 0
+		offset: number
 	): AudioAsset {
 		const activePlugin = this._audioPluginManager.getActivePlugin();
 		if (!activePlugin) {
