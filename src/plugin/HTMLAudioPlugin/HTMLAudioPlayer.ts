@@ -32,20 +32,22 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		const audio = asset.cloneElement();
 
 		if (audio) {
-			audio.currentTime = asset.offset ?? 0;
-			const offset = (asset.offset ?? 0) / 1000;
-			audio.currentTime = offset;
-			if (asset.loop && offset > 0) {
-				const durationSec = asset.duration / 1000;
-				audio.ontimeupdate = () => {
-					if (durationSec <= audio.currentTime - offset) audio.currentTime = offset;
-				}
-				audio.onended = () => {
-					audio.currentTime = offset;
-					audio.play();
-				};
-			} else {
+			if (asset.offset === undefined) {
+				// offsetが指定されていない場合、durationを無視して全体再生する
 				audio.loop = asset.loop;
+			} else {
+				const offset = (asset.offset ?? 0) / 1000;
+				const durationSec = asset.duration / 1000;
+				audio.currentTime = offset;
+				audio.ontimeupdate = () => {
+					if (durationSec <= audio.currentTime - offset) {
+						if (asset.loop) {
+							audio.currentTime = offset;
+						} else {
+							audio.pause();
+						}
+					}
+				}
 			}
 
 			setupChromeMEIWorkaround(audio);
