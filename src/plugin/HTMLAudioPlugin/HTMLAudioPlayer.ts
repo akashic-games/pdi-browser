@@ -37,15 +37,21 @@ export class HTMLAudioPlayer extends AudioPlayer {
 				audio.loop = asset.loop;
 			} else {
 				const offset = (asset.offset ?? 0) / 1000;
-				const durationSec = asset.duration / 1000;
+				const durationEndSec = asset.duration / 1000 + offset;
 				audio.currentTime = offset;
 				audio.ontimeupdate = () => {
-					if (durationSec <= audio.currentTime - offset) {
+					if (durationEndSec <= audio.currentTime) {
 						if (asset.loop) {
 							audio.currentTime = offset;
 						} else {
 							audio.pause();
 						}
+					}
+				}
+				audio.onended = () => {
+					if (asset.loop) {
+						audio.currentTime = offset;
+						audio.play();
 					}
 				}
 			}
