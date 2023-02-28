@@ -36,24 +36,24 @@ export class HTMLAudioPlayer extends AudioPlayer {
 				// offsetが指定されていない場合、durationを無視して全体再生する
 				audio.loop = asset.loop;
 			} else {
-				const offset = (asset.offset ?? 0) / 1000;
-				const durationEndSec = asset.duration / 1000 + offset;
-				audio.currentTime = offset;
+				const offsetSec = (asset.offset ?? 0) / 1000;
+				const durationEndSec = asset.duration / 1000 + offsetSec;
+				audio.currentTime = offsetSec;
 				audio.ontimeupdate = () => {
 					if (durationEndSec <= audio.currentTime) {
 						if (asset.loop) {
-							audio.currentTime = offset;
+							audio.currentTime = offsetSec;
 						} else {
 							audio.pause();
 						}
 					}
-				}
+				};
 				audio.onended = () => {
 					if (asset.loop) {
-						audio.currentTime = offset;
+						audio.currentTime = offsetSec;
 						audio.play();
 					}
-				}
+				};
 			}
 
 			setupChromeMEIWorkaround(audio);
