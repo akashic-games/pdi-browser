@@ -30,16 +30,35 @@ export class HTMLAudioPlayer extends AudioPlayer {
 			this.stop();
 		}
 		const audio = asset.cloneElement();
+
 		if (audio) {
+			if (asset.offset === undefined) {
+				// offsetが指定されていない場合、durationを無視して全体再生する
+				audio.loop = asset.loop;
+			} else {
+				const offsetSec = (asset.offset ?? 0) / 1000;
+				const durationEndSec = asset.duration / 1000 + offsetSec;
+				audio.currentTime = offsetSec;
+				audio.ontimeupdate = () => {
+					if (durationEndSec <= audio.currentTime) {
+						if (asset.loop) {
+							audio.currentTime = offsetSec;
+						} else {
+							audio.pause();
+						}
+					}
+				};
+				audio.onended = () => {
+					if (asset.loop) {
+						audio.currentTime = offsetSec;
+						audio.play();
+					}
+				};
+			}
+
 			setupChromeMEIWorkaround(audio);
 			audio.volume = this._calculateVolume();
-
-			// TODO asset.offset, asset.duration に対応する。
-			// audio.currentTime と setInterval() で実現できるはずだが、併せて this に紐づいてしまっている _dummyDurationWaitTimer の整理が必要。
-
 			audio.play().catch((_err) => { /* user interactの前にplay()を呼ぶとエラーになる。これはHTMLAudioAutoplayHelperで吸収する */});
-
-			audio.loop = asset.loop;
 			audio.addEventListener("ended", this._endedEventHandler, false);
 			audio.addEventListener("play", this._onPlayEventHandler, false);
 			this._isWaitingPlayEvent = true;

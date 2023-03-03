@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.4.3
+* HTMLAudioPlugin で offset を利用できるように
+
 ## 2.4.2
 * AudioAsset の拡張子を AudioAsset#hint で指定できるように
 
