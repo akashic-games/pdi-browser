@@ -1,5 +1,5 @@
-"use strict";
-import * as pdi from "@akashic/pdi-types";
+import type { CommonOffset, PlatformPointEvent} from "@akashic/pdi-types";
+import { PlatformPointType } from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
 import type { OffsetPosition } from "./OffsetPosition";
 
@@ -14,16 +14,15 @@ export interface PagePosition {
 }
 
 /**
- * 入力ハンドラ。
+ * pointer-events を利用した入力ハンドラ。
  *
- * コンストラクタで受け取ったViewに対してDOMイベントのハンドラを設定する。
- * DOMイベント情報から `PointEventResponse` へ変換したデータを `point{Down, Move, Up}Trigger` を通して通知する。
+ * コンストラクタで受け取ったViewに対して pointer-events のハンドラを設定する。
+ * DOMイベント情報から `PlatformPointEvent` へ変換したデータを `pointTrigger` を通して通知する。
  * Down -> Move -> Up のフローにおける、Moveイベントのロックを管理する。
  */
-export class InputAbstractHandler {
+export class PointerEventHandler {
 	inputView: HTMLElement;
-	pointTrigger: Trigger<pdi.PlatformPointEvent>;
-	_disablePreventDefault: boolean;
+	pointTrigger: Trigger<PlatformPointEvent>;
 
 	private _xScale: number;
 	private _yScale: number;
@@ -35,31 +34,23 @@ export class InputAbstractHandler {
 		return false;
 	}
 
-	/**
-	 * @param inputView inputViewはDOMイベントを設定するHTMLElement
-	 */
-	constructor(inputView: HTMLElement, disablePreventDefault?: boolean) {
-		if (Object.getPrototypeOf && (Object.getPrototypeOf(this) === InputAbstractHandler.prototype)) {
-			throw new Error("InputAbstractHandler is abstract and should not be directly instantiated");
-		}
+	constructor(inputView: HTMLElement) {
 		this.inputView = inputView;
 		this.pointerEventLock = {};
 		this._xScale = 1;
 		this._yScale = 1;
-		this._disablePreventDefault = !!disablePreventDefault;
-		this.pointTrigger = new Trigger<pdi.PlatformPointEvent>();
+		this.pointTrigger = new Trigger<PlatformPointEvent>();
+		inputView.style.touchAction = "none";
+		inputView.style.userSelect = "none";
 	}
 
-	// 継承したクラスにおいて、適切なDOMイベントを設定する
 	start(): void {
-		throw new Error("This method is abstract");
+		this.inputView.addEventListener("pointerdown", this.onPointerDown, false);
 	}
 
-	// start() に対応するDOMイベントを開放する
 	stop(): void {
-		throw new Error("This method is abstract");
+		this.inputView.removeEventListener("pointerdown", this.onPointerDown, false);
 	}
-
 
 	setScale(xScale: number, yScale: number = xScale): void {
 		this._xScale = xScale;
@@ -68,7 +59,7 @@ export class InputAbstractHandler {
 
 	pointDown(identifier: number, pagePosition: OffsetPosition): void {
 		this.pointTrigger.fire({
-			type: pdi.PlatformPointType.Down,
+			type: PlatformPointType.Down,
 			identifier: identifier,
 			offset: this.getOffsetFromEvent(pagePosition)
 		});
@@ -82,7 +73,7 @@ export class InputAbstractHandler {
 			return;
 		}
 		this.pointTrigger.fire({
-			type: pdi.PlatformPointType.Move,
+			type: PlatformPointType.Move,
 			identifier: identifier,
 			offset: this.getOffsetFromEvent(pagePosition)
 		});
@@ -93,7 +84,7 @@ export class InputAbstractHandler {
 			return;
 		}
 		this.pointTrigger.fire({
-			type: pdi.PlatformPointType.Up,
+			type: PlatformPointType.Up,
 			identifier: identifier,
 			offset: this.getOffsetFromEvent(pagePosition)
 		});
@@ -101,7 +92,7 @@ export class InputAbstractHandler {
 		delete this.pointerEventLock[identifier];
 	}
 
-	getOffsetFromEvent(e: OffsetPosition): pdi.CommonOffset {
+	getOffsetFromEvent(e: OffsetPosition): CommonOffset {
 		return { x: e.offsetX, y: e.offsetY };
 	}
 
@@ -118,4 +109,20 @@ export class InputAbstractHandler {
 			offsetY: (position.pageY - Math.round(window.pageYOffset + bounding.top)) / scale.y
 		};
 	}
+
+	private onPointerDown: (e: PointerEvent) => void = (e: PointerEvent): void => {
+		this.pointDown(e.pointerId, this.getOffsetPositionFromInputView(e));
+		window.addEventListener("pointermove", this.onPointerMove, false);
+		window.addEventListener("pointerup", this.onPointerUp, false);
+	};
+
+	private onPointerMove: (e: PointerEvent) => void = (e: PointerEvent): void => {
+		this.pointMove(e.pointerId, this.getOffsetPositionFromInputView(e));
+	};
+
+	private onPointerUp: (e: PointerEvent) => void = (e: PointerEvent): void => {
+		this.pointUp(e.pointerId, this.getOffsetPositionFromInputView(e));
+		window.removeEventListener("pointermove", this.onPointerMove, false);
+		window.removeEventListener("pointerup", this.onPointerUp, false);
+	};
 }
