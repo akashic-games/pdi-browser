@@ -7,7 +7,10 @@ import type { ResourceFactory } from "./ResourceFactory";
 
 export interface ContainerControllerInitializeParameterObject {
 	rendererRequirement: pdi.RendererRequirement;
-	disablePreventDefault?: boolean; // NOTE: このオプションは後方互換性のために残している。現在のバージョンでは参照されていない。
+	/**
+	 * NOTE: このオプションは後方互換性のために残している。現在のバージョンではこの値に関わらず一切の preventDefault() を行わない。
+	 */
+	disablePreventDefault?: boolean;
 }
 
 /*
