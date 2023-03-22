@@ -13,6 +13,15 @@ export interface PagePosition {
 	pageY: number;
 }
 
+type EventHandler = (event: PointerEvent) => void;
+
+type EventHandlersMap = {
+	[pointerId: number]: {
+		onPointerMove: EventHandler;
+		onPointerUp: EventHandler;
+	};
+};
+
 /**
  * pointer-events を利用した入力ハンドラ。
  *
@@ -28,6 +37,8 @@ export class PointerEventHandler {
 	private _yScale: number;
 	// 移動中にdownなしでmoveやupを発生してしまうのを防ぐためのロック
 	private pointerEventLock: { [key: number]: boolean };
+	// pointerId ごとのハンドラのマップ情報
+	private _eventHandlersMap: EventHandlersMap;
 
 	// `start()` で設定するDOMイベントをサポートしているかを返す
 	static isSupported(): boolean {
@@ -37,6 +48,7 @@ export class PointerEventHandler {
 	constructor(inputView: HTMLElement) {
 		this.inputView = inputView;
 		this.pointerEventLock = {};
+		this._eventHandlersMap = Object.create(null);
 		this._xScale = 1;
 		this._yScale = 1;
 		this.pointTrigger = new Trigger<PlatformPointEvent>();
@@ -112,17 +124,24 @@ export class PointerEventHandler {
 
 	private onPointerDown: (e: PointerEvent) => void = (e: PointerEvent): void => {
 		this.pointDown(e.pointerId, this.getOffsetPositionFromInputView(e));
-		window.addEventListener("pointermove", this.onPointerMove, false);
-		window.addEventListener("pointerup", this.onPointerUp, false);
-	};
+		const onPointerMove = (event: PointerEvent): void => {
+			this.pointMove(event.pointerId, this.getOffsetPositionFromInputView(event));
+		};
+		const onPointerUp = (event: PointerEvent): void => {
+			this.pointUp(event.pointerId, this.getOffsetPositionFromInputView(event));
 
-	private onPointerMove: (e: PointerEvent) => void = (e: PointerEvent): void => {
-		this.pointMove(e.pointerId, this.getOffsetPositionFromInputView(e));
-	};
+			if (e.pointerId === event.pointerId) {
+				const handlers = this._eventHandlersMap[event.pointerId];
+				if (!handlers) return;
+				const { onPointerMove, onPointerUp } = handlers;
+				window.removeEventListener("pointermove", onPointerMove, false);
+				window.removeEventListener("pointerup", onPointerUp, false);
+				delete this._eventHandlersMap[event.pointerId];
+			}
+		};
 
-	private onPointerUp: (e: PointerEvent) => void = (e: PointerEvent): void => {
-		this.pointUp(e.pointerId, this.getOffsetPositionFromInputView(e));
-		window.removeEventListener("pointermove", this.onPointerMove, false);
-		window.removeEventListener("pointerup", this.onPointerUp, false);
+		window.addEventListener("pointermove", onPointerMove, false);
+		window.addEventListener("pointerup", onPointerUp, false);
+		this._eventHandlersMap[e.pointerId] = { onPointerMove, onPointerUp };
 	};
 }
