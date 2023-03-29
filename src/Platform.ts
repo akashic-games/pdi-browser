@@ -55,6 +55,13 @@ export class Platform implements pdi.Platform {
 	audioPluginManager: AudioPluginManager;
 	amflow: AMFlow;
 
+	/**
+	 * DOM に対するタッチイベントの捕捉方法として pointer-events を利用しているかどうか。
+	 * 現バージョンにおいては常に true となる。
+	 * この値は MouseEvent および TouchEvent を利用していた旧バージョンとの識別のために存在し、もしこの値が undefined の場合は旧バージョンであるとみなす。
+	 */
+	readonly usingPointerEvents: boolean = true;
+
 	_platformEventHandler: pdi.PlatformEventHandler | null;
 	_resourceFactory: ResourceFactory;
 	_rendererReq: pdi.RendererRequirement | null;
