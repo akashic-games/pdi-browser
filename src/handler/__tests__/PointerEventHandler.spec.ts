@@ -1,13 +1,12 @@
 import { PlatformPointType } from "@akashic/pdi-types";
-import type { InputAbstractHandler } from "../handler/InputAbstractHandler";
-import { MouseHandler } from "../handler/MouseHandler";
+import { PointerEventHandler } from "../PointerEventHandler";
 
-describe("InputHandlerLayer", () => {
+describe("PointerEventHandler", () => {
 	describe("DownのDOMイベントが発生済みの時", () => {
-		let handler: InputAbstractHandler;
+		let handler: PointerEventHandler;
 		let identifier: number;
 		beforeEach(() => {
-			handler = new MouseHandler(document.createElement("div"), false);
+			handler = new PointerEventHandler(document.createElement("div"));
 			identifier = 1;
 			// Down
 			handler.pointDown(identifier, {offsetX: 1, offsetY: 1});
@@ -58,7 +57,7 @@ describe("InputHandlerLayer", () => {
 	});
 	describe("DownのDOMイベントが起きていない時", () => {
 		it("MoveのDOMイベントあってもonPointMoveは呼び出されない", (done) => {
-			const handler = new MouseHandler(document.createElement("div"), false);
+			const handler = new PointerEventHandler(document.createElement("div"));
 			handler.pointMove(1, {offsetX: 0, offsetY: 0});
 			handler.pointTrigger.add(() => {
 				done.fail(new Error("not call!"));

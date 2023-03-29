@@ -7,6 +7,9 @@ import type { ResourceFactory } from "./ResourceFactory";
 
 export interface ContainerControllerInitializeParameterObject {
 	rendererRequirement: pdi.RendererRequirement;
+	/**
+	 * NOTE: このオプションは後方互換性のために残している。現在のバージョンではこの値に関わらず一切の preventDefault() を行わない。
+	 */
 	disablePreventDefault?: boolean;
 }
 
@@ -39,7 +42,6 @@ export class ContainerController {
 	pointEventTrigger: Trigger<pdi.PlatformPointEvent> = new Trigger<pdi.PlatformPointEvent>();
 
 	private _rendererReq: pdi.RendererRequirement = undefined!;
-	private _disablePreventDefault: boolean = false;
 
 	constructor(resourceFactory: ResourceFactory) {
 		this.resourceFactory = resourceFactory;
@@ -47,7 +49,6 @@ export class ContainerController {
 
 	initialize(param: ContainerControllerInitializeParameterObject): void {
 		this._rendererReq = param.rendererRequirement;
-		this._disablePreventDefault = !!param.disablePreventDefault;
 		this._loadView();
 	}
 
@@ -100,13 +101,12 @@ export class ContainerController {
 
 	private _loadView(): void {
 		const { primarySurfaceWidth: width, primarySurfaceHeight: height } = this._rendererReq;
-		const disablePreventDefault = this._disablePreventDefault;
 		// DocumentFragmentはinsertした時点で開放されているため毎回作る
 		// https://dom.spec.whatwg.org/#concept-node-insert
 		this.container = document.createDocumentFragment();
 		// 入力受け付けレイヤー - DOM Eventの管理
 		if (! this.inputHandlerLayer) {
-			this.inputHandlerLayer = new InputHandlerLayer({ width, height, disablePreventDefault });
+			this.inputHandlerLayer = new InputHandlerLayer({ width, height });
 		} else {
 			// Note: 操作プラグインに与えた view 情報を削除しないため、 inputHandlerLayer を使いまわしている
 			this.inputHandlerLayer.setViewSize({ width, height });

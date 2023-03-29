@@ -1,12 +1,10 @@
 import type * as pdi from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
-import type { InputAbstractHandler } from "./handler/InputAbstractHandler";
-import { TouchHandler } from "./handler/TouchHandler";
+import { PointerEventHandler } from "./handler/PointerEventHandler";
 
 export interface InputHandlerLayerParameterObject {
 	width: number;
 	height: number;
-	disablePreventDefault?: boolean;
 }
 
 /**
@@ -22,8 +20,7 @@ export class InputHandlerLayer {
 	// DOMで起きたイベントを通知するTrigger
 	pointEventTrigger: Trigger<pdi.PlatformPointEvent>;
 
-	_inputHandler: InputAbstractHandler;
-	private _disablePreventDefault: boolean;
+	_inputHandler: PointerEventHandler;
 
 	/**
 	 * @example
@@ -38,13 +35,11 @@ export class InputHandlerLayer {
 		this.view = this._createInputView(param.width, param.height);
 		this._inputHandler = undefined!;
 		this.pointEventTrigger = new Trigger<pdi.PlatformPointEvent>();
-
-		this._disablePreventDefault = !!param.disablePreventDefault;
 	}
 
 	// 実行環境でサポートしてるDOM Eventを使い、それぞれonPoint*Triggerを関連付ける
 	enablePointerEvent(): void {
-		this._inputHandler = new TouchHandler(this.view, this._disablePreventDefault);
+		this._inputHandler = new PointerEventHandler(this.view);
 		// 各種イベントのTrigger
 		this._inputHandler.pointTrigger.add((e: pdi.PlatformPointEvent) => {
 			this.pointEventTrigger.fire(e);
@@ -54,8 +49,7 @@ export class InputHandlerLayer {
 
 	// DOMイベントハンドラを開放する
 	disablePointerEvent(): void {
-		if (this._inputHandler)
-			this._inputHandler.stop();
+		this._inputHandler?.stop();
 	}
 
 	setOffset(offset: pdi.CommonOffset): void {
@@ -71,8 +65,6 @@ export class InputHandlerLayer {
 
 	private _createInputView(width: number, height: number): HTMLDivElement {
 		const view = document.createElement("div");
-		view.setAttribute("tabindex", "1");
-		view.className = "input-handler";
 		view.setAttribute("style", "display:inline-block; outline:none;");
 		view.style.width = width + "px";
 		view.style.height = height + "px";
