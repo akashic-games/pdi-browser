@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## unreleased changes
+## 2.4.4
 * `MouseHandler` と `TouchHandler` を `PointerPointerEvent` に統合するように
 * `InputHandlerLayer` に付加されていたクラス名 `input-handler` を削除
 * `InputHandlerLayer` に付加されていた tabindex の指定を削除
