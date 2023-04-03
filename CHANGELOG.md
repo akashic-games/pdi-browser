@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.4.5
+* `Platform#usingPointerEvents` を追加
+
 ## 2.4.4
 * `MouseHandler` と `TouchHandler` を `PointerPointerEvent` に統合するように
 * `InputHandlerLayer` に付加されていたクラス名 `input-handler` を削除
