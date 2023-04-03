@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## unreleased changes
+## 2.4.5
 * `Platform#usingPointerEvents` を追加
 
 ## 2.4.4
