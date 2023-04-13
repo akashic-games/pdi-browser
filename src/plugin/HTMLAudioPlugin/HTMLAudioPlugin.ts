@@ -4,6 +4,7 @@ import type { AudioAsset } from "../../asset/AudioAsset";
 import type { AudioManager } from "../../AudioManager";
 import type { AudioPlayer } from "../AudioPlayer";
 import type { AudioPlugin } from "../AudioPlugin";
+import { detectSupportedFormats } from "../audioUtil";
 import { HTMLAudioAsset } from "./HTMLAudioAsset";
 import { HTMLAudioPlayer } from "./HTMLAudioPlayer";
 
@@ -26,7 +27,7 @@ export class HTMLAudioPlugin implements AudioPlugin {
 	}
 
 	constructor() {
-		this.supportedFormats = this._detectSupportedFormats();
+		this.supportedFormats = detectSupportedFormats();
 	}
 
 	get supportedFormats(): string[] {
@@ -52,29 +53,5 @@ export class HTMLAudioPlugin implements AudioPlugin {
 
 	createPlayer(system: pdi.AudioSystem, manager: AudioManager): AudioPlayer {
 		return new HTMLAudioPlayer(system, manager);
-	}
-
-	private _detectSupportedFormats(): string[] {
-		// Edgeは再生できるファイル形式とcanPlayTypeの結果が一致しないため、固定でAACを利用する
-		if (navigator.userAgent.indexOf("Edge/") !== -1) return ["aac"];
-
-		// Audio要素を実際に作って、canPlayTypeで再生できるかを判定する
-		const audioElement = document.createElement("audio");
-		const supportedFormats: string[] = [];
-		try {
-			// AudioAssetにhint.extensionsが指定されている場合、この配列順をそのまま優先順位として利用する拡張子が決まる
-			const supportedExtensions = ["m4a", "ogg", "aac", "mp4"];
-			for (let i = 0, len = supportedExtensions.length; i < len; i++) {
-				const ext = supportedExtensions[i];
-				const canPlay = audioElement.canPlayType("audio/" + ext) as string;
-				const supported = (canPlay !== "no" && canPlay !== "");
-				if (supported) {
-					supportedFormats.push(ext);
-				}
-			}
-		} catch (e) {
-			// ignore Error
-		}
-		return supportedFormats;
 	}
 }
