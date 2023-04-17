@@ -71,7 +71,7 @@
     "uglify-js": "^3.17.3"
   },
   "dependencies": {
-    "@akashic/trigger": "^1.0.1"
+    "@akashic/trigger": "^2.0.0"
   },
   "publishConfig": {
     "@akashic:registry": "https://registry.npmjs.org/"
