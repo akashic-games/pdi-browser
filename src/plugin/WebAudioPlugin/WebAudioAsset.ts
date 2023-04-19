@@ -1,8 +1,8 @@
 import type * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
-import { addExtname } from "../../PathUtil";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
 import { XHRLoader } from "../../utils/XHRLoader";
+import { addExtname, resolveExtname } from "../audioUtil";
 import * as helper from "./WebAudioHelper";
 
 export class WebAudioAsset extends AudioAsset {
@@ -51,7 +51,7 @@ export class WebAudioAsset extends AudioAsset {
 			// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
 			// この対応を止める際には、WebAudioPluginのsupportedExtensionsからaacを除外する必要がある。
 			loadArrayBuffer(this.path, onLoadArrayBufferHandler, _error => {
-				const altPath = addExtname(this.originalPath, "mp4");
+				const altPath = addExtname(this.originalPath, ".mp4");
 				loadArrayBuffer(altPath, (response) => {
 					this.path = altPath;
 					onLoadArrayBufferHandler(response);
@@ -64,10 +64,10 @@ export class WebAudioAsset extends AudioAsset {
 
 	_assetPathFilter(path: string): string {
 		if (WebAudioAsset.supportedFormats.indexOf("ogg") !== -1) {
-			return addExtname(path, "ogg");
+			return addExtname(path, ".ogg");
 		}
 		if (WebAudioAsset.supportedFormats.indexOf("aac") !== -1) {
-			return addExtname(path, "aac");
+			return addExtname(path, ".aac");
 		}
 		// ここで検出されるのは最初にアクセスを試みるオーディオアセットのファイルパスなので、
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない
@@ -76,13 +76,7 @@ export class WebAudioAsset extends AudioAsset {
 	}
 
 	_modifyPath(path: string): string {
-		if (this.hint && this.hint.extensions && this.hint.extensions.length > 0) {
-			for (const ext of WebAudioAsset.supportedFormats) {
-				if (this.hint.extensions.indexOf(ext) !== -1) {
-					return addExtname(this.originalPath, ext);
-				}
-			}
-		}
-		return path;
+		const ext = resolveExtname(this.hint?.extensions, WebAudioAsset.supportedFormats);
+		return ext ? addExtname(this.originalPath, ext) : path;
 	}
 }

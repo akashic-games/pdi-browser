@@ -28,7 +28,7 @@ describe("HTMLAudioAsset", () => {
 			100,
 			system,
 			false,
-			{ streaming: false, extensions: ["m4a", "aac"] },
+			{ streaming: false, extensions: [".m4a", ".aac"] },
 			10
 		);
 		expect(asset.id).toBe("audio-asset");
@@ -43,7 +43,7 @@ describe("HTMLAudioAsset", () => {
 			100,
 			system,
 			false,
-			{ streaming: false, extensions: ["mp4", "aac"] },
+			{ streaming: false, extensions: [".mp4", ".aac"] },
 			10
 		);
 		expect(asset.id).toBe("audio-asset");

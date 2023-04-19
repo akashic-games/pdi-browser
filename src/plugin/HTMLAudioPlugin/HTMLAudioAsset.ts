@@ -1,7 +1,7 @@
 import type * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
-import { addExtname } from "../../PathUtil";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
+import { addExtname, resolveExtname } from "../audioUtil";
 
 export interface MediaLoaderEventHandlerSet {
 	success: () => void;
@@ -85,7 +85,7 @@ export class HTMLAudioAsset extends AudioAsset {
 				error: () => {
 					this._detachAll(audio, altHandlers);
 					window.clearInterval(this._intervalId);
-					this.path = addExtname(this.originalPath, "mp4");
+					this.path = addExtname(this.originalPath, ".mp4");
 					startLoadingAudio(this.path, handlers);
 				}
 			};
@@ -102,10 +102,10 @@ export class HTMLAudioAsset extends AudioAsset {
 
 	_assetPathFilter(path: string): string {
 		if (HTMLAudioAsset.supportedFormats.indexOf("ogg") !== -1) {
-			return addExtname(path, "ogg");
+			return addExtname(path, ".ogg");
 		}
 		if (HTMLAudioAsset.supportedFormats.indexOf("aac") !== -1) {
-			return addExtname(path, "aac");
+			return addExtname(path, ".aac");
 		}
 		// ここで検出されるのは最初にアクセスを試みるオーディオアセットのファイルパスなので、
 		// supportedFormatsに(後方互換性保持で使う可能性がある)mp4が含まれていても利用しない
@@ -114,14 +114,8 @@ export class HTMLAudioAsset extends AudioAsset {
 	}
 
 	_modifyPath(path: string): string {
-		if (this.hint && this.hint.extensions && this.hint.extensions.length > 0) {
-			for (const ext of HTMLAudioAsset.supportedFormats) {
-				if (this.hint.extensions.indexOf(ext) !== -1) {
-					return addExtname(this.originalPath, ext);
-				}
-			}
-		}
-		return path;
+		const ext = resolveExtname(this.hint?.extensions, HTMLAudioAsset.supportedFormats);
+		return ext ? addExtname(this.originalPath, ext) : path;
 	}
 
 	protected createAudioElement(src?: string): HTMLAudioElement {

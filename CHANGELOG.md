@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.4.6
+* .m4a ファイルをオーディオアセットとして利用可能に (v2.4.2 で対応できていなかった問題を修正)
+* hint.extensions の拡張子に "." を求めるように
+
 ## 2.4.5
 * `Platform#usingPointerEvents` を追加
 
