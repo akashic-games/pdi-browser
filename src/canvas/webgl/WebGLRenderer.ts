@@ -1,10 +1,11 @@
 import type * as pdi from "@akashic/pdi-types";
+import type { Renderer } from "../Renderer";
 import type { WebGLBackSurface } from "./WebGLBackSurface";
 import { WebGLColor } from "./WebGLColor";
 import { WebGLRenderingState } from "./WebGLRenderingState";
 import type { RenderTarget, WebGLSharedObject } from "./WebGLSharedObject";
 
-export class WebGLRenderer implements pdi.Renderer {
+export class WebGLRenderer implements Renderer {
 	static DEFAULT_CAPACITY: number = 16;
 
 	protected _shared: WebGLSharedObject;
@@ -128,6 +129,10 @@ export class WebGLRenderer implements pdi.Renderer {
 			texture: old.texture,
 			framebuffer: old.framebuffer
 		};
+	}
+
+	getContext(): WebGLRenderingContext {
+		return this._shared.getContext();
 	}
 
 	destroy(): void {
