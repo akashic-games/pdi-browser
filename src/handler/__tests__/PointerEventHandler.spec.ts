@@ -9,7 +9,7 @@ describe("PointerEventHandler", () => {
 			handler = new PointerEventHandler(document.createElement("div"));
 			identifier = 1;
 			// Down
-			handler.pointDown(identifier, {offsetX: 1, offsetY: 1});
+			handler.pointDown(identifier, {offsetX: 1, offsetY: 1}, 0);
 		});
 		it("MoveのDOMイベント発生するとonPointMoveが呼ばれる", (done) => {
 			const offsetPos = {offsetX: 0, offsetY: 0};
@@ -18,10 +18,11 @@ describe("PointerEventHandler", () => {
 				expect(object.identifier).toBe(identifier);
 				expect(object.offset.x).toBe(offsetPos.offsetX);
 				expect(object.offset.y).toBe(offsetPos.offsetY);
+				expect(object.button).toBe(0);
 				done();
 			});
 			// Move
-			handler.pointMove(identifier, offsetPos);
+			handler.pointMove(identifier, offsetPos, 0);
 		});
 		it("Up後にMoveのDOMイベントあってもonPointMoveは呼び出されない", (done) => {
 			const upOffsetPos = {
@@ -33,14 +34,15 @@ describe("PointerEventHandler", () => {
 				expect(object.identifier).toBe(identifier);
 				expect(object.offset.x).toBe(upOffsetPos.offsetX);
 				expect(object.offset.y).toBe(upOffsetPos.offsetY);
+				expect(object.button).toBe(0);
 			});
 			// up
-			handler.pointUp(identifier, upOffsetPos);
+			handler.pointUp(identifier, upOffsetPos, 0);
 			handler.pointTrigger.add(() => {
 				done.fail(new Error("not call!"));
 			});
 			// Move
-			handler.pointMove(identifier, {offsetX: 0, offsetY: 0});
+			handler.pointMove(identifier, {offsetX: 0, offsetY: 0}, 0);
 			done();
 		});
 		it("異なるidentifierの場合はonPointMoveは呼ばれない", (done) => {

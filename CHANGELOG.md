@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased changes
+* マウスでの各種ボタンクリックに対応
+* 右クリックでコンテキストメニューを表示しないように
+
 ## 2.5.0
 * @akashic/trigger@2.0.0 に更新
 
