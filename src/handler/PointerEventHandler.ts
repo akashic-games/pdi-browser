@@ -1,4 +1,4 @@
-import type { CommonOffset, PlatformPointButton, PlatformPointEvent} from "@akashic/pdi-types";
+import type { CommonOffset, PlatformButtonType, PlatformPointEvent} from "@akashic/pdi-types";
 import { PlatformPointType } from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
 import type { OffsetPosition } from "./OffsetPosition";
@@ -71,7 +71,7 @@ export class PointerEventHandler {
 		this._yScale = yScale;
 	}
 
-	pointDown(identifier: number, pagePosition: OffsetPosition, button?: PlatformPointButton): void {
+	pointDown(identifier: number, pagePosition: OffsetPosition, button: PlatformButtonType): void {
 		this.pointTrigger.fire({
 			type: PlatformPointType.Down,
 			identifier: identifier,
@@ -83,7 +83,7 @@ export class PointerEventHandler {
 		this.pointerEventLock[identifier] = true;
 	}
 
-	pointMove(identifier: number, pagePosition: OffsetPosition, button?: PlatformPointButton): void {
+	pointMove(identifier: number, pagePosition: OffsetPosition, button: PlatformButtonType): void {
 		if (!this.pointerEventLock.hasOwnProperty(identifier + "")) {
 			return;
 		}
@@ -95,7 +95,7 @@ export class PointerEventHandler {
 		});
 	}
 
-	pointUp(identifier: number, pagePosition: OffsetPosition, button?: PlatformPointButton): void {
+	pointUp(identifier: number, pagePosition: OffsetPosition, button: PlatformButtonType): void {
 		if (!this.pointerEventLock.hasOwnProperty(identifier + "")) {
 			return;
 		}

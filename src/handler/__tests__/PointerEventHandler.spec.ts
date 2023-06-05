@@ -51,7 +51,7 @@ describe("PointerEventHandler", () => {
 				done.fail(new Error("not call!"));
 			});
 			// Move
-			handler.pointMove(42, offsetPos);
+			handler.pointMove(42, offsetPos, 0);
 			// 意味のないテストだが、テストケース中にexpectによるテストを入れておかないとエラーメッセージが表示されるため追加
 			expect(true).toBeTruthy();
 			done();
@@ -60,7 +60,7 @@ describe("PointerEventHandler", () => {
 	describe("DownのDOMイベントが起きていない時", () => {
 		it("MoveのDOMイベントあってもonPointMoveは呼び出されない", (done) => {
 			const handler = new PointerEventHandler(document.createElement("div"));
-			handler.pointMove(1, {offsetX: 0, offsetY: 0});
+			handler.pointMove(1, {offsetX: 0, offsetY: 0}, 0);
 			handler.pointTrigger.add(() => {
 				done.fail(new Error("not call!"));
 			});
