@@ -120,6 +120,10 @@ export class Context2DRenderer implements Renderer {
 		return this.context.getCanvasRenderingContext2D();
 	}
 
+	flush(): void {
+		// do nothing.
+	}
+
 	_getImageData(sx: number, sy: number, sw: number, sh: number): pdi.ImageData {
 		return this.context.getImageData(sx, sy, sw, sh);
 	}

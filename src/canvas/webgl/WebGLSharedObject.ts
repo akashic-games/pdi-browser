@@ -374,6 +374,10 @@ export class WebGLSharedObject {
 		return shaderProgram;
 	}
 
+	flush(): void {
+		this._commit();
+	}
+
 	private _init(): void {
 		const program = new WebGLShaderProgram(this._context);
 
