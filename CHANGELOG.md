@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.5.1
+* `Renderer#getContext()` を追加
+* `Renderer#flush()` を追加
+
 ## 2.5.0
 * @akashic/trigger@2.0.0 に更新
 
