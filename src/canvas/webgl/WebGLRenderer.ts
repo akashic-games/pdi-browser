@@ -135,6 +135,10 @@ export class WebGLRenderer implements Renderer {
 		return this._shared.getContext();
 	}
 
+	flush(): void {
+		return this._shared.flush();
+	}
+
 	destroy(): void {
 		this._shared.requestDeleteRenderTarget(this._renderTarget);
 		this._shared = undefined!;
