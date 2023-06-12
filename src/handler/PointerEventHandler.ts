@@ -1,4 +1,5 @@
-import type { CommonOffset, PlatformButtonType, PlatformPointEvent} from "@akashic/pdi-types";
+import type { CommonOffset, PlatformPointEvent } from "@akashic/pdi-types";
+import { PlatformButtonType } from "@akashic/pdi-types";
 import { PlatformPointType } from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
 import type { OffsetPosition } from "./OffsetPosition";
@@ -127,13 +128,23 @@ export class PointerEventHandler {
 		};
 	}
 
+	private getPlatformButtonType(button: number): PlatformButtonType {
+		switch (button) {
+			case PlatformButtonType.Auxiliary:
+			case PlatformButtonType.Secondary:
+				return button;
+			default:
+				return PlatformButtonType.Primary;
+		}
+	}
+
 	private onPointerDown: (e: PointerEvent) => void = (e: PointerEvent): void => {
-		this.pointDown(e.pointerId, this.getOffsetPositionFromInputView(e), e.button);
+		this.pointDown(e.pointerId, this.getOffsetPositionFromInputView(e), this.getPlatformButtonType(e.button));
 		const onPointerMove = (event: PointerEvent): void => {
-			this.pointMove(event.pointerId, this.getOffsetPositionFromInputView(event), e.button);
+			this.pointMove(event.pointerId, this.getOffsetPositionFromInputView(event), this.getPlatformButtonType(event.button));
 		};
 		const onPointerUp = (event: PointerEvent): void => {
-			this.pointUp(event.pointerId, this.getOffsetPositionFromInputView(event), e.button);
+			this.pointUp(event.pointerId, this.getOffsetPositionFromInputView(event), this.getPlatformButtonType(event.button));
 
 			if (e.pointerId === event.pointerId) {
 				const handlers = this._eventHandlersMap[event.pointerId];
