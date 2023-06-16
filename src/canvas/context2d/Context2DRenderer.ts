@@ -1,5 +1,6 @@
 import type * as pdi from "@akashic/pdi-types";
 import type { Surface } from "../../Surface";
+import type { Renderer } from "../Renderer";
 import type { CanvasSurfaceContext } from "./CanvasSurfaceContext";
 import type { Context2DSurface } from "./Context2DSurface";
 
@@ -17,7 +18,7 @@ const compositeOperationTable: { [P in pdi.CompositeOperationString]: string } =
 	"xor": "xor"
 };
 
-export class Context2DRenderer implements pdi.Renderer {
+export class Context2DRenderer implements Renderer {
 	private surface: Context2DSurface;
 	private context: CanvasSurfaceContext;
 	private canvasRenderingContext2D: CanvasRenderingContext2D;
@@ -113,6 +114,14 @@ export class Context2DRenderer implements pdi.Renderer {
 
 	isSupportedShaderProgram(): boolean {
 		return false;
+	}
+
+	getContext(): CanvasRenderingContext2D {
+		return this.context.getCanvasRenderingContext2D();
+	}
+
+	flush(): void {
+		// do nothing.
 	}
 
 	_getImageData(sx: number, sy: number, sw: number, sh: number): pdi.ImageData {
