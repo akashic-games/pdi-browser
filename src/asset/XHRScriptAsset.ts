@@ -3,11 +3,14 @@ import { XHRLoader } from "../utils/XHRLoader";
 import { Asset } from "./Asset";
 
 export class XHRScriptAsset extends Asset implements pdi.ScriptAsset {
-	static PRE_SCRIPT: string = "(function(exports, require, module, __filename, __dirname) {";
-	static POST_SCRIPT: string = "\n})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);";
-
 	type: "script" = "script";
 	script: string = ""; // _load() までは空文字が代入されている点に注意
+	exports: string[];
+
+	constructor(id: string, path: string, exports: string[] = []) {
+		super(id, path);
+		this.exports = exports;
+	}
 
 	_load(handler: pdi.AssetLoadHandler): void {
 		const loader = new XHRLoader();
@@ -35,10 +38,19 @@ export class XHRScriptAsset extends Asset implements pdi.ScriptAsset {
 	}
 
 	_wrap(): Function {
+		let postScript: string = "";
+		for (const key of this.exports) {
+			postScript += `exports["${key}"] = typeof ${key} !== "undefined" ? ${key} : undefined;\n`;
+		}
+
 		const func = new Function(
 			"g",
-			XHRScriptAsset.PRE_SCRIPT + this.script + XHRScriptAsset.POST_SCRIPT
+			"(function(exports, require, module, __filename, __dirname) {\n" +
+			this.script + "\n" +
+			postScript + "\n" +
+			"})(g.module.exports, g.module.require, g.module, g.filename, g.dirname);"
 		);
+
 		return func;
 	}
 }
