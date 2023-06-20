@@ -43,8 +43,8 @@
   "devDependencies": {
     "@akashic/amflow": "^3.1.0",
     "@akashic/eslint-config": "^1.1.1",
-    "@akashic/pdi-types": "^1.9.0",
-    "@akashic/playlog": "^3.1.0",
+    "@akashic/pdi-types": "^1.10.0",
+    "@akashic/playlog": "^3.2.0",
     "@types/jest": "^29.2.0",
     "@types/node": "^18.0.0",
     "@types/node-fetch": "^2.6.2",
