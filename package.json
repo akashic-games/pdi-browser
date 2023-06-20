@@ -41,7 +41,7 @@
     "index.js"
   ],
   "devDependencies": {
-    "@akashic/amflow": "^3.1.0",
+    "@akashic/amflow": "^4.0.0",
     "@akashic/eslint-config": "^1.1.1",
     "@akashic/pdi-types": "^1.8.0",
     "@akashic/playlog": "^3.1.0",
