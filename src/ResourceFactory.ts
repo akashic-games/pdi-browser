@@ -81,8 +81,8 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		return new XHRTextAsset(id, assetPath);
 	}
 
-	createScriptAsset(id: string, assetPath: string): pdi.ScriptAsset {
-		return new XHRScriptAsset(id, assetPath);
+	createScriptAsset(id: string, assetPath: string, exports?: string[]): pdi.ScriptAsset {
+		return new XHRScriptAsset(id, assetPath, exports);
 	}
 
 	createPrimarySurface(width: number, height: number): CanvasSurface {
