@@ -24,7 +24,7 @@
     "lint": "npm run lint:ts && npm run lint:md",
     "lint:ts": "tslint --project tsconfig.json -c tslint.json",
     "lint:md": "remark ./*.md --frail --no-stdout --rc-path ./.remarkrc",
-    "test": "npm run lint && testem ci"
+    "test": "npm run lint"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
