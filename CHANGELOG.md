@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.16.0
+* @akashic/amflowと@akashic/playlogと@akashic/akashic-pdiのminor更新に伴うバージョンアップ
+
 ## 0.15.0
 * @akashic/amflowのmajor更新と@akashic/playlogのminor更新に伴うバージョンアップ
 
