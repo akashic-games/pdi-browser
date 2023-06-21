@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## Unreleased changes
+## 2.6.0
 * マウスでの各種ボタンクリックに対応
 * 右クリックでコンテキストメニューを表示しないように
+* @akashic/pdi-types@1.11.0, @akashic/playlog@3.2.0, @akashic/amflow@3.2.0 に更新
 
 ## 2.5.1
 * `Renderer#getContext()` を追加
