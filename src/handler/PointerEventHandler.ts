@@ -1,4 +1,5 @@
-import type { CommonOffset, PlatformPointEvent} from "@akashic/pdi-types";
+import type { CommonOffset, PlatformPointEvent } from "@akashic/pdi-types";
+import { PlatformButtonType } from "@akashic/pdi-types";
 import { PlatformPointType } from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
 import type { OffsetPosition } from "./OffsetPosition";
@@ -58,10 +59,12 @@ export class PointerEventHandler {
 
 	start(): void {
 		this.inputView.addEventListener("pointerdown", this.onPointerDown, false);
+		this.inputView.addEventListener("contextmenu", this.onContextMenu, false);
 	}
 
 	stop(): void {
 		this.inputView.removeEventListener("pointerdown", this.onPointerDown, false);
+		this.inputView.removeEventListener("contextmenu", this.onContextMenu, false);
 	}
 
 	setScale(xScale: number, yScale: number = xScale): void {
@@ -69,36 +72,39 @@ export class PointerEventHandler {
 		this._yScale = yScale;
 	}
 
-	pointDown(identifier: number, pagePosition: OffsetPosition): void {
+	pointDown(identifier: number, pagePosition: OffsetPosition, button: PlatformButtonType): void {
 		this.pointTrigger.fire({
 			type: PlatformPointType.Down,
 			identifier: identifier,
-			offset: this.getOffsetFromEvent(pagePosition)
+			offset: this.getOffsetFromEvent(pagePosition),
+			button
 		});
 
 		// downのイベントIDを保存して、moveとupのイベントの抑制をする(ロックする)
 		this.pointerEventLock[identifier] = true;
 	}
 
-	pointMove(identifier: number, pagePosition: OffsetPosition): void {
+	pointMove(identifier: number, pagePosition: OffsetPosition, button: PlatformButtonType): void {
 		if (!this.pointerEventLock.hasOwnProperty(identifier + "")) {
 			return;
 		}
 		this.pointTrigger.fire({
 			type: PlatformPointType.Move,
 			identifier: identifier,
-			offset: this.getOffsetFromEvent(pagePosition)
+			offset: this.getOffsetFromEvent(pagePosition),
+			button
 		});
 	}
 
-	pointUp(identifier: number, pagePosition: OffsetPosition): void {
+	pointUp(identifier: number, pagePosition: OffsetPosition, button: PlatformButtonType): void {
 		if (!this.pointerEventLock.hasOwnProperty(identifier + "")) {
 			return;
 		}
 		this.pointTrigger.fire({
 			type: PlatformPointType.Up,
 			identifier: identifier,
-			offset: this.getOffsetFromEvent(pagePosition)
+			offset: this.getOffsetFromEvent(pagePosition),
+			button
 		});
 		// Upが完了したら、Down->Upが完了したとしてロックを外す
 		delete this.pointerEventLock[identifier];
@@ -122,13 +128,30 @@ export class PointerEventHandler {
 		};
 	}
 
+	private getPlatformButtonType(e: PointerEvent): PlatformButtonType {
+		switch (e.button) {
+			case 0:
+				// 左クリック
+				return PlatformButtonType.Primary;
+			case 1:
+				// ミドルクリック
+				return PlatformButtonType.Auxiliary;
+			case 2:
+				// 右クリック
+				return PlatformButtonType.Secondary;
+			default:
+				// 上記以外のボタンは左クリックとして扱う
+				return PlatformButtonType.Primary;
+		}
+	}
+
 	private onPointerDown: (e: PointerEvent) => void = (e: PointerEvent): void => {
-		this.pointDown(e.pointerId, this.getOffsetPositionFromInputView(e));
+		this.pointDown(e.pointerId, this.getOffsetPositionFromInputView(e), this.getPlatformButtonType(e));
 		const onPointerMove = (event: PointerEvent): void => {
-			this.pointMove(event.pointerId, this.getOffsetPositionFromInputView(event));
+			this.pointMove(event.pointerId, this.getOffsetPositionFromInputView(event), this.getPlatformButtonType(event));
 		};
 		const onPointerUp = (event: PointerEvent): void => {
-			this.pointUp(event.pointerId, this.getOffsetPositionFromInputView(event));
+			this.pointUp(event.pointerId, this.getOffsetPositionFromInputView(event), this.getPlatformButtonType(event));
 
 			if (e.pointerId === event.pointerId) {
 				const handlers = this._eventHandlersMap[event.pointerId];
@@ -143,5 +166,9 @@ export class PointerEventHandler {
 		window.addEventListener("pointermove", onPointerMove, false);
 		window.addEventListener("pointerup", onPointerUp, false);
 		this._eventHandlersMap[e.pointerId] = { onPointerMove, onPointerUp };
+	};
+
+	private onContextMenu: (ev: Event) => void = (ev: Event) => {
+		ev.preventDefault();
 	};
 }
