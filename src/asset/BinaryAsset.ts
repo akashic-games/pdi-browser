@@ -12,7 +12,7 @@ export class BinaryAsset extends Asset implements pdi.BinaryAsset {
 	}
 
 	destroy(): void {
-		this.data = null!;
+		this.data = undefined!;
 		super.destroy();
 	}
 
