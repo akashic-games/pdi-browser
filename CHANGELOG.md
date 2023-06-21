@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.12.0
+* @akashic/amflowと@akashic/playlogと@akashic/akashic-pdiのminor更新に伴うバージョンアップ
+
 ## 1.11.1
 * `CanvasSurfaceContext#restore()` で描画状態を復元された時に変数 `_contextXXXXX` が現在の状態を保持したままになる問題を修正
 
