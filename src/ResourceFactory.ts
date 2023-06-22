@@ -1,5 +1,6 @@
 import type * as pdi from "@akashic/pdi-types";
 import type { AudioAsset } from "./asset/AudioAsset";
+import { BinaryAsset } from "./asset/BinaryAsset";
 import { GeneratedSVGImageAsset } from "./asset/GeneratedSVGImageAsset";
 import { HTMLImageAsset } from "./asset/HTMLImageAsset";
 import { HTMLVideoAsset } from "./asset/HTMLVideoAsset";
@@ -80,8 +81,8 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		return new XHRTextAsset(id, assetPath);
 	}
 
-	createScriptAsset(id: string, assetPath: string): pdi.ScriptAsset {
-		return new XHRScriptAsset(id, assetPath);
+	createScriptAsset(id: string, assetPath: string, exports?: string[]): pdi.ScriptAsset {
+		return new XHRScriptAsset(id, assetPath, exports);
 	}
 
 	createPrimarySurface(width: number, height: number): CanvasSurface {
@@ -111,6 +112,10 @@ export class ResourceFactory implements pdi.ResourceFactory {
 
 	createVectorImageAssetFromString(id: string, assetPath: string, data: string): SVGImageAsset {
 		return new GeneratedSVGImageAsset(id, assetPath, data);
+	}
+
+	createBinaryAsset(id: string, assetPath: string): BinaryAsset {
+		return new BinaryAsset(id, assetPath);
 	}
 
 	_onAudioAssetDestroyed(asset: pdi.Asset): void {
