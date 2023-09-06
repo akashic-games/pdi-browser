@@ -1,12 +1,22 @@
 import { PlatformPointType, PlatformButtonType } from "@akashic/pdi-types";
-import { PointerEventHandler } from "../PointerEventHandler";
+import { InputEventHandler } from "../InputEventHandler";
 
-describe("PointerEventHandler", () => {
+// テスト用に abstract メソッドを補っただけの InputEventHandler
+class TestInputEventHandler extends InputEventHandler {
+	start(): void {
+		// do nothing
+	}
+	stop(): void {
+		// do nothing
+	}
+}
+
+describe("InputEventHandler", () => {
 	describe("DownのDOMイベントが発生済みの時", () => {
-		let handler: PointerEventHandler;
+		let handler: InputEventHandler;
 		let identifier: number;
 		beforeEach(() => {
-			handler = new PointerEventHandler(document.createElement("div"));
+			handler = new TestInputEventHandler(document.createElement("div"));
 			identifier = 1;
 			handler.pointDown(identifier, {offsetX: 1, offsetY: 1}, PlatformButtonType.Primary);
 		});
@@ -58,7 +68,7 @@ describe("PointerEventHandler", () => {
 	});
 	describe("DownのDOMイベントが起きていない時", () => {
 		it("DownのDOMイベントがあればonPointDownが呼ばれる", (done) => {
-			const handler = new PointerEventHandler(document.createElement("div"));
+			const handler = new TestInputEventHandler(document.createElement("div"));
 			handler.pointTrigger.add((object) => {
 				expect(object.type).toBe(PlatformPointType.Down);
 				expect(object.identifier).toBe(1);
@@ -72,7 +82,7 @@ describe("PointerEventHandler", () => {
 			handler.pointDown(1, {offsetX: 10, offsetY: 10}, PlatformButtonType.Secondary);
 		});
 		it("MoveのDOMイベントあってもonPointMoveは呼び出されない", (done) => {
-			const handler = new PointerEventHandler(document.createElement("div"));
+			const handler = new TestInputEventHandler(document.createElement("div"));
 			handler.pointMove(1, {offsetX: 0, offsetY: 0}, PlatformButtonType.Primary);
 			handler.pointTrigger.add(() => {
 				done.fail(new Error("not call!"));

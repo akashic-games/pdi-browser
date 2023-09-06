@@ -1,5 +1,7 @@
 import type * as pdi from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
+import type { InputEventHandler } from "./handler/InputEventHandler";
+import { MouseTouchEventHandler } from "./handler/MouseTouchEventHandler";
 import { PointerEventHandler } from "./handler/PointerEventHandler";
 
 export interface InputHandlerLayerParameterObject {
@@ -20,7 +22,7 @@ export class InputHandlerLayer {
 	// DOMで起きたイベントを通知するTrigger
 	pointEventTrigger: Trigger<pdi.PlatformPointEvent>;
 
-	_inputHandler: PointerEventHandler;
+	_inputHandler: InputEventHandler;
 
 	/**
 	 * @example
@@ -39,7 +41,9 @@ export class InputHandlerLayer {
 
 	// 実行環境でサポートしてるDOM Eventを使い、それぞれonPoint*Triggerを関連付ける
 	enablePointerEvent(): void {
-		this._inputHandler = new PointerEventHandler(this.view);
+		const pointerEventAvailable = !!window.PointerEvent;
+		this._inputHandler = pointerEventAvailable ? new PointerEventHandler(this.view) : new MouseTouchEventHandler(this.view);
+
 		// 各種イベントのTrigger
 		this._inputHandler.pointTrigger.add((e: pdi.PlatformPointEvent) => {
 			this.pointEventTrigger.fire(e);
