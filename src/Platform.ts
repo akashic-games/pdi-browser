@@ -23,15 +23,10 @@ export interface PlatformParameterObject {
 	containerView: HTMLElement;
 
 	/**
-	 * ビュー上のpreventDefaultを無効化するか。
-	 * デフォルトではpreventDefaultされるが、それを無効にしたい場合に指定すること。
+	 * 型の後方互換生のために残されている値。
 	 *
-	 * 注意: touchstartが利用可能な環境においてこの値を真にする場合、
-	 * 利用者はtouchstart, touchmove, touchendに対して自力で `preventDefault()` を呼び出さなくてはならない。
-	 * これはタッチとマウスの両方をサポートする環境に対応するために必要である。
-	 * `preventDefault()` が呼び出されない場合、Webブラウザはタッチイベントに対してマウスイベントを生成することがある。
-	 * この時pdi-browserは一度のタッチで二度pointDownの処理を行ってしまう。
-	 * 詳細は https://w3c.github.io/touch-events/#mouse-events を参照のこと。
+	 * 元々は、真を指定するとビュー上の MouseEvent/TouchEvent が preventDefault() されなくなるオプションだった。
+	 * 現在はこの値にかかわらず、(PointerEvent が利用できない環境で使われる) touchstart だけが preventDefault() される。
 	 */
 	disablePreventDefault?: boolean;
 
