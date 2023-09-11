@@ -1,4 +1,3 @@
-
 import type { CommonOffset, PlatformButtonType } from "@akashic/pdi-types";
 import { PlatformPointType, type PlatformPointEvent } from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
