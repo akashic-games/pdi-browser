@@ -9,6 +9,7 @@ import { InputEventHandler, preventEventDefault } from "./InputEventHandler";
  */
 export class MouseTouchEventHandler extends InputEventHandler {
 	private static MOUSE_IDENTIFIER: number = 1;
+	private pressingMouseButton: number | null = null;
 
 	// `start()` で設定するDOMイベントをサポートしているかを返す
 	static isSupported(): boolean {
@@ -49,6 +50,10 @@ export class MouseTouchEventHandler extends InputEventHandler {
 	}
 
 	private onMouseDown: (e: MouseEvent) => void = e => {
+		// TODO ボタンが複数押される状態をサポートする
+		if (this.pressingMouseButton != null) return null;
+		this.pressingMouseButton = e.button;
+
 		this.pointDown(MouseTouchEventHandler.MOUSE_IDENTIFIER, this.getOffsetPositionFromInputView(e), this.getPlatformButtonType(e));
 		window.addEventListener("mousemove", this.onWindowMouseMove, false);
 		window.addEventListener("mouseup", this.onWindowMouseUp, false);
@@ -61,6 +66,9 @@ export class MouseTouchEventHandler extends InputEventHandler {
 	};
 
 	private onWindowMouseUp: (e: MouseEvent) => void = e => {
+		if (this.pressingMouseButton !== e.button) return;
+		this.pressingMouseButton = null;
+
 		this.pointUp(MouseTouchEventHandler.MOUSE_IDENTIFIER, this.getOffsetPositionFromInputView(e), this.getPlatformButtonType(e));
 		window.removeEventListener("mousemove", this.onWindowMouseMove, false);
 		window.removeEventListener("mouseup", this.onWindowMouseUp, false);
