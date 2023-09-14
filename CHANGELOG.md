@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.7.1
+* `PointerEvent` 非サポート環境向けのフォールバック `MouseTouchEventHandler` を追加
+
 ## 2.7.0
 * BinaryAsset の実装を追加
 * `ScriptAsset#exports` に対応
