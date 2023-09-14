@@ -51,7 +51,7 @@ export class MouseTouchEventHandler extends InputEventHandler {
 
 	private onMouseDown: (e: MouseEvent) => void = e => {
 		// TODO ボタンが複数押される状態をサポートする
-		if (this.pressingMouseButton != null) return null;
+		if (this.pressingMouseButton != null) return;
 		this.pressingMouseButton = e.button;
 
 		this.pointDown(MouseTouchEventHandler.MOUSE_IDENTIFIER, this.getOffsetPositionFromInputView(e), this.getPlatformButtonType(e));
