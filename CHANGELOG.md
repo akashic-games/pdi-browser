@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## unreleased changes
+* @akashic/pdi-types@1.12.0 に追従
+  * `PointerEvent` サポート環境において `PointMoveEvent#button`, `PointUpEvent#button` に対応
+
 ## 2.7.1
 * `PointerEvent` 非サポート環境向けのフォールバック `MouseTouchEventHandler` を追加
 
