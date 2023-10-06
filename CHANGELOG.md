@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## unreleased changes
+## 2.8.0
 * @akashic/pdi-types@1.12.0 に追従
   * `PointerEvent` サポート環境において `PointMoveEvent#button`, `PointUpEvent#button` に対応
 
