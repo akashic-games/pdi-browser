@@ -41,30 +41,42 @@ export class PointerEventHandler extends InputEventHandler {
 		this.inputView.removeEventListener("contextmenu", preventEventDefault, false);
 	}
 
-	private getPlatformButtonType(e: PointerEvent): PlatformButtonType {
+	private getPlatformButtonType(e: PointerEvent, defaultValue: number): PlatformButtonType {
 		switch (e.button) {
+			case -1:
+				// 変化なし
+				return PlatformButtonType.Unchanged;
 			case 0:
-				// 左クリック
+				// 主ボタン（通常は左ボタン）
 				return PlatformButtonType.Primary;
 			case 1:
-				// ミドルクリック
+				// 予備ボタン（通常は中ボタン）
 				return PlatformButtonType.Auxiliary;
 			case 2:
-				// 右クリック
+				// 副ボタン（通常は右ボタン）
 				return PlatformButtonType.Secondary;
 			default:
-				// 上記以外のボタンは左クリックとして扱う
-				return PlatformButtonType.Primary;
+				return defaultValue;
 		}
 	}
 
 	private onPointerDown: (e: PointerEvent) => void = (e: PointerEvent): void => {
-		this.pointDown(e.pointerId, this.getOffsetPositionFromInputView(e), this.getPlatformButtonType(e));
+		this.pointDown(e.pointerId, this.getOffsetPositionFromInputView(e), this.getPlatformButtonType(e, PlatformButtonType.Primary));
+
 		const onPointerMove = (event: PointerEvent): void => {
-			this.pointMove(event.pointerId, this.getOffsetPositionFromInputView(event), this.getPlatformButtonType(event));
+			this.pointMove(
+				event.pointerId,
+				this.getOffsetPositionFromInputView(event),
+				this.getPlatformButtonType(event, PlatformButtonType.Unchanged)
+			);
 		};
+
 		const onPointerUp = (event: PointerEvent): void => {
-			this.pointUp(event.pointerId, this.getOffsetPositionFromInputView(event), this.getPlatformButtonType(event));
+			this.pointUp(
+				event.pointerId,
+				this.getOffsetPositionFromInputView(event),
+				this.getPlatformButtonType(event, PlatformButtonType.Primary)
+			);
 
 			if (e.pointerId === event.pointerId) {
 				const handlers = this._eventHandlersMap[event.pointerId];
