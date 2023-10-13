@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## unreleased changes
+* `Platform#setTabindex()` を追加
+* `InputHandler` の `view` の Element に `tabindex: 0` をデフォルトで付与するように
+  * これはバージョン 2.4.3 以前の挙動と同様となります。
+
 ## 2.8.0
 * @akashic/pdi-types@1.12.0 に追従
   * `PointerEvent` サポート環境において `PointMoveEvent#button`, `PointUpEvent#button` に対応

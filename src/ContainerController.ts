@@ -99,6 +99,10 @@ export class ContainerController {
 		}
 	}
 
+	setTabindex(index: number | undefined): void {
+		this.inputHandlerLayer.setViewTabindex(index);
+	}
+
 	private _loadView(): void {
 		const { primarySurfaceWidth: width, primarySurfaceHeight: height } = this._rendererReq;
 		// DocumentFragmentはinsertした時点で開放されているため毎回作る
