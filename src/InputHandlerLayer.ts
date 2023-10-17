@@ -67,11 +67,17 @@ export class InputHandlerLayer {
 		view.style.height = size.height + "px";
 	}
 
+	setViewTabindex(tabindex: string): void {
+		const view = this.view;
+		view.setAttribute("tabindex", tabindex);
+	}
+
 	private _createInputView(width: number, height: number): HTMLDivElement {
 		const view = document.createElement("div");
 		view.setAttribute("style", "display:inline-block; outline:none;");
 		view.style.width = width + "px";
 		view.style.height = height + "px";
+		view.setAttribute("tabindex", "0");
 		return view;
 	}
 }
