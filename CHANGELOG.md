@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## unreleased changes
+* `Platform#getTabindex()` を `Platform#getTabIndex()` に変更
+* `Platform#setTabindex()` を `Platform#setTabIndex()` に変更
+
 ## 2.8.1
 * `Platform#setTabindex()` を追加
 * `InputHandler` の `view` の Element に `tabindex: 0` をデフォルトで付与するように

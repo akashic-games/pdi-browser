@@ -181,8 +181,8 @@ export class Platform implements pdi.Platform {
 		return this._audioManager.getMasterVolume();
 	}
 
-	setTabindex(tabindex: string): void {
-		this.containerController.setTabindex(tabindex);
+	setTabIndex(tabIndex: string): void {
+		this.containerController.setTabIndex(tabIndex);
 	}
 
 	destroy(): void {
