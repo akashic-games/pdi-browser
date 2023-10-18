@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## unreleased changes
+## 2.8.2
 * `Platform#getTabindex()` を `Platform#getTabIndex()` に変更
 * `Platform#setTabindex()` を `Platform#setTabIndex()` に変更
 
