@@ -99,8 +99,8 @@ export class ContainerController {
 		}
 	}
 
-	setTabindex(tabindex: string): void {
-		this.inputHandlerLayer.setViewTabindex(tabindex);
+	setTabIndex(tabIndex: string): void {
+		this.inputHandlerLayer.setViewTabIndex(tabIndex);
 	}
 
 	private _loadView(): void {

@@ -67,9 +67,9 @@ export class InputHandlerLayer {
 		view.style.height = size.height + "px";
 	}
 
-	setViewTabindex(tabindex: string): void {
+	setViewTabIndex(tabIndex: string): void {
 		const view = this.view;
-		view.setAttribute("tabindex", tabindex);
+		view.setAttribute("tabindex", tabIndex);
 	}
 
 	private _createInputView(width: number, height: number): HTMLDivElement {
