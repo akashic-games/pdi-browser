@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## unreleased changes
+* `MouseTouchEventHandler` において `button` の値が一部 `PointerEventHandler` と異なってしまう問題を修正
+
 ## 2.8.2
 * `Platform#getTabindex()` を `Platform#getTabIndex()` に変更
 * `Platform#setTabindex()` を `Platform#setTabIndex()` に変更
