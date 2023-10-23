@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## unreleased changes
+## 2.8.3
 * `MouseTouchEventHandler` において `button` の値が一部 `PointerEventHandler` と異なってしまう問題を修正
 
 ## 2.8.2
