@@ -32,20 +32,22 @@ export class MouseTouchEventHandler extends InputEventHandler {
 		this.inputView.removeEventListener("contextmenu", preventEventDefault);
 	}
 
-	private getPlatformButtonType(e: MouseEvent): PlatformButtonType {
+	private getPlatformButtonType(e: MouseEvent, defaultValue: number): PlatformButtonType {
 		switch (e.button) {
+			case -1:
+				// 変化なし
+				return PlatformButtonType.Unchanged;
 			case 0:
-				// 左クリック
+				// 主ボタン（通常は左ボタン）
 				return PlatformButtonType.Primary;
 			case 1:
-				// ミドルクリック
+				// 予備ボタン（通常は中ボタン）
 				return PlatformButtonType.Auxiliary;
 			case 2:
-				// 右クリック
+				// 副ボタン（通常は右ボタン）
 				return PlatformButtonType.Secondary;
 			default:
-				// 上記以外のボタンは左クリックとして扱う
-				return PlatformButtonType.Primary;
+				return defaultValue;
 		}
 	}
 
@@ -54,7 +56,11 @@ export class MouseTouchEventHandler extends InputEventHandler {
 		if (this.pressingMouseButton != null) return;
 		this.pressingMouseButton = e.button;
 
-		this.pointDown(MouseTouchEventHandler.MOUSE_IDENTIFIER, this.getOffsetPositionFromInputView(e), this.getPlatformButtonType(e));
+		this.pointDown(
+			MouseTouchEventHandler.MOUSE_IDENTIFIER,
+			this.getOffsetPositionFromInputView(e),
+			this.getPlatformButtonType(e, PlatformButtonType.Primary)
+		);
 		window.addEventListener("mousemove", this.onWindowMouseMove, false);
 		window.addEventListener("mouseup", this.onWindowMouseUp, false);
 		// NOTE ここで e.preventDefault() してはならない。
@@ -62,14 +68,22 @@ export class MouseTouchEventHandler extends InputEventHandler {
 	};
 
 	private onWindowMouseMove: (e: MouseEvent) => void = e => {
-		this.pointMove(MouseTouchEventHandler.MOUSE_IDENTIFIER, this.getOffsetPositionFromInputView(e), this.getPlatformButtonType(e));
+		this.pointMove(
+			MouseTouchEventHandler.MOUSE_IDENTIFIER,
+			this.getOffsetPositionFromInputView(e),
+			PlatformButtonType.Unchanged // NOTE: 簡易的だが pointermove と挙動を揃えるために常に Unchanged を指定する
+		);
 	};
 
 	private onWindowMouseUp: (e: MouseEvent) => void = e => {
 		if (this.pressingMouseButton !== e.button) return;
 		this.pressingMouseButton = null;
 
-		this.pointUp(MouseTouchEventHandler.MOUSE_IDENTIFIER, this.getOffsetPositionFromInputView(e), this.getPlatformButtonType(e));
+		this.pointUp(
+			MouseTouchEventHandler.MOUSE_IDENTIFIER,
+			this.getOffsetPositionFromInputView(e),
+			this.getPlatformButtonType(e, PlatformButtonType.Primary)
+		);
 		window.removeEventListener("mousemove", this.onWindowMouseMove, false);
 		window.removeEventListener("mouseup", this.onWindowMouseUp, false);
 	};
