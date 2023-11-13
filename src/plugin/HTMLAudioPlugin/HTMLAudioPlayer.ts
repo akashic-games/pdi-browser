@@ -32,34 +32,41 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		const audio = asset.cloneElement();
 
 		if (audio) {
-			if (asset.offset === undefined) {
-				// offsetが指定されていない場合、durationを無視して全体再生する
+			// NOTE: 後方互換のため、offset の指定がない場合は duration を無視 (終端まで再生)
+			const duration = (asset.duration != null && asset.offset != null) ? asset.duration / 1000 : null;
+			const offset = (asset.offset ?? 0) / 1000;
+			const loopStart = (asset.loop && asset.loopOffset != null) ? asset.loopOffset / 1000 : offset;
+			const end = (duration != null) ? offset + duration : null;
+
+			audio.currentTime = offset;
+			if (loopStart === 0 && end == null) {
 				audio.loop = asset.loop;
+				audio.addEventListener("ended", this._endedEventHandler);
 			} else {
-				const offsetSec = (asset.offset ?? 0) / 1000;
-				const durationEndSec = asset.duration / 1000 + offsetSec;
-				audio.currentTime = offsetSec;
-				audio.ontimeupdate = () => {
-					if (durationEndSec <= audio.currentTime) {
-						if (asset.loop) {
-							audio.currentTime = offsetSec;
-						} else {
-							audio.pause();
-						}
-					}
-				};
-				audio.onended = () => {
-					if (asset.loop) {
-						audio.currentTime = offsetSec;
+				if (!asset.loop) {
+					audio.addEventListener("ended", this._endedEventHandler);
+				} else {
+					audio.addEventListener("ended", () => {
+						audio.currentTime = loopStart;
 						audio.play();
-					}
-				};
+					});
+				}
+				if (end != null) {
+					audio.addEventListener("timeupdate", () => {
+						if (end <= audio.currentTime) {
+							if (asset.loop) {
+								audio.currentTime = loopStart;
+							} else {
+								audio.pause();
+							}
+						}
+					});
+				}
 			}
 
 			setupChromeMEIWorkaround(audio);
 			audio.volume = this._calculateVolume();
 			audio.play().catch((_err) => { /* user interactの前にplay()を呼ぶとエラーになる。これはHTMLAudioAutoplayHelperで吸収する */});
-			audio.addEventListener("ended", this._endedEventHandler, false);
 			audio.addEventListener("play", this._onPlayEventHandler, false);
 			this._isWaitingPlayEvent = true;
 			this._audioInstance = audio;

@@ -9,6 +9,7 @@ export interface LoadAudioAssetParameterObject {
 	loop: boolean;
 	hint: AudioAssetHintParameterObject;
 	offset: number;
+	loopOffset: number | undefined;
 }
 
 export interface CreateAudioPlayerParameterObject {

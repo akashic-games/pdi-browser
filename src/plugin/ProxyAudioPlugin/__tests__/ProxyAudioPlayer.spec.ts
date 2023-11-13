@@ -25,7 +25,7 @@ describe("ProxyAudioPlayer", () => {
 		const manager = new AudioManager();
 		const handlerSet = new MockProxyAudioHandlerSet();
 		const player = new ProxyAudioPlayer(handlerSet, system, manager);
-		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 0);
+		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 0, 20);
 
 		expect(player.currentAudio).toBeUndefined();
 		expect(handlerSet.playAudioPlayer).not.toBeCalled();
@@ -44,7 +44,7 @@ describe("ProxyAudioPlayer", () => {
 		const manager = new AudioManager();
 		const handlerSet = new MockProxyAudioHandlerSet();
 		const player = new ProxyAudioPlayer(handlerSet, system, manager);
-		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 0);
+		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 0, 20);
 
 		player.play(asset);
 		player.play(asset);
@@ -57,7 +57,7 @@ describe("ProxyAudioPlayer", () => {
 		const manager = new AudioManager();
 		const handlerSet = new MockProxyAudioHandlerSet();
 		const player = new ProxyAudioPlayer(handlerSet, system, manager);
-		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 0);
+		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 0, 20);
 
 		expect(handlerSet.createAudioPlayer).not.toBeCalled();
 
@@ -76,7 +76,7 @@ describe("ProxyAudioPlayer", () => {
 		const manager = new AudioManager();
 		const handlerSet = new MockProxyAudioHandlerSet();
 		const player = new ProxyAudioPlayer(handlerSet, system, manager);
-		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 0);
+		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 0, 20);
 
 		expect(handlerSet.destroyAudioPlayer).not.toBeCalled();
 
@@ -90,7 +90,7 @@ describe("ProxyAudioPlayer", () => {
 		const manager = new AudioManager();
 		const handlerSet = new MockProxyAudioHandlerSet();
 		const player = new ProxyAudioPlayer(handlerSet, system, manager);
-		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 0);
+		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 0, 20);
 
 		expect(handlerSet.changeAudioVolume).not.toBeCalled();
 

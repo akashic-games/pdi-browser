@@ -22,7 +22,7 @@ describe("HTMLAudioPlayer", () => {
 			const system = new MockAudioSystem({ id: "audio-system" });
 			const manager = new AudioManager();
 			const player = new HTMLAudioPlayer(system, manager);
-			const asset = new HTMLAudioAsset("audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 0);
+			const asset = new HTMLAudioAsset("audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 0, undefined);
 
 			expect(player.currentAudio).toBeUndefined();
 

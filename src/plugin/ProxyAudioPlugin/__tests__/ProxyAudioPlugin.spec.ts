@@ -13,11 +13,12 @@ describe("ProxyAudioPlugin", () => {
 		const handlerSet = new MockProxyAudioHandlerSet();
 		const plugin = new ProxyAudioPlugin(handlerSet);
 		const system = new MockAudioSystem({ id: "audio-system" });
-		const asset = plugin.createAsset("audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 10);
+		const asset = plugin.createAsset("audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 10, 20);
 
 		expect(asset.id).toBe("audio-asset");
 		expect(asset.path).toBe("/path/to/audio");
 		expect(asset.offset).toBe(10);
+		expect(asset.loopOffset).toBe(20);
 		expect(asset.duration).toBe(100);
 		expect(asset.hint).toEqual({ streaming: false });
 		expect(asset.loop).toBe(false);
