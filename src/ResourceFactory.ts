@@ -41,13 +41,14 @@ export class ResourceFactory implements pdi.ResourceFactory {
 		system: pdi.AudioSystem,
 		loop: boolean,
 		hint: pdi.AudioAssetHint,
-		offset: number
+		offset: number,
+		loopOffset: number
 	): AudioAsset {
 		const activePlugin = this._audioPluginManager.getActivePlugin();
 		if (!activePlugin) {
 			throw new Error("ResourceFactory#createAudioAsset(): could not initialize ActivePlugin");
 		}
-		const audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint, offset);
+		const audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint, offset, loopOffset);
 		this._audioManager.registerAudioAsset(audioAsset);
 		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed, this);
 		return audioAsset;

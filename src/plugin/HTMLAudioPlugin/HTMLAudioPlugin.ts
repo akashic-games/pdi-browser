@@ -46,9 +46,10 @@ export class HTMLAudioPlugin implements AudioPlugin {
 		system: pdi.AudioSystem,
 		loop: boolean,
 		hint: pdi.AudioAssetHint,
-		offset: number
+		offset: number,
+		loopOffset: number | undefined
 	): AudioAsset {
-		return new HTMLAudioAsset(id, path, duration, system, loop, hint, offset);
+		return new HTMLAudioAsset(id, path, duration, system, loop, hint, offset, loopOffset);
 	}
 
 	createPlayer(system: pdi.AudioSystem, manager: AudioManager): AudioPlayer {

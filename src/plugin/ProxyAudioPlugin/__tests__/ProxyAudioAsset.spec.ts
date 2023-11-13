@@ -6,11 +6,22 @@ describe("ProxyAudioAsset", () => {
 	it("can instantiate", () => {
 		const system = new MockAudioSystem({ id: "audio-system" });
 		const handlerSet = new MockProxyAudioHandlerSet();
-		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 10);
+		const asset = new ProxyAudioAsset(
+			handlerSet,
+			"audio-asset",
+			"/path/to/audio",
+			100,
+			system,
+			false,
+			{ streaming: false },
+			10,
+			undefined
+		);
 
 		expect(asset.id).toBe("audio-asset");
 		expect(asset.path).toBe("/path/to/audio");
 		expect(asset.offset).toBe(10);
+		expect(asset.loopOffset).toBeUndefined();
 		expect(asset.duration).toBe(100);
 		expect(asset.hint).toEqual({ streaming: false });
 		expect(asset.loop).toBe(false);
@@ -20,7 +31,7 @@ describe("ProxyAudioAsset", () => {
 	it("can load", done => {
 		const system = new MockAudioSystem({ id: "audio-system" });
 		const handlerSet = new MockProxyAudioHandlerSet();
-		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 10);
+		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 10, 20);
 
 		asset._load({
 			_onAssetLoad: (a) => {
@@ -37,7 +48,7 @@ describe("ProxyAudioAsset", () => {
 	it("can unload", done => {
 		const system = new MockAudioSystem({ id: "audio-system" });
 		const handlerSet = new MockProxyAudioHandlerSet();
-		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 10);
+		const asset = new ProxyAudioAsset(handlerSet, "audio-asset", "/path/to/audio", 100, system, false, { streaming: false }, 10, 20);
 
 		asset._load({
 			_onAssetLoad: (a) => {

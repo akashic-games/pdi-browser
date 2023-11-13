@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.9.0-beta.0
+* @akashic/pdi-types@1.13.0-beta.0 に追従
+  * `AudioAsset#loopOffset` に対応
+
 ## 2.8.3
 * `MouseTouchEventHandler` において `button` の値が一部 `PointerEventHandler` と異なってしまう問題を修正
 

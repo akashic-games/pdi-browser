@@ -8,6 +8,7 @@ export abstract class AudioAsset extends Asset implements pdi.AudioAsset {
 	loop: boolean;
 	hint: pdi.AudioAssetHint;
 	offset: number;
+	loopOffset: number | undefined;
 	_system: pdi.AudioSystem;
 	_lastPlayedPlayer: pdi.AudioPlayer | undefined;
 
@@ -18,7 +19,8 @@ export abstract class AudioAsset extends Asset implements pdi.AudioAsset {
 		system: pdi.AudioSystem,
 		loop: boolean,
 		hint: pdi.AudioAssetHint,
-		offset: number
+		offset: number,
+		loopOffset: number | undefined,
 	) {
 		super(id, path);
 		this.duration = duration;
@@ -26,6 +28,7 @@ export abstract class AudioAsset extends Asset implements pdi.AudioAsset {
 		this.hint = hint;
 		this._system = system;
 		this.offset = offset;
+		this.loopOffset = loopOffset;
 		this.path = this._modifyPath(this.path);
 	}
 
