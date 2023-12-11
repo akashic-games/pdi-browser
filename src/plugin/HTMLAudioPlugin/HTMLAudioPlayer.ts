@@ -52,15 +52,27 @@ export class HTMLAudioPlayer extends AudioPlayer {
 					});
 				}
 				if (end != null) {
+					const onEnded: () => void = () => {
+						if (asset.loop) {
+							audio.currentTime = loopStart;
+						} else {
+							audio.pause();
+						}
+					};
+					const setTimer = function(): void {
+						setTimeout(() => {
+							onEnded();
+							setTimer();
+						}, (end - loopStart) * 1000);
+					};
+					// timeupdate イベント通知の精度が低いため、 setTimeout と併用する
+					// addEventListener は裏タブ時にも動作させるため残す
 					audio.addEventListener("timeupdate", () => {
 						if (end <= audio.currentTime) {
-							if (asset.loop) {
-								audio.currentTime = loopStart;
-							} else {
-								audio.pause();
-							}
+							onEnded();
 						}
 					});
+					setTimer();
 				}
 			}
 
