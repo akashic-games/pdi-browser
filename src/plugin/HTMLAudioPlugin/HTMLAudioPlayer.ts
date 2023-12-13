@@ -52,7 +52,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 					});
 				}
 				if (end != null) {
-					const onEnded: () => void = () => {
+					const onEnded= function(): void {
 						if (asset.loop) {
 							audio.currentTime = loopStart;
 						} else {
