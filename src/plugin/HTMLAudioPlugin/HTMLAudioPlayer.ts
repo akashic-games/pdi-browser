@@ -12,6 +12,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 	private _isStopRequested: boolean = false;
 	private _onPlayEventHandler: () => void;
 	private _dummyDurationWaitTimer: any;
+	private _loopTimeoutId: any;
 
 	constructor(system: pdi.AudioSystem, manager: AudioManager) {
 		super(system);
@@ -52,18 +53,25 @@ export class HTMLAudioPlayer extends AudioPlayer {
 					});
 				}
 				if (end != null) {
-					const onEnded= function(): void {
+					const defaultDelayTime = (end - loopStart) * 1000;
+					const onEnded: () => void = () => {
 						if (asset.loop) {
 							audio.currentTime = loopStart;
 						} else {
 							audio.pause();
 						}
 					};
-					const setTimer = function(): void {
-						setTimeout(() => {
-							onEnded();
-							setTimer();
-						}, (end - loopStart) * 1000);
+					const setTimer = (delay: number): void => {
+						console.log("setTimer", delay);
+						this. _loopTimeoutId = setTimeout(() => {
+							console.log("t", end, audio.currentTime);
+							if (end <= audio.currentTime) {
+								onEnded();
+								if (asset.loop) setTimer(defaultDelayTime);
+							} else {
+								setTimer((end - audio.currentTime) * 1000);
+							}
+						}, delay);
 					};
 					// timeupdate イベント通知の精度が低いため、 setTimeout と併用する
 					// addEventListener は裏タブ時にも動作させるため残す
@@ -72,7 +80,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 							onEnded();
 						}
 					});
-					setTimer();
+					setTimer(defaultDelayTime);
 				}
 			}
 
@@ -139,6 +147,10 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		if (this._dummyDurationWaitTimer != null) {
 			clearTimeout(this._dummyDurationWaitTimer);
 			this._dummyDurationWaitTimer = null;
+		}
+		if (this._loopTimeoutId != null) {
+			clearTimeout(this._loopTimeoutId);
+			this._loopTimeoutId = null;
 		}
 	}
 
