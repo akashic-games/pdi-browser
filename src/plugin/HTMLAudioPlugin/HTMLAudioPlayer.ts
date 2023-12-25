@@ -53,34 +53,32 @@ export class HTMLAudioPlayer extends AudioPlayer {
 					});
 				}
 				if (end != null) {
-					const defaultDelayTime = (end - loopStart) * 1000;
-					const onEnded: () => void = () => {
+					let previousCurrentTime = 0;
+					let timerId: any;
+					const clearTimer = (): void => {
+						if (!timerId) clearTimeout(timerId);
+						timerId = null;
+					};
+					const onEnded = function (): void {
+						clearTimer();
 						if (asset.loop) {
 							audio.currentTime = loopStart;
 						} else {
 							audio.pause();
 						}
 					};
-					const setTimer = (delay: number): void => {
-						console.log("setTimer", delay);
-						this. _loopTimeoutId = setTimeout(() => {
-							console.log("t", end, audio.currentTime);
-							if (end <= audio.currentTime) {
-								onEnded();
-								if (asset.loop) setTimer(defaultDelayTime);
-							} else {
-								setTimer((end - audio.currentTime) * 1000);
-							}
-						}, delay);
-					};
-					// timeupdate イベント通知の精度が低いため、 setTimeout と併用する
-					// addEventListener は裏タブ時にも動作させるため残す
 					audio.addEventListener("timeupdate", () => {
+						const diff = Math.max(0, audio.currentTime - previousCurrentTime);
+						previousCurrentTime = audio.currentTime;
 						if (end <= audio.currentTime) {
 							onEnded();
+						} else if (end <= audio.currentTime + diff) { // 次の timeupdate イベントまでに end を超えることが確定していれば、見越し時間で停止処理を行う
+							clearTimer();
+							timerId = setTimeout(() => {
+								onEnded();
+							}, (end - audio.currentTime) * 1000);
 						}
 					});
-					setTimer(defaultDelayTime);
 				}
 			}
 
