@@ -54,13 +54,8 @@ export class HTMLAudioPlayer extends AudioPlayer {
 				}
 				if (end != null) {
 					let previousCurrentTime = 0;
-					let timerId: any;
-					const clearTimer = (): void => {
-						if (!timerId) clearTimeout(timerId);
-						timerId = null;
-					};
-					const onEnded = function (): void {
-						clearTimer();
+					const onEnded =  (): void => {
+						this._clearTimer();
 						if (asset.loop) {
 							audio.currentTime = loopStart;
 						} else {
@@ -73,8 +68,8 @@ export class HTMLAudioPlayer extends AudioPlayer {
 						if (end <= audio.currentTime) {
 							onEnded();
 						} else if (end <= audio.currentTime + diff) { // 次の timeupdate イベントまでに end を超えることが確定していれば、見越し時間で停止処理を行う
-							clearTimer();
-							timerId = setTimeout(() => {
+							this._clearTimer();
+							this._loopTimeoutId = setTimeout(() => {
 								onEnded();
 							}, (end - audio.currentTime) * 1000);
 						}
@@ -139,6 +134,13 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		super.stop();
 	}
 
+	private _clearTimer(): void {
+		if (this._loopTimeoutId != null) {
+			clearTimeout(this._loopTimeoutId);
+			this._loopTimeoutId = null;
+		}
+	}
+
 	private _clearEndedEventHandler(): void {
 		if (this._audioInstance)
 			this._audioInstance.removeEventListener("ended", this._endedEventHandler, false);
@@ -146,10 +148,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 			clearTimeout(this._dummyDurationWaitTimer);
 			this._dummyDurationWaitTimer = null;
 		}
-		if (this._loopTimeoutId != null) {
-			clearTimeout(this._loopTimeoutId);
-			this._loopTimeoutId = null;
-		}
+		this._clearTimer();
 	}
 
 	// audio.play() は非同期なので、 play が開始される前に stop を呼ばれた場合はこのハンドラ到達時に停止する
