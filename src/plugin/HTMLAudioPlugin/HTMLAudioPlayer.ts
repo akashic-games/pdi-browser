@@ -11,7 +11,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 	private _isWaitingPlayEvent: boolean = false;
 	private _isStopRequested: boolean = false;
 	private _onPlayEventHandler: () => void;
-	private _dummyDurationWaitTimer: any;
+	private _dummyDurationWaitTimerId: any;
 	private _loopTimeoutId: any;
 
 	constructor(system: pdi.AudioSystem, manager: AudioManager) {
@@ -23,7 +23,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		this._onPlayEventHandler = () => {
 			this._onPlayEvent();
 		};
-		this._dummyDurationWaitTimer = null;
+		this._dummyDurationWaitTimerId = null;
 	}
 
 	play(asset: HTMLAudioAsset): void {
@@ -85,7 +85,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 			this._audioInstance = audio;
 		} else {
 			// 再生できるオーディオがない場合。duration後に停止処理だけ行う(処理のみ進め音は鳴らさない)
-			this._dummyDurationWaitTimer = setTimeout(this._endedEventHandler, asset.duration);
+			this._dummyDurationWaitTimerId = setTimeout(this._endedEventHandler, asset.duration);
 		}
 		super.play(asset);
 	}
@@ -144,9 +144,9 @@ export class HTMLAudioPlayer extends AudioPlayer {
 	private _clearEndedEventHandler(): void {
 		if (this._audioInstance)
 			this._audioInstance.removeEventListener("ended", this._endedEventHandler, false);
-		if (this._dummyDurationWaitTimer != null) {
-			clearTimeout(this._dummyDurationWaitTimer);
-			this._dummyDurationWaitTimer = null;
+		if (this._dummyDurationWaitTimerId != null) {
+			clearTimeout(this._dummyDurationWaitTimerId);
+			this._dummyDurationWaitTimerId = null;
 		}
 		this._clearTimer();
 	}
