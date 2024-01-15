@@ -48,6 +48,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 					audio.addEventListener("ended", this._endedEventHandler);
 				} else {
 					audio.addEventListener("ended", () => {
+						this._clearLoopTimer();
 						audio.currentTime = loopStart;
 						audio.play();
 					});
@@ -56,10 +57,10 @@ export class HTMLAudioPlayer extends AudioPlayer {
 					let previousCurrentTime = 0;
 					const onEnded =  (): void => {
 						this._clearLoopTimer();
-						if (asset.loop) {
-							audio.currentTime = loopStart;
-						} else {
+						if (!asset.loop) {
 							audio.pause();
+						} else {
+							audio.currentTime = loopStart;
 						}
 					};
 					audio.addEventListener("timeupdate", () => {
