@@ -11,7 +11,12 @@ export class HTMLAudioPlayer extends AudioPlayer {
 	private _isWaitingPlayEvent: boolean = false;
 	private _isStopRequested: boolean = false;
 	private _onPlayEventHandler: () => void;
-	private _dummyDurationWaitTimer: any;
+	private _dummyDurationWaitTimerId: any;
+	// "timeupdate" によるイベント通知間隔はシステム負荷に依存するため、
+	// 次の "timeupdate" 通知タイミングより先にループすべき duration に到達してしまう可能性があり、適切なタイミングでループ処理を行うことができない。
+	// そのため、 `setTimeout()` を併用することで適切なタイミングでループ処理を行う。
+	// この値はそのときの timeoutID を示す。
+	private _onEndedCallTimerId: any;
 
 	constructor(system: pdi.AudioSystem, manager: AudioManager) {
 		super(system);
@@ -22,7 +27,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		this._onPlayEventHandler = () => {
 			this._onPlayEvent();
 		};
-		this._dummyDurationWaitTimer = null;
+		this._dummyDurationWaitTimerId = null;
 	}
 
 	play(asset: HTMLAudioAsset): void {
@@ -47,18 +52,31 @@ export class HTMLAudioPlayer extends AudioPlayer {
 					audio.addEventListener("ended", this._endedEventHandler);
 				} else {
 					audio.addEventListener("ended", () => {
+						this._clearOnEndedCallTimer();
 						audio.currentTime = loopStart;
 						audio.play();
 					});
 				}
 				if (end != null) {
+					let previousCurrentTime = 0;
+					const onEnded =  (): void => {
+						this._clearOnEndedCallTimer();
+						if (!asset.loop) {
+							audio.pause();
+						} else {
+							audio.currentTime = loopStart;
+						}
+					};
 					audio.addEventListener("timeupdate", () => {
+						const diff = Math.max(0, audio.currentTime - previousCurrentTime);
+						previousCurrentTime = audio.currentTime;
 						if (end <= audio.currentTime) {
-							if (asset.loop) {
-								audio.currentTime = loopStart;
-							} else {
-								audio.pause();
-							}
+							onEnded();
+						} else if (end <= audio.currentTime + diff) { // 次の timeupdate イベントまでに end を超えることが確定していれば、見越し時間で停止処理を行う
+							this._clearOnEndedCallTimer();
+							this._onEndedCallTimerId = setTimeout(() => {
+								onEnded();
+							}, (end - audio.currentTime) * 1000);
 						}
 					});
 				}
@@ -72,7 +90,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 			this._audioInstance = audio;
 		} else {
 			// 再生できるオーディオがない場合。duration後に停止処理だけ行う(処理のみ進め音は鳴らさない)
-			this._dummyDurationWaitTimer = setTimeout(this._endedEventHandler, asset.duration);
+			this._dummyDurationWaitTimerId = setTimeout(this._endedEventHandler, asset.duration);
 		}
 		super.play(asset);
 	}
@@ -121,13 +139,21 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		super.stop();
 	}
 
+	private _clearOnEndedCallTimer(): void {
+		if (this._onEndedCallTimerId != null) {
+			clearTimeout(this._onEndedCallTimerId);
+			this._onEndedCallTimerId = null;
+		}
+	}
+
 	private _clearEndedEventHandler(): void {
 		if (this._audioInstance)
 			this._audioInstance.removeEventListener("ended", this._endedEventHandler, false);
-		if (this._dummyDurationWaitTimer != null) {
-			clearTimeout(this._dummyDurationWaitTimer);
-			this._dummyDurationWaitTimer = null;
+		if (this._dummyDurationWaitTimerId != null) {
+			clearTimeout(this._dummyDurationWaitTimerId);
+			this._dummyDurationWaitTimerId = null;
 		}
+		this._clearOnEndedCallTimer();
 	}
 
 	// audio.play() は非同期なので、 play が開始される前に stop を呼ばれた場合はこのハンドラ到達時に停止する
