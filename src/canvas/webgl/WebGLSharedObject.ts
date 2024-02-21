@@ -442,7 +442,7 @@ export class WebGLSharedObject {
 			"lighter": [this._context.ONE, this._context.ONE],
 			"copy": [this._context.ONE, this._context.ZERO],
 			"xor": [this._context.ONE_MINUS_DST_ALPHA, this._context.ONE_MINUS_SRC_ALPHA],
-			// WebGL では difference と saturation に対応していないため、source-atop と同等の値にする
+			// difference と saturation は WebGL での描画に対応していないため、source-atop と同等の値にする
 			"difference": [this._context.DST_ALPHA, this._context.ONE_MINUS_SRC_ALPHA],
 			"saturation": [this._context.DST_ALPHA, this._context.ONE_MINUS_SRC_ALPHA],
 		};
