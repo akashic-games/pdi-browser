@@ -15,7 +15,9 @@ const compositeOperationTable: { [P in pdi.CompositeOperationString]: string } =
 	"experimental-destination-in": "destination-in",
 	"destination-out": "destination-out",
 	"destination-over": "destination-over",
-	"xor": "xor"
+	"xor": "xor",
+	"difference": "difference",
+	"saturation": "saturation"
 };
 
 export class Context2DRenderer implements Renderer {

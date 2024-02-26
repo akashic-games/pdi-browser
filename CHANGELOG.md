@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.9.0
+* @akashic/pdi-types@1.13.0 に追従
+  * サポートする `CompisiteOperation` に `"difference"` と `"saturation"` を追加(ただし Canvas 描画時のみ)
+
 ## 2.8.6
 * `HTMLAudioPlayer#play()` で部分再生するかどうかの判定が誤っていたため修正
 

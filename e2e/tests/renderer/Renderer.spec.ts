@@ -36,6 +36,8 @@ describe("Renderer", () => {
 		"experimental-source-out",
 		"experimental-destination-in",
 		"experimental-destination-atop",
+		"difference",
+		"saturation"
 	];
 
 	for (const rendererCandidate of ["canvas", "webgl"]) {

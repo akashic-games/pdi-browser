@@ -441,7 +441,10 @@ export class WebGLSharedObject {
 			"destination-over": [this._context.ONE_MINUS_DST_ALPHA, this._context.ONE],
 			"lighter": [this._context.ONE, this._context.ONE],
 			"copy": [this._context.ONE, this._context.ZERO],
-			"xor": [this._context.ONE_MINUS_DST_ALPHA, this._context.ONE_MINUS_SRC_ALPHA]
+			"xor": [this._context.ONE_MINUS_DST_ALPHA, this._context.ONE_MINUS_SRC_ALPHA],
+			// difference と saturation は WebGL での描画に対応していないため、source-over と同等の値にする
+			"difference": [this._context.ONE, this._context.ONE_MINUS_SRC_ALPHA],
+			"saturation": [this._context.ONE, this._context.ONE_MINUS_SRC_ALPHA],
 		};
 
 		const compositeOperation = this._compositeOps[this._currentCompositeOperation];
