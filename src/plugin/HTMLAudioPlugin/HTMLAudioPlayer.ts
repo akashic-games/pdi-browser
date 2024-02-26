@@ -32,7 +32,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 		const audio = asset.cloneElement();
 
 		if (audio) {
-			if (asset.offset === undefined) {
+			if (!asset.offset) {
 				// offsetが指定されていない場合、durationを無視して全体再生する
 				audio.loop = asset.loop;
 			} else {
@@ -59,6 +59,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 			setupChromeMEIWorkaround(audio);
 			audio.volume = this._calculateVolume();
 			audio.play().catch((_err) => { /* user interactの前にplay()を呼ぶとエラーになる。これはHTMLAudioAutoplayHelperで吸収する */});
+			// FIXME: 部分ループ再生の場合、音声再生1周目終了時に内部情報を削除してしまうため、この後にstop()を呼び出しても音声が止まらない問題がある
 			audio.addEventListener("ended", this._endedEventHandler, false);
 			audio.addEventListener("play", this._onPlayEventHandler, false);
 			this._isWaitingPlayEvent = true;
