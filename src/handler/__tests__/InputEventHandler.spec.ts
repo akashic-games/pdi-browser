@@ -12,10 +12,12 @@ class TestInputEventHandler extends InputEventHandler {
 }
 
 describe("InputEventHandler", () => {
-	beforeEach(() => {
-		// レンダリングしていないので offsetWidth,offsetHeight が取得時に 0 となるので定義
-		Object.defineProperty(HTMLElement.prototype, "offsetWidth", { value: 640});
-		Object.defineProperty(HTMLElement.prototype, "offsetHeight", { value: 320});
+	// レンダリングしていないので offsetWidth,offsetHeight が取得時に 0 となるのでモック化
+	const spyWidth = jest.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(640);
+	const spyHeight = jest.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(320);
+	afterAll(() => {
+		spyWidth.mockClear();
+		spyHeight.mockClear();
 	});
 	describe("DownのDOMイベントが発生済みの時", () => {
 		let handler: InputEventHandler;
