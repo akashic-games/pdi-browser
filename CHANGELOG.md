@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.9.1
+* View の外をクリック時に `pointDown` イベントが発生しないよう修正
+
 ## 2.9.0
 * @akashic/pdi-types@1.13.0 に追従
   * サポートする `CompisiteOperation` に `"difference"` と `"saturation"` を追加(ただし Canvas 描画時のみ)
