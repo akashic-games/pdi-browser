@@ -12,6 +12,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 	private _isStopRequested: boolean = false;
 	private _onPlayEventHandler: () => void;
 	private _dummyDurationWaitTimer: any;
+	private _assetLoop: boolean = false;
 
 	constructor(system: pdi.AudioSystem, manager: AudioManager) {
 		super(system);
@@ -30,6 +31,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 			this.stop();
 		}
 		const audio = asset.cloneElement();
+		this._assetLoop = asset.loop;
 
 		if (audio) {
 			if (!asset.offset) {
@@ -111,8 +113,10 @@ export class HTMLAudioPlayer extends AudioPlayer {
 	}
 
 	private _onAudioEnded(): void {
-		this._clearEndedEventHandler();
-		super.stop();
+		if (!this._assetLoop) {
+			this._clearEndedEventHandler();
+			super.stop();
+		}
 	}
 
 	private _clearEndedEventHandler(): void {
