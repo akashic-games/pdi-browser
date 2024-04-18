@@ -63,7 +63,7 @@
     "portfinder": "^1.0.32",
     "puppeteer": "^22.0.0",
     "remark-cli": "^12.0.0",
-    "remark-lint": "^9.1.1",
+    "remark-lint": "^10.0.0",
     "serve-handler": "^6.1.3",
     "shx": "^0.3.4",
     "ts-jest": "^29.0.3",
