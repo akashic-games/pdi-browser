@@ -31,7 +31,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 				// 同じ audio を 連続で再生するとエラーとなる。これは audio.play() が非同期で開始されるためである。
 				// 現在再生中とこれから再生しようとする audio が同じ場合は現在の audio を先頭から再生し、これから再生しようとする audio は何もしないようにする。
 				super.stop();
-				this._audioInstance!.currentTime = 0;
+				this._audioInstance!.currentTime = (asset.offset ?? 0) / 1000;
 				super.play(asset);
 				return;
 			}
