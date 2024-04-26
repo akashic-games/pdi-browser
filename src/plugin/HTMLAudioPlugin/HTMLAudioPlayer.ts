@@ -28,13 +28,13 @@ export class HTMLAudioPlayer extends AudioPlayer {
 	play(asset: HTMLAudioAsset): void {
 		if (this.currentAudio) {
 			if (asset.id === this.currentAudio.id) {
-				// 同一 audio を 連続で再生処理を行うとエラーとなる。これは audio.play() が非同期で開始されるためである。
-				// 上記対応で、現在再生中とこれから再生する audio が同じ場合は現在の audio を先頭から再生し、これから再生する audio は何もしないようにする。
+				// 同じ audio を 連続で再生するとエラーとなる。これは audio.play() が非同期で開始されるためである。
+				// 現在再生中とこれから再生しようとする audio が同じ場合は現在の audio を先頭から再生し、これから再生しようとする audio は何もしないようにする。
 				super.stop();
 				this._audioInstance!.currentTime = 0;
 				super.play(asset);
 				return;
-			  }
+			}
 			this.stop();
 		}
 		const audio = asset.cloneElement();
