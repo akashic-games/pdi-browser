@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.9.2
+* `HTMLAudioPlayer#play()` で同じ audio が連続で再生された時にエラーとなる不具合を修正
+
 ## 2.9.1
 * View の外をクリック時に `pointDown` イベントが発生しないよう修正
 
