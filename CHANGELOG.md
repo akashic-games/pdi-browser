@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## unreleased changes
+* @akashic/pdi-types@1.14.0 に更新
+* `RendererCandidate` をサポート
+  * `WebGLRenderer` で部分的に depth buffer をサポートするように
+
 ## 2.9.2
 * `HTMLAudioPlayer#play()` で同じ audio が連続で再生された時にエラーとなる不具合を修正
 
