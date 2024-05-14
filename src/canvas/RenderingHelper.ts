@@ -1,3 +1,12 @@
+import type { RendererCandidate } from "@akashic/pdi-types";
+
+interface WebGLRendererCandidate extends RendererCandidate {
+	type: "webgl";
+	options?: {
+		enableDepth: boolean;
+	};
+}
+
 export module RenderingHelper {
 	export function toPowerOfTwo(x: number): number {
 		if ((x & (x - 1)) !== 0) {
@@ -14,11 +23,32 @@ export module RenderingHelper {
 		return Math.min(Math.max(x, 0.0), 1.0);
 	}
 
-	export function usedWebGL(rendererCandidates?: string[]): boolean {
-		let used = false;
-		if (rendererCandidates && (0 < rendererCandidates.length)) {
-			used = (rendererCandidates[0] === "webgl");
+	export function usedWebGL(rendererCandidates?: (string | RendererCandidate)[]): false | Required<WebGLRendererCandidate> {
+		if (!rendererCandidates || rendererCandidates.length === 0) {
+			return false;
 		}
-		return used;
+
+		const candidate = rendererCandidates[0];
+
+		if (typeof candidate === "string") {
+			if (candidate === "webgl") {
+				return {
+					type: "webgl",
+					options: {
+						enableDepth: false
+					}
+				};
+			}
+		} else if (candidate.type === "webgl") {
+			const webglRendererCandidate = candidate as WebGLRendererCandidate;
+			return {
+				type: "webgl",
+				options: {
+					enableDepth: !!webglRendererCandidate.options?.enableDepth
+				}
+			};
+		}
+
+		return false;
 	}
 }

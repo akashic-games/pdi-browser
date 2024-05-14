@@ -23,9 +23,22 @@ export interface RenderTarget {
 	texture: WebGLTexture | null;
 }
 
+export interface WebGLSharedObjectParameterObject {
+	width: number;
+	height: number;
+
+	/**
+	 * depth buffer を有効にするかどうか。
+	 * 本値が指定された場合、`this.clear()` 時に depth buffer がクリアされることに注意。
+	 * 本値は実験的なオプションのため、将来的に挙動が変更される可能性がある。
+	 */
+	enableDepth?: boolean;
+}
+
 export class WebGLSharedObject {
 	private _context: WebGLRenderingContext;
 	private _surface: WebGLPrimarySurface;
+	private _enableDepth: boolean;
 
 	private _renderTarget: RenderTarget = undefined!;
 	private _defaultShaderProgram: WebGLShaderProgram = undefined!;
@@ -48,13 +61,17 @@ export class WebGLSharedObject {
 	private _compositeOps: {[key in pdi.CompositeOperationString]: [number, number]; } = undefined!;
 	private _deleteRequestedTargets: RenderTarget[] = undefined!;
 
-	constructor(width: number, height: number) {
+	constructor(params: WebGLSharedObjectParameterObject) {
+		const width = params.width;
+		const height = params.height;
+		const enableDepth = !!params.enableDepth;
 		const surface = new WebGLPrimarySurface(this, width, height);
-		const context = surface.canvas.getContext("webgl", { depth: false, preserveDrawingBuffer: true });
+		const context = surface.canvas.getContext("webgl", { depth: enableDepth, preserveDrawingBuffer: true });
 		if (!context) {
 			throw new Error("WebGLSharedObject#constructor: could not initialize WebGLRenderingContext");
 		}
 
+		this._enableDepth = enableDepth;
 		this._surface = surface;
 		this._context = context;
 		this._init();
@@ -105,6 +122,13 @@ export class WebGLSharedObject {
 	}
 
 	clear(): void {
+		if (this._enableDepth) {
+			this._context.depthMask(true); // NOTE: 既存の描画に影響を与えないよう、クリア時のみ有効にする
+			this._context.clear(this._context.COLOR_BUFFER_BIT | this._context.DEPTH_BUFFER_BIT);
+			this._context.depthMask(false);
+			return;
+		}
+
 		this._context.clear(this._context.COLOR_BUFFER_BIT);
 	}
 
