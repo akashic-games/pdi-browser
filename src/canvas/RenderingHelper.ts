@@ -3,7 +3,7 @@ import type { RendererCandidate } from "@akashic/pdi-types";
 interface WebGLRendererCandidate extends RendererCandidate {
 	type: "webgl";
 	options?: {
-		enableDepth: boolean;
+		enableDepthBuffer: boolean;
 	};
 }
 
@@ -35,7 +35,7 @@ export module RenderingHelper {
 				return {
 					type: "webgl",
 					options: {
-						enableDepth: false
+						enableDepthBuffer: false
 					}
 				};
 			}
@@ -44,7 +44,7 @@ export module RenderingHelper {
 			return {
 				type: "webgl",
 				options: {
-					enableDepth: !!webglRendererCandidate.options?.enableDepth
+					enableDepthBuffer: !!webglRendererCandidate.options?.enableDepthBuffer
 				}
 			};
 		}

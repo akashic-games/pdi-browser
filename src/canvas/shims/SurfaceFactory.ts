@@ -13,7 +13,7 @@ export class SurfaceFactory {
 		const usedWebGL = RenderingHelper.usedWebGL(rendererCandidates);
 		if (usedWebGL) {
 			if (!this._shared) {
-				this._shared = new WebGLSharedObject({ width, height, enableDepth: usedWebGL.options.enableDepth });
+				this._shared = new WebGLSharedObject({ width, height, enableDepthBuffer: usedWebGL.options.enableDepthBuffer });
 			}
 			return this._shared.getPrimarySurface();
 		} else {
