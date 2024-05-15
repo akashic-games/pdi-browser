@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## unreleased changes
+## 2.10.0
 * @akashic/pdi-types@1.14.0 に更新
 * `RendererCandidate` をサポート
   * `WebGLRenderer` で部分的に depth buffer をサポートするように
