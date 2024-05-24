@@ -7,6 +7,7 @@ type EventHandlersMap = {
 	[pointerId: number]: {
 		onPointerMove: EventHandler;
 		onPointerUp: EventHandler;
+		onPointerCancel: EventHandler;
 	};
 };
 
@@ -81,15 +82,21 @@ export class PointerEventHandler extends InputEventHandler {
 			if (e.pointerId === event.pointerId) {
 				const handlers = this._eventHandlersMap[event.pointerId];
 				if (!handlers) return;
-				const { onPointerMove, onPointerUp } = handlers;
+				const { onPointerMove, onPointerUp, onPointerCancel } = handlers;
 				window.removeEventListener("pointermove", onPointerMove, false);
 				window.removeEventListener("pointerup", onPointerUp, false);
+				window.removeEventListener("pointercancel", onPointerCancel, false);
 				delete this._eventHandlersMap[event.pointerId];
 			}
 		};
 
+		const onPointerCancel = (event: PointerEvent): void => {
+			onPointerUp(event);
+		};
+
 		window.addEventListener("pointermove", onPointerMove, false);
 		window.addEventListener("pointerup", onPointerUp, false);
-		this._eventHandlersMap[e.pointerId] = { onPointerMove, onPointerUp };
+		window.addEventListener("pointercancel", onPointerCancel, false);
+		this._eventHandlersMap[e.pointerId] = { onPointerMove, onPointerUp, onPointerCancel };
 	};
 }
