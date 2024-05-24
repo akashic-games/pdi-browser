@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.11.0-beta.0
+* `PointerEventHandler` に `pointercancel` を追加。
+* `MouseTouchEventHandler` に `touchcancel` を追加。
+
 ## 2.10.0
 * @akashic/pdi-types@1.14.0 に更新
 * `RendererCandidate` をサポート
