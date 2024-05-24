@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 2.11.0-beta.0
+## 2.11.0
 * `PointerEventHandler` に `pointercancel` を追加。
 * `MouseTouchEventHandler` に `touchcancel` を追加。
 
