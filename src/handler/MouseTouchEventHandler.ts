@@ -21,6 +21,7 @@ export class MouseTouchEventHandler extends InputEventHandler {
 		this.inputView.addEventListener("touchstart", this.onTouchStart);
 		this.inputView.addEventListener("touchmove", this.onTouchMove);
 		this.inputView.addEventListener("touchend", this.onTouchEnd);
+		this.inputView.addEventListener("touchcancel", this.onTouchCancel);
 		this.inputView.addEventListener("contextmenu", preventEventDefault);
 	}
 
@@ -29,6 +30,7 @@ export class MouseTouchEventHandler extends InputEventHandler {
 		this.inputView.removeEventListener("touchstart", this.onTouchStart);
 		this.inputView.removeEventListener("touchmove", this.onTouchMove);
 		this.inputView.removeEventListener("touchend", this.onTouchEnd);
+		this.inputView.removeEventListener("touchcancel", this.onTouchCancel);
 		this.inputView.removeEventListener("contextmenu", preventEventDefault);
 	}
 
@@ -117,5 +119,10 @@ export class MouseTouchEventHandler extends InputEventHandler {
 		}
 		window.removeEventListener("touchmove", this.onTouchMove, false);
 		window.removeEventListener("touchend", this.onTouchEnd, false);
+		window.removeEventListener("touchcancel", this.onTouchCancel, false);
 	};
+
+	private onTouchCancel: (e: TouchEvent) => void =  e => {
+		this.onTouchEnd(e);
+	}
 }
