@@ -22,6 +22,7 @@ export interface PagePosition {
  */
 export abstract class InputEventHandler {
 	inputView: HTMLElement;
+	canvas: HTMLCanvasElement;
 	pointTrigger: Trigger<PlatformPointEvent>;
 
 	protected _xScale: number;
@@ -36,6 +37,7 @@ export abstract class InputEventHandler {
 
 	constructor(inputView: HTMLElement) {
 		this.inputView = inputView;
+		this.canvas = this.inputView.getElementsByTagName("canvas")[0];
 		this.pointerEventLock = {};
 		this._xScale = 1;
 		this._yScale = 1;
@@ -56,8 +58,8 @@ export abstract class InputEventHandler {
 		// chrome で view の境界部分をクリックした際にポイント座標が view の外の座標となることがあるため、view 外の座標の場合は除外する
 		if ( pagePosition.offsetX < 0
 			|| pagePosition.offsetY < 0
-			|| pagePosition.offsetX > this.inputView.offsetWidth
-			|| pagePosition.offsetY > this.inputView.offsetHeight
+			|| pagePosition.offsetX > this.canvas.width
+			|| pagePosition.offsetY > this.canvas.height
 		) return;
 
 		this.pointTrigger.fire({

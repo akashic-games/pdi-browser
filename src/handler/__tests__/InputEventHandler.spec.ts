@@ -12,18 +12,21 @@ class TestInputEventHandler extends InputEventHandler {
 }
 
 describe("InputEventHandler", () => {
-	// レンダリングしていないので offsetWidth,offsetHeight が取得時に 0 となるのでモック化
-	const spyWidth = jest.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(640);
-	const spyHeight = jest.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(320);
-	afterAll(() => {
-		spyWidth.mockClear();
-		spyHeight.mockClear();
+	const canvasWidth = 640;
+	const canvasHeight = 320;
+	let divElement: HTMLDivElement;
+	beforeAll(() => {
+		divElement = document.createElement("div");
+		const canvas: HTMLCanvasElement = document.createElement("canvas");
+		canvas.width = canvasWidth;
+		canvas.height = canvasHeight;
+		divElement.append(canvas);
 	});
 	describe("DownのDOMイベントが発生済みの時", () => {
 		let handler: InputEventHandler;
 		let identifier: number;
 		beforeEach(() => {
-			handler = new TestInputEventHandler(document.createElement("div"));
+			handler = new TestInputEventHandler(divElement);
 			identifier = 1;
 			handler.pointDown(identifier, {offsetX: 1, offsetY: 1}, PlatformButtonType.Primary);
 		});
@@ -75,7 +78,7 @@ describe("InputEventHandler", () => {
 	});
 	describe("DownのDOMイベントが起きていない時", () => {
 		it("DownのDOMイベントがあればonPointDownが呼ばれる", (done) => {
-			const handler = new TestInputEventHandler(document.createElement("div"));
+			const handler = new TestInputEventHandler(divElement);
 			handler.pointTrigger.add((object) => {
 				expect(object.type).toBe(PlatformPointType.Down);
 				expect(object.identifier).toBe(1);
@@ -89,7 +92,7 @@ describe("InputEventHandler", () => {
 			handler.pointDown(1, {offsetX: 10, offsetY: 10}, PlatformButtonType.Secondary);
 		});
 		it("MoveのDOMイベントあってもonPointMoveは呼び出されない", (done) => {
-			const handler = new TestInputEventHandler(document.createElement("div"));
+			const handler = new TestInputEventHandler(divElement);
 			handler.pointMove(1, {offsetX: 0, offsetY: 0}, PlatformButtonType.Primary);
 			handler.pointTrigger.add(() => {
 				done.fail(new Error("not call!"));
@@ -99,7 +102,7 @@ describe("InputEventHandler", () => {
 			done();
 		});
 		it("view 外の座標の場合 pointDown は呼ばれない", (done) => {
-			const handler = new TestInputEventHandler(document.createElement("div"));
+			const handler = new TestInputEventHandler(divElement);
 			let callCount = 0;
 			handler.pointTrigger.add((_object) => {
 				callCount++;
