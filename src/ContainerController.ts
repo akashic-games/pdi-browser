@@ -123,7 +123,14 @@ export class ContainerController {
 
 		// 入力受け付けレイヤー > 描画レイヤー
 		this.surface = this.resourceFactory.createPrimarySurface(width, height);
-		this.inputHandlerLayer.view.appendChild(this.surface.getHTMLElement());
+		const surfaceElement = this.surface.getHTMLElement();
+		// Canvasの親要素のwidthとheightは範囲外判定で使用するため、Canvasに追従できるようにする必要がある
+		const observer = new MutationObserver(() => {
+			this.inputHandlerLayer.view.style.width = surfaceElement.offsetWidth + "px";
+			this.inputHandlerLayer.view.style.height = surfaceElement.offsetHeight + "px";
+		});
+		observer.observe(surfaceElement, { attributeFilter: ["width", "height", "style"] });
+		this.inputHandlerLayer.view.appendChild(surfaceElement);
 		// containerController -> input -> canvas
 		this.container.appendChild(this.inputHandlerLayer.view);
 	}
