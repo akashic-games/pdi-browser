@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 2.10.0
+* @akashic/pdi-types@1.14.0 に更新
+* `RendererCandidate` をサポート
+  * `WebGLRenderer` で部分的に depth buffer をサポートするように
+
+## 2.9.2
+* `HTMLAudioPlayer#play()` で同じ audio が連続で再生された時にエラーとなる不具合を修正
+
+## 2.9.1
+* View の外をクリック時に `pointDown` イベントが発生しないよう修正
+
 ## 2.9.0
 * @akashic/pdi-types@1.13.0 に追従
   * サポートする `CompisiteOperation` に `"difference"` と `"saturation"` を追加(ただし Canvas 描画時のみ)

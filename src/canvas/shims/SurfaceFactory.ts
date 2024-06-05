@@ -1,3 +1,4 @@
+import type { RendererCandidate } from "@akashic/pdi-types";
 import type { CanvasSurface } from "../CanvasSurface";
 import { Context2DSurface } from "../context2d/Context2DSurface";
 import { RenderingHelper } from "../RenderingHelper";
@@ -8,10 +9,11 @@ export class SurfaceFactory {
 	_shared: WebGLSharedObject | undefined;
 	_disposer: CanvasDisposer = new CanvasDisposer();
 
-	createPrimarySurface(width: number, height: number, rendererCandidates?: string[]): CanvasSurface {
-		if (RenderingHelper.usedWebGL(rendererCandidates)) {
+	createPrimarySurface(width: number, height: number, rendererCandidates?: (string | RendererCandidate)[]): CanvasSurface {
+		const usedWebGL = RenderingHelper.usedWebGL(rendererCandidates);
+		if (usedWebGL) {
 			if (!this._shared) {
-				this._shared = new WebGLSharedObject(width, height);
+				this._shared = new WebGLSharedObject({ width, height, enableDepthBuffer: usedWebGL.options.enableDepthBuffer });
 			}
 			return this._shared.getPrimarySurface();
 		} else {
@@ -19,7 +21,7 @@ export class SurfaceFactory {
 		}
 	}
 
-	createBackSurface(width: number, height: number, rendererCandidates?: string[]): CanvasSurface {
+	createBackSurface(width: number, height: number, rendererCandidates?: (string | RendererCandidate)[]): CanvasSurface {
 		const surface = RenderingHelper.usedWebGL(rendererCandidates)
 			? this._shared!.createBackSurface(width, height)
 			: new Context2DSurface(width, height);

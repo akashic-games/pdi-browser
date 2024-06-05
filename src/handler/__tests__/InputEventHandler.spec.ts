@@ -12,6 +12,13 @@ class TestInputEventHandler extends InputEventHandler {
 }
 
 describe("InputEventHandler", () => {
+	// レンダリングしていないので offsetWidth,offsetHeight が取得時に 0 となるのでモック化
+	const spyWidth = jest.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(640);
+	const spyHeight = jest.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(320);
+	afterAll(() => {
+		spyWidth.mockClear();
+		spyHeight.mockClear();
+	});
 	describe("DownのDOMイベントが発生済みの時", () => {
 		let handler: InputEventHandler;
 		let identifier: number;
@@ -89,6 +96,21 @@ describe("InputEventHandler", () => {
 			});
 			// 意味のないテストだが、テストケース中にexpectによるテストを入れておかないとエラーメッセージが表示されるため追加
 			expect(true).toBeTruthy();
+			done();
+		});
+		it("view 外の座標の場合 pointDown は呼ばれない", (done) => {
+			const handler = new TestInputEventHandler(document.createElement("div"));
+			let callCount = 0;
+			handler.pointTrigger.add((_object) => {
+				callCount++;
+				done.fail();
+			});
+
+			handler.pointDown(1, {offsetX: -0.1, offsetY: 10}, PlatformButtonType.Primary);
+			handler.pointDown(1, {offsetX: 10, offsetY: -0.01}, PlatformButtonType.Primary);
+			handler.pointDown(1, {offsetX: 640.1, offsetY: 10}, PlatformButtonType.Primary);
+			handler.pointDown(1, {offsetX: 10, offsetY: 320.01}, PlatformButtonType.Primary);
+			expect(callCount).toBe(0);
 			done();
 		});
 	});
