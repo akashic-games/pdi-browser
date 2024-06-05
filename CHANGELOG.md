@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.10.1
+* `HTMLAudioPlayer` でループ再生時に停止できなくなる不具合を修正
+
 ## 2.10.0
 * @akashic/pdi-types@1.14.0 に更新
 * `RendererCandidate` をサポート
