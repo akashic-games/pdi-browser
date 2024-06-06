@@ -120,16 +120,14 @@ export class ContainerController {
 			if (this.surface && ! this.surface.destroyed()) {
 				this.inputHandlerLayer.view.removeChild(this.surface.canvas);
 				this.surface.destroy();
+				// メモリリーク防止のため、過去の Canvas に対する Observer を削除しておく
+				this.observer.disconnect();
 			}
 		}
 
 		// 入力受け付けレイヤー > 描画レイヤー
 		this.surface = this.resourceFactory.createPrimarySurface(width, height);
 		const surfaceElement = this.surface.getHTMLElement();
-		// メモリリーク防止のため、過去の Canvas に対する Observer を削除しておく
-		if (this.observer) {
-			this.observer.disconnect();
-		}
 		// Canvasの親要素のwidthとheightは範囲外判定で使用するため、Canvasに追従できるようにする必要がある
 		this.observer = new MutationObserver(() => {
 			this.inputHandlerLayer.view.style.width = surfaceElement.offsetWidth + "px";
