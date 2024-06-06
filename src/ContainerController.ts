@@ -31,6 +31,8 @@ export class ContainerController {
 	surface: CanvasSurface = undefined!;
 	inputHandlerLayer: InputHandlerLayer = undefined!;
 	rootView: HTMLElement = undefined!;
+	// Canvas 要素のサイズ変更に追従するための Observer
+	observer: MutationObserver = undefined!;
 
 	/**
 	 * ゲームコンテンツのCanvas拡大・縮小時に内部のコンテキスト領域のリサイズを行うかどうか。初期値はfalse。
@@ -118,12 +120,21 @@ export class ContainerController {
 			if (this.surface && ! this.surface.destroyed()) {
 				this.inputHandlerLayer.view.removeChild(this.surface.canvas);
 				this.surface.destroy();
+				// メモリリーク防止のため、過去の Canvas に対する Observer を削除しておく
+				this.observer.disconnect();
 			}
 		}
 
 		// 入力受け付けレイヤー > 描画レイヤー
 		this.surface = this.resourceFactory.createPrimarySurface(width, height);
-		this.inputHandlerLayer.view.appendChild(this.surface.getHTMLElement());
+		const surfaceElement = this.surface.getHTMLElement();
+		// Canvasの親要素のwidthとheightは範囲外判定で使用するため、Canvasに追従できるようにする必要がある
+		this.observer = new MutationObserver(() => {
+			this.inputHandlerLayer.view.style.width = surfaceElement.offsetWidth + "px";
+			this.inputHandlerLayer.view.style.height = surfaceElement.offsetHeight + "px";
+		});
+		this.observer.observe(surfaceElement, { attributeFilter: ["width", "height", "style"] });
+		this.inputHandlerLayer.view.appendChild(surfaceElement);
 		// containerController -> input -> canvas
 		this.container.appendChild(this.inputHandlerLayer.view);
 	}
