@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.10.1
+* スマホ環境だと画面右側のPointDownに反応しない問題を修正
+  * 本問題は `2.9.1` ~ `2.10.0` において発生していた
+
 ## 2.10.0
 * @akashic/pdi-types@1.14.0 に更新
 * `RendererCandidate` をサポート
