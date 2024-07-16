@@ -2,17 +2,21 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
 import { Trigger } from "@akashic/trigger";
-import type { HTMLAudioAsset } from "./HTMLAudioAsset";
 import { setupChromeMEIWorkaround } from "./HTMLAudioAutoplayHelper";
 
-export interface HTMLAudioPlayerContextParameterObject {
-	asset: HTMLAudioAsset;
+export interface AudioElementPlayerParameterObject {
+	id: string;
+	element: HTMLAudioElement | null;
+	duration: number;
+	offset: number;
+	loop: boolean;
+	loopOffset: number;
 }
 
-export class HTMLAudioPlayerContext {
+export class AudioElementPlayer {
 	onStop: Trigger<void>;
 
-	asset: HTMLAudioAsset;
+	id: string;
 	element: HTMLAudioElement | null;
 	offsetStart: number;
 	offsetEnd: number;
@@ -24,25 +28,24 @@ export class HTMLAudioPlayerContext {
 	_reachEndTimerId: number | null;
 	_previousCurrentTime: number;
 
-	constructor({ asset }: HTMLAudioPlayerContextParameterObject) {
-		this.asset = asset;
-		this.duration = asset.duration ?? +Infinity;
-		this.offsetStart = asset.offset ?? 0;
-		this.offsetEnd = this.offsetStart + this.duration;
-		this.loop = !!asset.loop;
-		this.loopOffset = asset.loopOffset ?? 0;
+	constructor({ id, element, duration, offset, loopOffset, loop }: AudioElementPlayerParameterObject) {
+		this.id = id;
+		this.duration = duration;
+		this.offsetStart = offset;
+		this.offsetEnd = offset + duration;
+		this.loop = loop;
+		this.loopOffset = loopOffset;
 		this.onStop = new Trigger();
 		this._dummyTimerId = null;
 		this._reachEndTimerId = null;
 
-		const element = asset.cloneElement();
 		if (element) {
 			setupChromeMEIWorkaround(element);
 			element.addEventListener("timeupdate", this._onTimeupdate, false);
 			element.addEventListener("ended", this._onEnded, false);
 			element.currentTime = this.offsetStart / 1000;
 		} else {
-			if (!asset.loop && asset.duration != null) {
+			if (!loop && duration != null) {
 				this._setDummyTimer(this.duration);
 			}
 		}

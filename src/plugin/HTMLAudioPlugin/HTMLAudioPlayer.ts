@@ -1,56 +1,63 @@
 import type * as pdi from "@akashic/pdi-types";
 import type { AudioManager } from "../../AudioManager";
 import { AudioPlayer } from "../AudioPlayer";
+import { AudioElementPlayer } from "./AudioElementPlayer";
 import type { HTMLAudioAsset } from "./HTMLAudioAsset";
-import { HTMLAudioPlayerContext } from "./HTMLAudioPlayerContext";
 
 export class HTMLAudioPlayer extends AudioPlayer {
 	private _manager: AudioManager;
-	private _context: HTMLAudioPlayerContext | null;
+	private _player: AudioElementPlayer | null;
 
 	constructor(system: pdi.AudioSystem, manager: AudioManager) {
 		super(system);
 		this._manager = manager;
-		this._context = null;
+		this._player = null;
 	}
 
 	play(asset: HTMLAudioAsset): void {
-		if (this._context) {
-			if (asset.id === this._context.asset.id) {
+		if (this._player) {
+			if (asset.id === this._player.id) {
 				// 同一 ID のアセットは使い回す
 				super.stop();
-				this._context.rewind();
+				this._player.rewind();
 				super.play(asset);
 				return;
 			}
-			this._context.destroy();
+			this._player.destroy();
 		}
 
-		const context = new HTMLAudioPlayerContext({ asset });
-		context.onStop.add(this.stop, this);
-		context.play();
-		this._context = context;
+		const player = new AudioElementPlayer({
+			id: asset.id,
+			element: asset.cloneElement(),
+			duration: asset.duration ?? +Infinity,
+			offset: asset.offset ?? 0,
+			loop: !!asset.loop,
+			loopOffset: asset.loopOffset ?? 0,
+		});
+		player.onStop.add(this.stop, this);
+		player.play();
+		this._player = player;
 
 		super.play(asset);
 	}
 
 	stop(): void {
-		this._context?.pause();
+		this._player?.pause();
 		super.stop();
 	}
 
 	changeVolume(volume: number): void {
 		super.changeVolume(volume);
-		this._context?.setVolume(this._calculateVolume());
+		this._player?.setVolume(this._calculateVolume());
 	}
 
 	_changeMuted(muted: boolean): void {
 		super._changeMuted(muted);
-		this._context?.setVolume(this._calculateVolume());
+		this._player?.setVolume(this._calculateVolume());
 	}
 
 	notifyMasterVolumeChanged(): void {
-		this._context?.setVolume(this._calculateVolume());
+		this._player?.setVolume(this._calculateVolume());
 	}
 
 	private _calculateVolume(): number {
