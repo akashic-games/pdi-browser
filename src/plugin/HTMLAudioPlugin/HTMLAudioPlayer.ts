@@ -34,6 +34,7 @@ export class HTMLAudioPlayer extends AudioPlayer {
 			loop: !!asset.loop,
 			loopOffset: asset.loopOffset ?? 0,
 		});
+		player.setVolume(this._calculateVolume());
 		player.onStop.add(this.stop, this);
 		player.play();
 		this._player = player;
