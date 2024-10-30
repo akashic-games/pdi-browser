@@ -71,17 +71,31 @@ export class WebGLRenderer implements Renderer {
 		);
 	}
 
-	drawSprites(surface: WebGLBackSurface, offsetX: number[], offsetY: number[], width: number[], height: number[],
-	            canvasOffsetX: number[], canvasOffsetY: number[], count: number): void {
+	drawSprites(
+		surface: WebGLBackSurface,
+		offsetX: number[],
+		offsetY: number[],
+		width: number[],
+		height: number[],
+		canvasOffsetX: number[],
+		canvasOffsetY: number[],
+		count: number
+	): void {
 		for (let i = 0; i < count; ++i) {
 			this.drawImage(surface, offsetX[i], offsetY[i],
 				width[i], height[i], canvasOffsetX[i], canvasOffsetY[i]);
 		}
 	}
 
-	drawImage(surface: WebGLBackSurface,
-	          offsetX: number, offsetY: number, width: number, height: number,
-	          canvasOffsetX: number, canvasOffsetY: number): void {
+	drawImage(
+		surface: WebGLBackSurface,
+		offsetX: number,
+		offsetY: number,
+		width: number,
+		height: number,
+		canvasOffsetX: number,
+		canvasOffsetY: number
+	): void {
 
 		if (!surface._drawable) {
 			throw new Error("WebGLRenderer#drawImage: no drawable surface.");

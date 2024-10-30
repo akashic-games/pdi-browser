@@ -13,7 +13,6 @@ type UniformSetter = (loc: WebGLUniformLocation, v: number | Int32Array | Float3
 export class WebGLShaderProgram {
 	program: WebGLProgram;
 
-	/* eslint-disable  @typescript-eslint/indent */
 	private static _DEFAULT_VERTEX_SHADER: string =
 		"#version 100\n" +
 		"precision mediump float;\n" +
@@ -37,7 +36,6 @@ export class WebGLShaderProgram {
 		"void main() {" +
 		"    gl_FragColor = texture2D(uSampler, vTexCoord) * vColor;" +
 		"}";
-	/* eslint-enable @typescript-eslint/indent */
 
 	private _context: WebGLRenderingContext;
 	private _aVertex: number;
