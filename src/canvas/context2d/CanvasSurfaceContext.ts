@@ -66,8 +66,17 @@ export class CanvasSurfaceContext {
 		this._modifiedTransform = true;
 	}
 
-	drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap,
-	          srcX: number, srcY: number, srcW: number, srcH: number, dstX: number, dstY: number, dstW: number, dstH: number): void {
+	drawImage(
+		image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap,
+		srcX: number,
+		srcY: number,
+		srcW: number,
+		srcH: number,
+		dstX: number,
+		dstY: number,
+		dstW: number,
+		dstH: number
+	): void {
 		this.prerender();
 		this._context.drawImage(image, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH);
 	}
@@ -110,8 +119,15 @@ export class CanvasSurfaceContext {
 		return this._context.getImageData(sx, sy, sw, sh);
 	}
 
-	putImageData(imagedata: ImageData, dx: number, dy: number,
-	             dirtyX?: number, dirtyY?: number, dirtyWidth?: number, dirtyHeight?: number): void {
+	putImageData(
+		imagedata: ImageData,
+		dx: number,
+		dy: number,
+		dirtyX?: number,
+		dirtyY?: number,
+		dirtyWidth?: number,
+		dirtyHeight?: number
+	): void {
 		this._context.putImageData(imagedata, dx, dy, dirtyX!, dirtyY!, dirtyWidth!, dirtyHeight!);
 	}
 

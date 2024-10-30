@@ -28,7 +28,7 @@ export function setupChromeMEIWorkaround(audio: HTMLAudioElement): void {
 		clearTimeout(timer!);
 	}
 
-	function suspendedHandler(): void {
+	async function suspendedHandler(): Promise<void> {
 		audio.removeEventListener("play", playHandler);
 		switch (state) {
 			case PlayableState.Unknown:
@@ -40,7 +40,7 @@ export function setupChromeMEIWorkaround(audio: HTMLAudioElement): void {
 				suspendedAudioElements.push(audio);
 				break;
 			case PlayableState.Ready:
-				audio.play(); // suspendedHandler が呼ばれるまでに音が鳴らせるようになった場合
+				await audio.play(); // suspendedHandler が呼ばれるまでに音が鳴らせるようになった場合
 				break;
 			default:
 				// do nothing;

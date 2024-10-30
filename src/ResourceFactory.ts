@@ -1,5 +1,4 @@
 import type * as pdi from "@akashic/pdi-types";
-import type { RendererCandidate } from "@akashic/pdi-types";
 import type { AudioAsset } from "./asset/AudioAsset";
 import { BinaryAsset } from "./asset/BinaryAsset";
 import { GeneratedSVGImageAsset } from "./asset/GeneratedSVGImageAsset";
@@ -24,7 +23,7 @@ export interface ResourceFactoryParameterObject {
 export class ResourceFactory implements pdi.ResourceFactory {
 	_audioPluginManager: AudioPluginManager;
 	_audioManager: AudioManager;
-	_rendererCandidates: (string | RendererCandidate)[] | undefined;
+	_rendererCandidates: (string | pdi.RendererCandidate)[] | undefined;
 	_surfaceFactory: SurfaceFactory;
 	_platform: Platform;
 
