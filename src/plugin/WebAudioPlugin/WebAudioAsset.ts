@@ -1,6 +1,7 @@
 import type * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
+import { ResourceManager } from "../../utils/ResourceManager";
 import { XHRLoader } from "../../utils/XHRLoader";
 import { addExtname, resolveExtname } from "../audioUtil";
 import * as helper from "./WebAudioHelper";
@@ -8,6 +9,8 @@ import * as helper from "./WebAudioHelper";
 export class WebAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[] = [];
+	static webAudioManager: ResourceManager<AudioBuffer> = new ResourceManager<AudioBuffer>();
+	private byteLength: number = 0;
 
 	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {
@@ -17,8 +20,17 @@ export class WebAudioAsset extends AudioAsset {
 			return;
 		}
 
+		if (!WebAudioAsset.webAudioManager.registerLoadingResoruce(this.originalPath)) {
+			WebAudioAsset.webAudioManager.useResoruce(this.originalPath, (audio) => {
+				this.data = audio;
+				setTimeout(() => loader._onAssetLoad(this), 0);
+			});
+			return;
+		}
+
 		const successHandler = (decodedAudio: AudioBuffer): void => {
 			this.data = decodedAudio;
+			WebAudioAsset.webAudioManager.saveResoruce(this.originalPath, decodedAudio, this.byteLength);
 			loader._onAssetLoad(this);
 		};
 		const errorHandler = (): void => {
@@ -26,6 +38,9 @@ export class WebAudioAsset extends AudioAsset {
 		};
 
 		const onLoadArrayBufferHandler = (response: any): void => {
+			if (response.byteLength) {
+				this.byteLength = response.byteLength;
+			}
 			const audioContext = helper.getAudioContext();
 			audioContext.decodeAudioData(
 				response,

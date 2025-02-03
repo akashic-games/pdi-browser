@@ -1,6 +1,7 @@
 import type * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
+import { ResourceManager } from "../../utils/ResourceManager";
 import { addExtname, resolveExtname } from "../audioUtil";
 
 export interface MediaLoaderEventHandlerSet {
@@ -11,6 +12,7 @@ export interface MediaLoaderEventHandlerSet {
 export class HTMLAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[];
+	static htmlAudioManager: ResourceManager<HTMLAudioElement> = new ResourceManager<HTMLAudioElement>();
 	private _intervalId: number = -1;
 	private _intervalCount: number = 0;
 
@@ -22,7 +24,16 @@ export class HTMLAudioAsset extends AudioAsset {
 			return;
 		}
 
+		if (!HTMLAudioAsset.htmlAudioManager.registerLoadingResoruce(this.originalPath)) {
+			HTMLAudioAsset.htmlAudioManager.useResoruce(this.originalPath, (audio) => {
+				this.data = audio;
+				setTimeout(() => loader._onAssetLoad(this), 0);
+			});
+			return;
+		}
+
 		const audio = this.createAudioElement();
+
 		const startLoadingAudio = (path: string, handlers: MediaLoaderEventHandlerSet): void => {
 			// autoplay は preload よりも優先されるため明示的にfalseとする
 			audio.autoplay = false;
@@ -39,6 +50,15 @@ export class HTMLAudioAsset extends AudioAsset {
 			audio.preload = "auto";
 			setAudioLoadInterval(audio, handlers);
 			audio.load();
+			fetch(audio.src)
+				.then(response => response.arrayBuffer())
+				.then(buffer => {
+					HTMLAudioAsset.htmlAudioManager.saveResoruce(this.originalPath, audio, buffer.byteLength);
+				})
+				.catch(_error => {
+					// エラーの場合、データサイズがわからないので仮に1MBとして登録
+					HTMLAudioAsset.htmlAudioManager.saveResoruce(this.originalPath, audio, 1000000);
+				});
 		};
 
 		const handlers: MediaLoaderEventHandlerSet = {
