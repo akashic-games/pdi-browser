@@ -4,19 +4,19 @@ interface LoadingResource<T> {
 	reserveFuncs: ((data: T) => void)[];
 }
 
-// 音声ファイル等のリソースを一時的にキャッシュして管理するクラス
+// リソースを一時的にキャッシュして管理するクラス
 // 同名ファイルの複数ロードを防ぐために用意
-export class ResourceManager<T> {
-	private static DEFAULT_LIMIT_SIZE: number = 100000000; // キャッシュ用マップ保存可能容量のデフォルト値。byte単位なので100MB
+export class CacheTable<T> {
+	private static DEFAULT_LIMIT_SIZE: number = 100000000; // キャッシュ用マップ保存可能容量のデフォルト値。単位はbyteの想定だが、別の単位も利用可能
 	private loadingResourceMap: Map<string, LoadingResource<T>>; // リソースキャッシュ用マップ
-	private mapLimitSize: number; // キャッシュ用マップに保存できるリソースの容量。単位はbyte
+	private mapLimitSize: number; // キャッシュ用マップに保存できるリソースの容量
 	private totalSize: number; // キャッシュ用マップが現在抱えているリソースの合計容量
 	private priorities: {[id: string]: number}; // 各リソースの優先度マップ。最近利用されたものほど値(優先度)が高くなる
 	private totalUseCount: number; // リソースキャッシュ用マップにアクセスされた回数。この数値を優先度マップで利用
 
 	constructor(mapLimitSize?: number) {
 		this.loadingResourceMap = new Map<string, LoadingResource<T>>();
-		this.mapLimitSize = mapLimitSize ?? ResourceManager.DEFAULT_LIMIT_SIZE;
+		this.mapLimitSize = mapLimitSize ?? CacheTable.DEFAULT_LIMIT_SIZE;
 		this.totalSize = 0;
 		this.totalUseCount = 0;
 		this.priorities = Object.create({});

@@ -1,7 +1,7 @@
 import type * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
+import { CacheTable } from "../../utils/CacheTable";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
-import { ResourceManager } from "../../utils/ResourceManager";
 import { addExtname, resolveExtname } from "../audioUtil";
 
 export interface MediaLoaderEventHandlerSet {
@@ -12,7 +12,8 @@ export interface MediaLoaderEventHandlerSet {
 export class HTMLAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[];
-	static htmlAudioManager: ResourceManager<HTMLAudioElement> = new ResourceManager<HTMLAudioElement>();
+	// 音声ファイルのファイルサイズ取得が困難なので、保存可能容量として音声の合計再生時間を利用。100分を上限とする
+	static cacheTable: CacheTable<HTMLAudioElement> = new CacheTable<HTMLAudioElement>(6000000);
 	private _intervalId: number = -1;
 	private _intervalCount: number = 0;
 
@@ -24,8 +25,8 @@ export class HTMLAudioAsset extends AudioAsset {
 			return;
 		}
 
-		if (!HTMLAudioAsset.htmlAudioManager.registerLoadingResoruce(this.originalPath)) {
-			HTMLAudioAsset.htmlAudioManager.useResoruce(this.originalPath, (audio) => {
+		if (!HTMLAudioAsset.cacheTable.registerLoadingResoruce(this.originalPath)) {
+			HTMLAudioAsset.cacheTable.useResoruce(this.originalPath, (audio) => {
 				this.data = audio;
 				setTimeout(() => loader._onAssetLoad(this), 0);
 			});
@@ -49,16 +50,12 @@ export class HTMLAudioAsset extends AudioAsset {
 			/* eslint-enable max-len */
 			audio.preload = "auto";
 			setAudioLoadInterval(audio, handlers);
+			audio.addEventListener("loadeddata", _event => {
+				// ロード後でないと音声ファイルの再生時間が取得できないため、ここでキャッシュ保存処理を行う
+				HTMLAudioAsset.cacheTable.saveResoruce(this.originalPath, audio, 1000 * audio.duration);
+			});
 			audio.load();
-			fetch(audio.src)
-				.then(response => response.arrayBuffer())
-				.then(buffer => {
-					HTMLAudioAsset.htmlAudioManager.saveResoruce(this.originalPath, audio, buffer.byteLength);
-				})
-				.catch(_error => {
-					// エラーの場合、データサイズがわからないので仮に1MBとして登録
-					HTMLAudioAsset.htmlAudioManager.saveResoruce(this.originalPath, audio, 1000000);
-				});
+			HTMLAudioAsset.cacheTable.saveResoruce(this.originalPath, audio, this.duration);
 		};
 
 		const handlers: MediaLoaderEventHandlerSet = {
