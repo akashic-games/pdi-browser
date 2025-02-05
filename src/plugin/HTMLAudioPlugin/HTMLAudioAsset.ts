@@ -25,8 +25,8 @@ export class HTMLAudioAsset extends AudioAsset {
 			return;
 		}
 
-		if (!HTMLAudioAsset.cacheTable.registerLoadingResoruce(this.originalPath)) {
-			HTMLAudioAsset.cacheTable.useResoruce(this.originalPath, (audio) => {
+		if (!HTMLAudioAsset.cacheTable.register(this.originalPath)) {
+			HTMLAudioAsset.cacheTable.exec(this.originalPath, (audio) => {
 				this.data = audio;
 				setTimeout(() => loader._onAssetLoad(this), 0);
 			});
@@ -50,24 +50,21 @@ export class HTMLAudioAsset extends AudioAsset {
 			/* eslint-enable max-len */
 			audio.preload = "auto";
 			setAudioLoadInterval(audio, handlers);
-			audio.addEventListener("loadeddata", _event => {
-				// ロード後でないと音声ファイルの再生時間が取得できないため、ここでキャッシュ保存処理を行う
-				HTMLAudioAsset.cacheTable.saveResoruce(this.originalPath, audio, 1000 * audio.duration);
-			});
 			audio.load();
-			HTMLAudioAsset.cacheTable.saveResoruce(this.originalPath, audio, this.duration);
 		};
 
 		const handlers: MediaLoaderEventHandlerSet = {
 			success: (): void => {
 				this._detachAll(audio, handlers);
 				this.data = audio;
+				HTMLAudioAsset.cacheTable.add(this.originalPath, audio, 1000 * audio.duration);
 				loader._onAssetLoad(this);
 				window.clearInterval(this._intervalId);
 			},
 			error: (): void => {
 				this._detachAll(audio, handlers);
 				this.data = audio;
+				HTMLAudioAsset.cacheTable.delete(this.originalPath);
 				loader._onAssetError(this, ExceptionFactory.createAssetLoadError("HTMLAudioAsset loading error"));
 				window.clearInterval(this._intervalId);
 			}

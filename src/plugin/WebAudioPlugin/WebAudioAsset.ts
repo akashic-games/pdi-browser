@@ -20,8 +20,8 @@ export class WebAudioAsset extends AudioAsset {
 			return;
 		}
 
-		if (!WebAudioAsset.cacheTable.registerLoadingResoruce(this.originalPath)) {
-			WebAudioAsset.cacheTable.useResoruce(this.originalPath, (audio) => {
+		if (!WebAudioAsset.cacheTable.register(this.originalPath)) {
+			WebAudioAsset.cacheTable.exec(this.originalPath, (audio) => {
 				this.data = audio;
 				setTimeout(() => loader._onAssetLoad(this), 0);
 			});
@@ -30,10 +30,11 @@ export class WebAudioAsset extends AudioAsset {
 
 		const successHandler = (decodedAudio: AudioBuffer): void => {
 			this.data = decodedAudio;
-			WebAudioAsset.cacheTable.saveResoruce(this.originalPath, decodedAudio, this.byteLength);
+			WebAudioAsset.cacheTable.add(this.originalPath, decodedAudio, this.byteLength);
 			loader._onAssetLoad(this);
 		};
 		const errorHandler = (): void => {
+			WebAudioAsset.cacheTable.delete(this.originalPath);
 			loader._onAssetError(this, ExceptionFactory.createAssetLoadError("WebAudioAsset unknown loading error"));
 		};
 
