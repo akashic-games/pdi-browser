@@ -1,6 +1,6 @@
 import type * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
-import { CacheTable } from "../../utils/CacheTable";
+import { CachedLoader } from "../../utils/CachedLoader";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
 import { XHRLoader } from "../../utils/XHRLoader";
 import { addExtname, resolveExtname } from "../audioUtil";
@@ -9,73 +9,22 @@ import * as helper from "./WebAudioHelper";
 export class WebAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[] = [];
-	static cacheTable: CacheTable<AudioBuffer> = new CacheTable<AudioBuffer>();
-	private byteLength: number = 0;
+	private static _loader: CachedLoader<string, AudioBuffer> = new CachedLoader<string, AudioBuffer>();
 
-	_load(loader: pdi.AssetLoadHandler): void {
+	_load(handler: pdi.AssetLoadHandler): void {
 		if (this.path == null) {
 			// 再生可能な形式がない。実際には鳴らない音声としてロード成功しておく
 			this.data = null;
-			setTimeout(() => loader._onAssetLoad(this), 0);
+			setTimeout(() => handler._onAssetLoad(this), 0);
 			return;
 		}
 
-		if (!WebAudioAsset.cacheTable.register(this.originalPath)) {
-			WebAudioAsset.cacheTable.exec(this.originalPath, (audio) => {
-				this.data = audio;
-				setTimeout(() => loader._onAssetLoad(this), 0);
-			});
-			return;
-		}
-
-		const successHandler = (decodedAudio: AudioBuffer): void => {
-			this.data = decodedAudio;
-			WebAudioAsset.cacheTable.add(this.originalPath, decodedAudio, this.byteLength);
-			loader._onAssetLoad(this);
-		};
-		const errorHandler = (): void => {
-			WebAudioAsset.cacheTable.delete(this.originalPath);
-			loader._onAssetError(this, ExceptionFactory.createAssetLoadError("WebAudioAsset unknown loading error"));
-		};
-
-		const onLoadArrayBufferHandler = (response: any): void => {
-			if (response.byteLength) {
-				this.byteLength = response.byteLength;
-			}
-			const audioContext = helper.getAudioContext();
-			audioContext.decodeAudioData(
-				response,
-				successHandler,
-				errorHandler
-			);
-		};
-
-		const xhrLoader = new XHRLoader();
-		const loadArrayBuffer = (path: string, onSuccess: (response: any) => void, onFailed: (err: pdi.AssetLoadError) => void): void => {
-			xhrLoader.getArrayBuffer(path, (error, response) => {
-				if (error) {
-					onFailed(error);
-				} else {
-					onSuccess(response);
-				}
-			});
-		};
-
-		const delIndex = this.path.indexOf("?");
-		const basePath = delIndex >= 0 ? this.path.substring(0, delIndex) : this.path;
-		if (basePath.slice(-4) === ".aac") {
-			// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
-			// この対応を止める際には、WebAudioPluginのsupportedExtensionsからaacを除外する必要がある。
-			loadArrayBuffer(this.path, onLoadArrayBufferHandler, _error => {
-				const altPath = addExtname(this.originalPath, ".mp4");
-				loadArrayBuffer(altPath, (response) => {
-					this.path = altPath;
-					onLoadArrayBufferHandler(response);
-				}, errorHandler);
-			});
-			return;
-		}
-		loadArrayBuffer(this.path, onLoadArrayBufferHandler, errorHandler);
+		WebAudioAsset._loader.load(this.path, this._loadImpl.bind(this)).then(audioData => {
+			this.data = audioData.value;
+			setTimeout(() => handler._onAssetLoad(this), 0);
+		}).catch(_e => {
+			handler._onAssetError(this, ExceptionFactory.createAssetLoadError("WebAudioAsset unknown loading error"));
+		});
 	}
 
 	_assetPathFilter(path: string): string {
@@ -94,5 +43,39 @@ export class WebAudioAsset extends AudioAsset {
 	_modifyPath(path: string): string {
 		const ext = resolveExtname(this.hint?.extensions, WebAudioAsset.supportedFormats);
 		return ext ? addExtname(this.originalPath, ext) : path;
+	}
+
+	private async _loadImpl(url: string): Promise<{ value: AudioBuffer; size: number }> {
+		try {
+			return await this._loadArrayBuffer(url);
+		} catch (e) {
+			const delIndex = url.indexOf("?");
+			const basePath = delIndex >= 0 ? url.substring(0, delIndex) : url;
+			if (basePath.slice(-4) === ".aac") {
+				this.path = addExtname(this.originalPath, ".mp4"); // 互換性維持のため
+				return await this._loadArrayBuffer(this.path);
+			}
+			throw e;
+		}
+	}
+
+	private _loadArrayBuffer(url: string): Promise<{ value: AudioBuffer; size: number }> {
+		const l = new XHRLoader();
+		return new Promise((resolve, reject) => {
+			l.getArrayBuffer(url, (err, result) => {
+				if (err) {
+					return reject(err);
+				}
+				if (!result) {
+					return reject(`respone is undefined: ${url}`);
+				}
+				const audioContext = helper.getAudioContext();
+				audioContext.decodeAudioData(
+					result,
+					(value) => resolve({ value, size: result.byteLength ?? 0 }),
+					reject
+				);
+			});
+		});
 	}
 }
