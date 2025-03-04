@@ -9,7 +9,8 @@ import * as helper from "./WebAudioHelper";
 export class WebAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[] = [];
-	private static _loader: CachedLoader<string, AudioBuffer> = new CachedLoader<string, AudioBuffer>();
+	// 保存可能容量としてファイルサイズの合計値を利用。100MBを上限とする
+	private static _loader: CachedLoader<string, AudioBuffer> = new CachedLoader<string, AudioBuffer>({ limitSize: 100000000 });
 
 	_load(handler: pdi.AssetLoadHandler): void {
 		if (this.path == null) {

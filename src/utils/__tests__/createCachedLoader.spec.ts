@@ -36,7 +36,7 @@ const loaderImpl = (key: string): Promise<{ value: string; size: number }> => {
 
 describe("CachedLoader", () => {
 	it("リソース・キャッシュを取得できる", async () => {
-		const loader = new CachedLoader<string, string>();
+		const loader = new CachedLoader<string, string>({ limitSize: 1000 });
 
 		// リソースをロードして取得できるか確認
 		const resource = await loader.load("id1", loaderImpl);
@@ -65,7 +65,7 @@ describe("CachedLoader", () => {
 				}
 			});
 		};
-		const loader = new CachedLoader<string, string>();
+		const loader = new CachedLoader<string, string>({ limitSize: 1000 });
 		const key = "key";
 
 		loader.load(key, loaderImpl).then(() => {

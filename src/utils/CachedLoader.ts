@@ -1,4 +1,4 @@
-import { createWaiter } from "./createWaiter";
+import { createWaiter } from "./Waiter";
 
 interface CachedResource<T> {
 	value: T;
@@ -6,10 +6,8 @@ interface CachedResource<T> {
 };
 
 interface CachedLoaderOption {
-	limitSize?: number;
+	limitSize: number;
 }
-
-const DEFAULT_LIMIT_SIZE: number = 100000000; // キャッシュ用マップ保存可能容量のデフォルト値。単位はbyteの想定だが、別の単位も利用可能
 
 export class CachedLoader<K, T> {
 	private table: Map<K, Promise<CachedResource<T>>>; // リソースキャッシュ用マップ
@@ -18,12 +16,12 @@ export class CachedLoader<K, T> {
 	private totalUseCount: number; // リソースキャッシュ用マップにアクセスされた回数。この数値を優先度マップで利用
 	private limitSize: number; // キャッシュ用マップに保存できるリソースの容量
 
-	constructor(option: CachedLoaderOption = {}) {
+	constructor(option: CachedLoaderOption) {
 		this.table = new Map<K, Promise<CachedResource<T>>>();
 		this.priorities = new Map<K, number>();
 		this.totalSize = 0;
 		this.totalUseCount = 0;
-		this.limitSize = option.limitSize ?? DEFAULT_LIMIT_SIZE;
+		this.limitSize = option.limitSize;
 	}
 
 	async load(key: K, loaderImpl: (key: K) => Promise<CachedResource<T>>): Promise<CachedResource<T>> {
