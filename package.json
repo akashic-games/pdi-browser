@@ -25,8 +25,8 @@
     "lint:md": "remark ./*.md --frail --no-stdout --rc-path ./.remarkrc",
     "jest": "run-s jest:**",
     "jest:unit": "jest --projects jest.unit.config.js",
-    "jest:e2e": "cpx build/pdi-browser.js e2e/public/ && npm run jest jest:e2e2",
-    "jest:e2e2": "jest --projects jest.e2e.config.js --runInBand --detectOpenHandles"
+    "jest:e2e": "cpx build/pdi-browser.js e2e/public/ && npm run test2",
+    "test2": "jest --projects jest.e2e.config.js --runInBand --detectOpenHandles"
   },
   "author": "DWANGO Co., Ltd.",
   "license": "MIT",
