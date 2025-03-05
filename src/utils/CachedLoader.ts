@@ -1,8 +1,9 @@
 import { createWaiter } from "./Waiter";
 
-interface CachedResource<T> {
+interface CachedResource<K, T> {
 	value: T;
 	size: number;
+	key: K;
 };
 
 interface CachedLoaderOption {
@@ -10,35 +11,37 @@ interface CachedLoaderOption {
 }
 
 export class CachedLoader<K, T> {
-	private table: Map<K, { size: number, promise: Promise<CachedResource<T>> }>; // リソースキャッシュ用マップ
+	private loaderImpl: (key: K) => Promise<CachedResource<K, T>>;
+	private table: Map<K, { size: number; promise: Promise<CachedResource<K, T>> }>; // リソースキャッシュ用マップ
 	private priorities: Map<K, number>; // 各リソースの優先度マップ。最近利用されたものほど値(優先度)が高くなる
 	private totalSize: number; // キャッシュ用マップが現在抱えているリソースの合計容量
 	private totalUseCount: number; // リソースキャッシュ用マップにアクセスされた回数。この数値を優先度マップで利用
 	private limitSize: number; // キャッシュ用マップに保存できるリソースの容量
 
-	constructor(option: CachedLoaderOption) {
-		this.table = new Map<K, { size: number, promise: Promise<CachedResource<T>> }>();
+	constructor(loaderImpl: (key: K) => Promise<CachedResource<K, T>>, option: CachedLoaderOption) {
+		this.loaderImpl = loaderImpl;
+		this.table = new Map<K, { size: number; promise: Promise<CachedResource<K, T>> }>();
 		this.priorities = new Map<K, number>();
 		this.totalSize = 0;
 		this.totalUseCount = 0;
 		this.limitSize = option.limitSize;
 	}
 
-	load(key: K, loaderImpl: (key: K) => Promise<CachedResource<T>>): Promise<CachedResource<T>> {
-		this._updatePriorities(key);
-		const entry = this.table.get(key);
+	load(targetKey: K): Promise<CachedResource<K, T>> {
+		this._updatePriorities(targetKey);
+		const entry = this.table.get(targetKey);
 		if (entry) {
 			return entry.promise;
 		}
 
-		const { resolve, reject, promise } = createWaiter<CachedResource<T>>();
-		this.table.set(key, { size: 0, promise });
-		loaderImpl(key).then(({ value, size }) => {
-			this.table.set(key, { size, promise });
+		const { resolve, reject, promise } = createWaiter<CachedResource<K, T>>();
+		this.table.set(targetKey, { size: 0, promise });
+		this.loaderImpl(targetKey).then(({ value, size, key }) => {
+			this.table.set(targetKey, { size, promise });
 			this._checkCache(size);
-			resolve({ value, size });
+			resolve({ value, size, key });
 		}).catch(e => {
-			this._deleteCache(key);
+			this._deleteCache(targetKey);
 			reject(e);
 		});
 		return promise;
