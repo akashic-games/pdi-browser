@@ -13,6 +13,10 @@ export class WebAudioAsset extends AudioAsset {
 	private static _loader: CachedLoader<string, AudioBuffer> =
 		new CachedLoader<string, AudioBuffer>(WebAudioAsset._loadImpl, { limitSize: 100000000 });
 
+	static clearCache(): void {
+		WebAudioAsset._loader.reset();
+	}
+
 	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {
 			// 再生可能な形式がない。実際には鳴らない音声としてロード成功しておく
@@ -22,8 +26,8 @@ export class WebAudioAsset extends AudioAsset {
 		}
 
 		WebAudioAsset._loader.load(this.path).then(audioData => {
-			if (this.path !== audioData.key) {
-				this.path = audioData.key;
+			if (this.path !== audioData.url) {
+				this.path = audioData.url;
 			}
 			this.data = audioData.value;
 			setTimeout(() => loader._onAssetLoad(this), 0);
@@ -50,7 +54,7 @@ export class WebAudioAsset extends AudioAsset {
 		return ext ? addExtname(this.originalPath, ext) : path;
 	}
 
-	private static async _loadImpl(url: string): Promise<{ value: AudioBuffer; size: number; key: string }> {
+	private static async _loadImpl(url: string): Promise<{ value: AudioBuffer; size: number; url: string }> {
 		try {
 			return await WebAudioAsset._loadArrayBuffer(url);
 		} catch (e) {
@@ -65,7 +69,7 @@ export class WebAudioAsset extends AudioAsset {
 		}
 	}
 
-	private static _loadArrayBuffer(url: string): Promise<{ value: AudioBuffer; size: number; key: string }> {
+	private static _loadArrayBuffer(url: string): Promise<{ value: AudioBuffer; size: number; url: string }> {
 		const l = new XHRLoader();
 		return new Promise((resolve, reject) => {
 			l.getArrayBuffer(url, (err, result) => {
@@ -78,7 +82,7 @@ export class WebAudioAsset extends AudioAsset {
 				const audioContext = helper.getAudioContext();
 				audioContext.decodeAudioData(
 					result,
-					(value) => resolve({ value, size: result.byteLength ?? 0, key: url }),
+					(value) => resolve({ value, size: result.byteLength ?? 0, url }),
 					reject
 				);
 			});

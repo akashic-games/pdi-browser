@@ -1,9 +1,7 @@
-import { createWaiter } from "./Waiter";
-
-interface CachedResource<K, T> {
+interface CachedResource<T> {
 	value: T;
 	size: number;
-	key: K;
+	url: string;
 };
 
 interface CachedLoaderOption {
@@ -11,40 +9,48 @@ interface CachedLoaderOption {
 }
 
 export class CachedLoader<K, T> {
-	private loaderImpl: (key: K) => Promise<CachedResource<K, T>>;
-	private table: Map<K, { size: number; promise: Promise<CachedResource<K, T>> }>; // リソースキャッシュ用マップ
+	private loaderImpl: (key: K) => Promise<CachedResource<T>>;
+	private table: Map<K, { size: number; promise: Promise<CachedResource<T>> }>; // リソースキャッシュ用マップ
 	private priorities: Map<K, number>; // 各リソースの優先度マップ。最近利用されたものほど値(優先度)が高くなる
 	private totalSize: number; // キャッシュ用マップが現在抱えているリソースの合計容量
 	private totalUseCount: number; // リソースキャッシュ用マップにアクセスされた回数。この数値を優先度マップで利用
 	private limitSize: number; // キャッシュ用マップに保存できるリソースの容量
 
-	constructor(loaderImpl: (key: K) => Promise<CachedResource<K, T>>, option: CachedLoaderOption) {
+	constructor(loaderImpl: (key: K) => Promise<CachedResource<T>>, option: CachedLoaderOption) {
 		this.loaderImpl = loaderImpl;
-		this.table = new Map<K, { size: number; promise: Promise<CachedResource<K, T>> }>();
+		this.table = new Map<K, { size: number; promise: Promise<CachedResource<T>> }>();
 		this.priorities = new Map<K, number>();
 		this.totalSize = 0;
 		this.totalUseCount = 0;
 		this.limitSize = option.limitSize;
 	}
 
-	load(targetKey: K): Promise<CachedResource<K, T>> {
-		this._updatePriorities(targetKey);
-		const entry = this.table.get(targetKey);
+	load(key: K): Promise<CachedResource<T>> {
+		this._updatePriorities(key);
+		const entry = this.table.get(key);
 		if (entry) {
 			return entry.promise;
 		}
 
-		const { resolve, reject, promise } = createWaiter<CachedResource<K, T>>();
-		this.table.set(targetKey, { size: 0, promise });
-		this.loaderImpl(targetKey).then(({ value, size, key }) => {
-			this.table.set(targetKey, { size, promise });
-			this._checkCache(size);
-			resolve({ value, size, key });
-		}).catch(e => {
-			this._deleteCache(targetKey);
-			reject(e);
+		const promise = new Promise<CachedResource<T>>((resolve, reject) => {
+			this.loaderImpl(key).then(({ value, size, url }) => {
+				this.table.set(key, { size, promise });
+				this._checkCache(size);
+				resolve({ value, size, url });
+			}).catch(e => {
+				this._deleteCache(key);
+				reject(e);
+			});
 		});
+		this.table.set(key, { size: 0, promise });
 		return promise;
+	}
+
+	reset(): void {
+		this.table.clear();
+		this.priorities.clear();
+		this.totalSize = 0;
+		this.totalUseCount = 0;
 	}
 
 	// キャッシュの整理。指定したサイズを合計サイズに加算して、合計サイズが上限を超えている場合は優先度が低い順に削除される
@@ -54,9 +60,9 @@ export class CachedLoader<K, T> {
 			return;
 		}
 		// 保存されている全リソースの容量が保存可能容量を超える場合、保存可能容量を下回るまで、使われていないリソースから順にキャッシュ用マップから削除していく
-		const ids = Array.from(this.priorities.keys()).sort((a, b) => this.priorities.get(a)! - this.priorities.get(b)!);
+		const ids = Array.from(this.priorities).sort((a, b) => a[1] - b[1]);
 		for (const i of ids) {
-			this._deleteCache(i);
+			this._deleteCache(i[0]);
 			if (this.totalSize <= this.limitSize) {
 				break;
 			}

@@ -16,6 +16,10 @@ export class HTMLAudioAsset extends AudioAsset {
 	private static _loader: CachedLoader<string, HTMLAudioElement> =
 		new CachedLoader<string, HTMLAudioElement>(HTMLAudioAsset._loadImpl, { limitSize: 6000000 });
 
+	static clearCache(): void {
+		HTMLAudioAsset._loader.reset();
+	}
+
 	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {
 			// 再生可能な形式がない。実際には鳴らない音声としてロード成功しておく
@@ -25,8 +29,8 @@ export class HTMLAudioAsset extends AudioAsset {
 		}
 
 		HTMLAudioAsset._loader.load(this.path).then(audioData => {
-			if (this.path !== audioData.key) {
-				this.path = audioData.key;
+			if (this.path !== audioData.url) {
+				this.path = audioData.url;
 			}
 			this.data = audioData.value;
 			setTimeout(() => loader._onAssetLoad(this), 0);
@@ -61,7 +65,7 @@ export class HTMLAudioAsset extends AudioAsset {
 		return new Audio(src);
 	}
 
-	private static async _loadImpl(url: string): Promise<{ value: HTMLAudioElement; size: number; key: string }> {
+	private static async _loadImpl(url: string): Promise<{ value: HTMLAudioElement; size: number; url: string }> {
 		try {
 			return await HTMLAudioAsset._startLoadingAudio(url);
 		} catch (e) {
@@ -76,7 +80,7 @@ export class HTMLAudioAsset extends AudioAsset {
 		}
 	}
 
-	private static _startLoadingAudio (url: string): Promise<{ value: HTMLAudioElement; size: number; key: string }> {
+	private static _startLoadingAudio (url: string): Promise<{ value: HTMLAudioElement; size: number; url: string }> {
 		const audio = HTMLAudioAsset.createAudioElement();
 		const attachAll = (audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void => {
 			if (handlers.success) {
@@ -112,7 +116,7 @@ export class HTMLAudioAsset extends AudioAsset {
 				success: (): void => {
 					detachAll(audio, handlers);
 					window.clearInterval(intervalId);
-					resolve({ value: audio, size: 1000 * audio.duration, key: url });
+					resolve({ value: audio, size: 1000 * audio.duration, url });
 				},
 				error: (): void => {
 					detachAll(audio, handlers);
