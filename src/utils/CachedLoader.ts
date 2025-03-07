@@ -1,7 +1,6 @@
 interface CachedResource<T> {
 	value: T;
 	size: number;
-	url: string;
 };
 
 interface CachedLoaderOption {
@@ -33,10 +32,10 @@ export class CachedLoader<K, T> {
 		}
 
 		const promise = new Promise<CachedResource<T>>((resolve, reject) => {
-			this.loaderImpl(key).then(({ value, size, url }) => {
+			this.loaderImpl(key).then(({ value, size }) => {
 				this.table.set(key, { size, promise });
 				this._checkCache(size);
-				resolve({ value, size, url });
+				resolve({ value, size });
 			}).catch(e => {
 				this._deleteCache(key);
 				reject(e);
@@ -60,9 +59,9 @@ export class CachedLoader<K, T> {
 			return;
 		}
 		// 保存されている全リソースの容量が保存可能容量を超える場合、保存可能容量を下回るまで、使われていないリソースから順にキャッシュ用マップから削除していく
-		const ids = Array.from(this.priorities).sort((a, b) => a[1] - b[1]);
-		for (const i of ids) {
-			this._deleteCache(i[0]);
+		const entries = Array.from(this.priorities).sort((a, b) => a[1] - b[1]);
+		for (const entry of entries) {
+			this._deleteCache(entry[0]);
 			if (this.totalSize <= this.limitSize) {
 				break;
 			}

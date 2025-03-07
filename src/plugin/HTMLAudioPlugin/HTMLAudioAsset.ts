@@ -13,8 +13,8 @@ export class HTMLAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[];
 	// 音声ファイルのファイルサイズ取得が困難なので、保存可能容量として音声の合計再生時間を利用。100分を上限とする
-	private static _loader: CachedLoader<string, HTMLAudioElement> =
-		new CachedLoader<string, HTMLAudioElement>(HTMLAudioAsset._loadImpl, { limitSize: 6000000 });
+	private static _loader: CachedLoader<string, { audio: HTMLAudioElement; url: string }> =
+		new CachedLoader<string, { audio: HTMLAudioElement; url: string }>(HTMLAudioAsset._loadImpl, { limitSize: 6000000 });
 
 	static clearCache(): void {
 		HTMLAudioAsset._loader.reset();
@@ -28,11 +28,11 @@ export class HTMLAudioAsset extends AudioAsset {
 			return;
 		}
 
-		HTMLAudioAsset._loader.load(this.path).then(audioData => {
-			if (this.path !== audioData.url) {
-				this.path = audioData.url;
+		HTMLAudioAsset._loader.load(this.path).then(data => {
+			if (this.path !== data.value.url) {
+				this.path = data.value.url;
 			}
-			this.data = audioData.value;
+			this.data = data.value.audio;
 			setTimeout(() => loader._onAssetLoad(this), 0);
 		}).catch(_e => {
 			loader._onAssetError(this, ExceptionFactory.createAssetLoadError("HTMLAudioAsset loading error"));
@@ -65,7 +65,7 @@ export class HTMLAudioAsset extends AudioAsset {
 		return new Audio(src);
 	}
 
-	private static async _loadImpl(url: string): Promise<{ value: HTMLAudioElement; size: number; url: string }> {
+	private static async _loadImpl(url: string): Promise<{ value: { audio: HTMLAudioElement; url: string }; size: number }> {
 		try {
 			return await HTMLAudioAsset._startLoadingAudio(url);
 		} catch (e) {
@@ -80,7 +80,7 @@ export class HTMLAudioAsset extends AudioAsset {
 		}
 	}
 
-	private static _startLoadingAudio (url: string): Promise<{ value: HTMLAudioElement; size: number; url: string }> {
+	private static _startLoadingAudio (url: string): Promise<{ value: { audio: HTMLAudioElement; url: string }; size: number }> {
 		const audio = HTMLAudioAsset.createAudioElement();
 		const attachAll = (audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void => {
 			if (handlers.success) {
@@ -116,7 +116,7 @@ export class HTMLAudioAsset extends AudioAsset {
 				success: (): void => {
 					detachAll(audio, handlers);
 					window.clearInterval(intervalId);
-					resolve({ value: audio, size: 1000 * audio.duration, url });
+					resolve({ value: { audio, url }, size: 1000 * audio.duration });
 				},
 				error: (): void => {
 					detachAll(audio, handlers);

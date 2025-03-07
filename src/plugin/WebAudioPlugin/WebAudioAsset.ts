@@ -10,8 +10,8 @@ export class WebAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[] = [];
 	// 保存可能容量としてファイルサイズの合計値を利用。100MBを上限とする
-	private static _loader: CachedLoader<string, AudioBuffer> =
-		new CachedLoader<string, AudioBuffer>(WebAudioAsset._loadImpl, { limitSize: 100000000 });
+	private static _loader: CachedLoader<string, { audio: AudioBuffer; url: string }> =
+		new CachedLoader<string, { audio: AudioBuffer; url: string }>(WebAudioAsset._loadImpl, { limitSize: 100000000 });
 
 	static clearCache(): void {
 		WebAudioAsset._loader.reset();
@@ -25,11 +25,11 @@ export class WebAudioAsset extends AudioAsset {
 			return;
 		}
 
-		WebAudioAsset._loader.load(this.path).then(audioData => {
-			if (this.path !== audioData.url) {
-				this.path = audioData.url;
+		WebAudioAsset._loader.load(this.path).then(data => {
+			if (this.path !== data.value.url) {
+				this.path = data.value.url;
 			}
-			this.data = audioData.value;
+			this.data = data.value.audio;
 			setTimeout(() => loader._onAssetLoad(this), 0);
 		}).catch(_e => {
 			loader._onAssetError(this, ExceptionFactory.createAssetLoadError("WebAudioAsset unknown loading error"));
@@ -54,7 +54,7 @@ export class WebAudioAsset extends AudioAsset {
 		return ext ? addExtname(this.originalPath, ext) : path;
 	}
 
-	private static async _loadImpl(url: string): Promise<{ value: AudioBuffer; size: number; url: string }> {
+	private static async _loadImpl(url: string): Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> {
 		try {
 			return await WebAudioAsset._loadArrayBuffer(url);
 		} catch (e) {
@@ -69,7 +69,7 @@ export class WebAudioAsset extends AudioAsset {
 		}
 	}
 
-	private static _loadArrayBuffer(url: string): Promise<{ value: AudioBuffer; size: number; url: string }> {
+	private static _loadArrayBuffer(url: string): Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> {
 		const l = new XHRLoader();
 		return new Promise((resolve, reject) => {
 			l.getArrayBuffer(url, (err, result) => {
@@ -82,7 +82,7 @@ export class WebAudioAsset extends AudioAsset {
 				const audioContext = helper.getAudioContext();
 				audioContext.decodeAudioData(
 					result,
-					(value) => resolve({ value, size: result.byteLength ?? 0, url }),
+					(audio) => resolve({ value: { audio, url }, size: result.byteLength ?? 0 }),
 					reject
 				);
 			});

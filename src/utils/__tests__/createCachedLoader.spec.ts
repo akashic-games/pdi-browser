@@ -22,14 +22,14 @@ const testResoruceMap: { [key: string]: TestResource } = {
 
 const DEFAULT_LOAD_TIME = 500;
 
-const loaderImpl = (key: string): Promise<{ value: string; size: number; url: string }> => {
+const loaderImpl = (key: string): Promise<{ value: string; size: number }> => {
 	return new Promise((resolve, reject) => {
 		const target = testResoruceMap[key];
 		if (!target) {
 			return reject(`${key} is not found`);
 		}
 		setTimeout(() => {
-			resolve({ value: target.value, size: target.size, url: "/url/" + key });
+			resolve({ value: target.value, size: target.size });
 		}, DEFAULT_LOAD_TIME);
 	});
 };
@@ -42,7 +42,6 @@ describe("CachedLoader", () => {
 		const resource = await loader.load("id1");
 		expect(resource.value).toBe("v_id1");
 		expect(resource.size).toBe(300);
-		expect(resource.url).toBe("/url/id1");
 
 		// 一度ロードしたリソースを再ロードせずキャッシュから取得できているかの確認
 		const timer = setTimeout(() => {
@@ -52,18 +51,17 @@ describe("CachedLoader", () => {
 		clearTimeout(timer);
 		expect(resource2.value).toBe("v_id1");
 		expect(resource2.size).toBe(300);
-		expect(resource2.url).toBe("/url/id1");
 	});
 	it("リソース取得失敗後も正常にリソースを取得できる", (done) => {
 		let count = 0;
-		const loaderImpl = (key: string): Promise<{ value: string; size: number; url: string }> => {
+		const loaderImpl = (key: string): Promise<{ value: string; size: number }> => {
 			count++;
 			return new Promise((resolve, reject) => {
 				// 呼び出し1回目は失敗するように
 				if (count < 2) {
 					reject(`failed to load ${key}`);
 				} else {
-					resolve({ value: "success", size: 10, url: "/" + key });
+					resolve({ value: "success", size: 10 });
 				}
 			});
 		};
@@ -76,7 +74,6 @@ describe("CachedLoader", () => {
 			loader.load(key).then((resource) => {
 				expect(resource.value).toBe("success");
 				expect(resource.size).toBe(10);
-				expect(resource.url).toBe("/key");
 				done();
 			});
 		});
@@ -93,14 +90,12 @@ describe("CachedLoader", () => {
 		const resource1 = await loader.load("id1");
 		expect(resource1.value).toBe("v_id1");
 		expect(resource1.size).toBe(300);
-		expect(resource1.url).toBe("/url/id1");
 		expect(Date.now() - beforeTime).toBeLessThan(DEFAULT_LOAD_TIME);
 		// id２はキャッシュから削除されているため再ロード
 		beforeTime = Date.now();
 		const resource2 = await loader.load("id2");
 		expect(resource2.value).toBe("v_id2");
 		expect(resource2.size).toBe(400);
-		expect(resource2.url).toBe("/url/id2");
 		expect(Date.now() - beforeTime).toBeGreaterThanOrEqual(DEFAULT_LOAD_TIME);
 	});
 
