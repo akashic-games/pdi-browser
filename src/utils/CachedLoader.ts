@@ -31,15 +31,13 @@ export class CachedLoader<K, T> {
 			return entry.promise;
 		}
 
-		const promise = new Promise<CachedResource<T>>((resolve, reject) => {
-			this.loaderImpl(key).then(({ value, size }) => {
-				this.table.set(key, { size, promise });
-				this._checkCache(size);
-				resolve({ value, size });
-			}).catch(e => {
-				this._deleteCache(key);
-				reject(e);
-			});
+		const promise = this.loaderImpl(key).then(({ value, size }) => {
+			this.table.set(key, { size, promise });
+			this._checkCache(size);
+			return { value, size };
+		}).catch(e => {
+			this._deleteCache(key);
+			throw e;
 		});
 		this.table.set(key, { size: 0, promise });
 		return promise;
