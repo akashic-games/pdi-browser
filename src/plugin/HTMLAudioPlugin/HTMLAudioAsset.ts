@@ -1,5 +1,6 @@
 import type * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
+import { CachedLoader } from "../../utils/CachedLoader";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
 import { addExtname, resolveExtname } from "../audioUtil";
 
@@ -11,8 +12,13 @@ export interface MediaLoaderEventHandlerSet {
 export class HTMLAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[];
-	private _intervalId: number = -1;
-	private _intervalCount: number = 0;
+	// 音声ファイルのファイルサイズ取得が困難なので、保存可能容量として音声の合計再生時間を利用。100分を上限とする
+	private static _loader: CachedLoader<string, { audio: HTMLAudioElement; url: string }> =
+		new CachedLoader<string, { audio: HTMLAudioElement; url: string }>(HTMLAudioAsset._loadImpl, { limitSize: 6000000 });
+
+	static clearCache(): void {
+		HTMLAudioAsset._loader.reset();
+	}
 
 	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {
@@ -22,82 +28,19 @@ export class HTMLAudioAsset extends AudioAsset {
 			return;
 		}
 
-		const audio = this.createAudioElement();
-		const startLoadingAudio = (path: string, handlers: MediaLoaderEventHandlerSet): void => {
-			// autoplay は preload よりも優先されるため明示的にfalseとする
-			audio.autoplay = false;
-			audio.preload = "none";
-			audio.src = path;
-			this._attachAll(audio, handlers);
-			/* eslint-disable max-len */
-			// Firefoxはpreload="auto"でないと読み込みされない
-			// preloadはブラウザに対するHint属性なので、どう扱うかはブラウザの実装次第となる
-			// https://html.spec.whatwg.org/multipage/embedded-content.html#attr-media-preload
-			// https://developer.mozilla.org/ja/docs/Web/HTML/Element/audio#attr-preload
-			// https://github.com/CreateJS/SoundJS/blob/e2d4842a84ff425ada861edb9f6e9b57f63d7caf/src/soundjs/htmlaudio/HTMLAudioSoundInstance.js#L147-147
-			/* eslint-enable max-len */
-			audio.preload = "auto";
-			setAudioLoadInterval(audio, handlers);
-			audio.load();
-		};
-
-		const handlers: MediaLoaderEventHandlerSet = {
-			success: (): void => {
-				this._detachAll(audio, handlers);
-				this.data = audio;
-				loader._onAssetLoad(this);
-				window.clearInterval(this._intervalId);
-			},
-			error: (): void => {
-				this._detachAll(audio, handlers);
-				this.data = audio;
-				loader._onAssetError(this, ExceptionFactory.createAssetLoadError("HTMLAudioAsset loading error"));
-				window.clearInterval(this._intervalId);
+		HTMLAudioAsset._loader.load(this.path).then(data => {
+			if (this.path !== data.value.url) {
+				this.path = data.value.url;
 			}
-		};
-
-		const setAudioLoadInterval = (audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void => {
-			// IE11において、canplaythroughイベントが正常に発火しない問題が確認されたため、その対処として以下の処理を行っている。
-			// なお、canplaythroughはreadyStateの値が4になった時点で呼び出されるイベントである。
-			// インターバルとして指定している100msに根拠は無い。
-			this._intervalCount = 0;
-			this._intervalId = window.setInterval((): void => {
-				if (audio.readyState === 4) {
-					handlers.success();
-				} else {
-					++this._intervalCount;
-					// readyStateの値が4にならない状態が1分（100ms×600）続いた場合、
-					// 読み込みに失敗したとする。1分という時間に根拠は無い。
-					if (this._intervalCount === 600) {
-						handlers.error();
-					}
-				}
-			}, 100);
-		};
-
-		// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
-		// この対応を止める際には、HTMLAudioPluginのsupportedExtensionsからaacを除外する必要がある。
-		const delIndex = this.path.indexOf("?");
-		const basePath = delIndex >= 0 ? this.path.substring(0, delIndex) : this.path;
-		if (basePath.slice(-4) === ".aac" && HTMLAudioAsset.supportedFormats.indexOf("mp4") !== -1) {
-			const altHandlers: MediaLoaderEventHandlerSet = {
-				success: handlers.success,
-				error: () => {
-					this._detachAll(audio, altHandlers);
-					window.clearInterval(this._intervalId);
-					this.path = addExtname(this.originalPath, ".mp4");
-					startLoadingAudio(this.path, handlers);
-				}
-			};
-			startLoadingAudio(this.path, altHandlers);
-			return;
-		}
-
-		startLoadingAudio(this.path, handlers);
+			this.data = data.value.audio;
+			loader._onAssetLoad(this);
+		}).catch(_e => {
+			loader._onAssetError(this, ExceptionFactory.createAssetLoadError("HTMLAudioAsset loading error"));
+		});
 	}
 
 	cloneElement(): HTMLAudioElement | null {
-		return this.data ? this.createAudioElement(this.data.src) : null;
+		return this.data ? new Audio(this.data.src) : null;
 	}
 
 	_assetPathFilter(path: string): string {
@@ -118,36 +61,99 @@ export class HTMLAudioAsset extends AudioAsset {
 		return ext ? addExtname(this.originalPath, ext) : path;
 	}
 
-	protected createAudioElement(src?: string): HTMLAudioElement {
-		return new Audio(src);
+	private static async _loadImpl(url: string): Promise<{ value: { audio: HTMLAudioElement; url: string }; size: number }> {
+		try {
+			return await HTMLAudioAsset._loadAudioElement(url);
+		} catch (e) {
+			const delIndex = url.indexOf("?");
+			const basePath = delIndex >= 0 ? url.substring(0, delIndex) : url;
+			if (basePath.slice(-4) === ".aac" && HTMLAudioAsset.supportedFormats.indexOf("mp4") !== -1) {
+				const newUrl = url.substring(0, delIndex - 4) + ".mp4";
+				const query = delIndex >= 0 ? url.substring(delIndex, url.length) : "";
+				return await HTMLAudioAsset._loadAudioElement(newUrl + query);
+			}
+			throw e;
+		}
 	}
 
-	private _attachAll(audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void {
-		if (handlers.success) {
+	private static _loadAudioElement (url: string): Promise<{ value: { audio: HTMLAudioElement; url: string }; size: number }> {
+		const audio = new Audio();
+		const attachAll = (audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void => {
+			if (handlers.success) {
+				/* eslint-disable max-len */
+				// https://developer.mozilla.org/en-US/docs/Web/Events/canplaythrough
+				// https://github.com/goldfire/howler.js/blob/1dad25cdd9d6982232050454e8b45411902efe65/howler.js#L372
+				// https://github.com/CreateJS/SoundJS/blob/e2d4842a84ff425ada861edb9f6e9b57f63d7caf/src/soundjs/htmlaudio/HTMLAudioSoundInstance.js#L145-145
+				/* eslint-enable max-len */
+				audio.addEventListener("canplaythrough", handlers.success, false);
+			}
+			if (handlers.error) {
+				// https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
+				// stalledはfetchして取れなかった時に起きるイベント
+				audio.addEventListener("stalled", handlers.error, false);
+				audio.addEventListener("error", handlers.error, false);
+				audio.addEventListener("abort", handlers.error, false);
+			}
+		};
+		const detachAll = (audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void => {
+			if (handlers.success) {
+				audio.removeEventListener("canplaythrough", handlers.success, false);
+			}
+			if (handlers.error) {
+				audio.removeEventListener("stalled", handlers.error, false);
+				audio.removeEventListener("error", handlers.error, false);
+				audio.removeEventListener("abort", handlers.error, false);
+			}
+		};
+
+		return new Promise((resolve, reject) => {
+			let intervalId: number = -1;
+			const handlers = {
+				success: (): void => {
+					detachAll(audio, handlers);
+					window.clearInterval(intervalId);
+					resolve({ value: { audio, url }, size: 1000 * audio.duration });
+				},
+				error: (): void => {
+					detachAll(audio, handlers);
+					window.clearInterval(intervalId);
+					reject();
+				}
+			};
+
+			const setAudioLoadInterval = (audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void => {
+				// IE11において、canplaythroughイベントが正常に発火しない問題が確認されたため、その対処として以下の処理を行っている。
+				// なお、canplaythroughはreadyStateの値が4になった時点で呼び出されるイベントである。
+				// インターバルとして指定している100msに根拠は無い。
+				let intervalCount = 0;
+				intervalId = window.setInterval((): void => {
+					if (audio.readyState === 4) {
+						handlers.success();
+					} else {
+						++intervalCount;
+						// readyStateの値が4にならない状態が1分（100ms×600）続いた場合、
+						// 読み込みに失敗したとする。1分という時間に根拠は無い。
+						if (intervalCount === 600) {
+							handlers.error();
+						}
+					}
+				}, 100);
+			};
+
+			audio.autoplay = false;
+			audio.preload = "none";
+			audio.src = url;
+			attachAll(audio, handlers);
 			/* eslint-disable max-len */
-			// https://developer.mozilla.org/en-US/docs/Web/Events/canplaythrough
-			// https://github.com/goldfire/howler.js/blob/1dad25cdd9d6982232050454e8b45411902efe65/howler.js#L372
-			// https://github.com/CreateJS/SoundJS/blob/e2d4842a84ff425ada861edb9f6e9b57f63d7caf/src/soundjs/htmlaudio/HTMLAudioSoundInstance.js#L145-145
+			// Firefoxはpreload="auto"でないと読み込みされない
+			// preloadはブラウザに対するHint属性なので、どう扱うかはブラウザの実装次第となる
+			// https://html.spec.whatwg.org/multipage/embedded-content.html#attr-media-preload
+			// https://developer.mozilla.org/ja/docs/Web/HTML/Element/audio#attr-preload
+			// https://github.com/CreateJS/SoundJS/blob/e2d4842a84ff425ada861edb9f6e9b57f63d7caf/src/soundjs/htmlaudio/HTMLAudioSoundInstance.js#L147-147
 			/* eslint-enable max-len */
-			audio.addEventListener("canplaythrough", handlers.success, false);
-		}
-		if (handlers.error) {
-			// https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
-			// stalledはfetchして取れなかった時に起きるイベント
-			audio.addEventListener("stalled", handlers.error, false);
-			audio.addEventListener("error", handlers.error, false);
-			audio.addEventListener("abort", handlers.error, false);
-		}
-	}
-
-	private _detachAll(audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void {
-		if (handlers.success) {
-			audio.removeEventListener("canplaythrough", handlers.success, false);
-		}
-		if (handlers.error) {
-			audio.removeEventListener("stalled", handlers.error, false);
-			audio.removeEventListener("error", handlers.error, false);
-			audio.removeEventListener("abort", handlers.error, false);
-		}
+			audio.preload = "auto";
+			setAudioLoadInterval(audio, handlers);
+			audio.load();
+		});
 	}
 }
