@@ -30,7 +30,7 @@ export class WebAudioAsset extends AudioAsset {
 				this.path = data.value.url;
 			}
 			this.data = data.value.audio;
-			setTimeout(() => loader._onAssetLoad(this), 0);
+			loader._onAssetLoad(this);
 		}).catch(_e => {
 			loader._onAssetError(this, ExceptionFactory.createAssetLoadError("WebAudioAsset unknown loading error"));
 		});

@@ -33,14 +33,14 @@ export class HTMLAudioAsset extends AudioAsset {
 				this.path = data.value.url;
 			}
 			this.data = data.value.audio;
-			setTimeout(() => loader._onAssetLoad(this), 0);
+			loader._onAssetLoad(this);
 		}).catch(_e => {
 			loader._onAssetError(this, ExceptionFactory.createAssetLoadError("HTMLAudioAsset loading error"));
 		});
 	}
 
 	cloneElement(): HTMLAudioElement | null {
-		return this.data ? HTMLAudioAsset.createAudioElement(this.data.src) : null;
+		return this.data ? new Audio(this.data.src) : null;
 	}
 
 	_assetPathFilter(path: string): string {
@@ -61,27 +61,23 @@ export class HTMLAudioAsset extends AudioAsset {
 		return ext ? addExtname(this.originalPath, ext) : path;
 	}
 
-	protected static createAudioElement(src?: string): HTMLAudioElement {
-		return new Audio(src);
-	}
-
 	private static async _loadImpl(url: string): Promise<{ value: { audio: HTMLAudioElement; url: string }; size: number }> {
 		try {
-			return await HTMLAudioAsset._startLoadingAudio(url);
+			return await HTMLAudioAsset._loadAudioElement(url);
 		} catch (e) {
 			const delIndex = url.indexOf("?");
 			const basePath = delIndex >= 0 ? url.substring(0, delIndex) : url;
 			if (basePath.slice(-4) === ".aac" && HTMLAudioAsset.supportedFormats.indexOf("mp4") !== -1) {
 				const newUrl = url.substring(0, delIndex - 4) + ".mp4";
 				const query = delIndex >= 0 ? url.substring(delIndex, url.length) : "";
-				return await HTMLAudioAsset._startLoadingAudio(newUrl + query);
+				return await HTMLAudioAsset._loadAudioElement(newUrl + query);
 			}
 			throw e;
 		}
 	}
 
-	private static _startLoadingAudio (url: string): Promise<{ value: { audio: HTMLAudioElement; url: string }; size: number }> {
-		const audio = HTMLAudioAsset.createAudioElement();
+	private static _loadAudioElement (url: string): Promise<{ value: { audio: HTMLAudioElement; url: string }; size: number }> {
+		const audio = new Audio();
 		const attachAll = (audio: HTMLAudioElement, handlers: MediaLoaderEventHandlerSet): void => {
 			if (handlers.success) {
 				/* eslint-disable max-len */
