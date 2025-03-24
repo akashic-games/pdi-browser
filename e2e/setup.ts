@@ -50,7 +50,7 @@ export default async (): Promise<void> => {
 	server.listen(port, host);
 	globalThis.server = server;
 
-	const browser = await launch({ dumpio: true, args: ["--no-sandbox"]});
+	const browser = await launch({ dumpio: true });
 	globalThis.__BROWSER_GLOBAL__ = browser;
 	await mkdir(DIR, {recursive: true});
 	await writeFile(path.join(DIR, "wsEndpoint"), browser.wsEndpoint());

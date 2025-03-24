@@ -25,9 +25,9 @@ export class WebAudioAsset extends AudioAsset {
 			loader._onAssetError(this, ExceptionFactory.createAssetLoadError("WebAudioAsset unknown loading error"));
 		};
 
-		const onLoadArrayBufferHandler = async (response: any): Promise<void> => {
+		const onLoadArrayBufferHandler = (response: any): void => {
 			const audioContext = helper.getAudioContext();
-			await audioContext.decodeAudioData(
+			audioContext.decodeAudioData(
 				response,
 				successHandler,
 				errorHandler
@@ -52,9 +52,9 @@ export class WebAudioAsset extends AudioAsset {
 			// この対応を止める際には、WebAudioPluginのsupportedExtensionsからaacを除外する必要がある。
 			loadArrayBuffer(this.path, onLoadArrayBufferHandler, _error => {
 				const altPath = addExtname(this.originalPath, ".mp4");
-				loadArrayBuffer(altPath, async (response) => {
+				loadArrayBuffer(altPath, (response) => {
 					this.path = altPath;
-					await onLoadArrayBufferHandler(response);
+					onLoadArrayBufferHandler(response);
 				}, errorHandler);
 			});
 			return;
