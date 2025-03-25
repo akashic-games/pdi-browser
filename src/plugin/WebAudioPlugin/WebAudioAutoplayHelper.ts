@@ -23,8 +23,8 @@ module WebAudioAutoplayHelper {
 
 async function resumeHandler(): Promise<void> {
 	const context = helper.getAudioContext();
-	await context.resume();
 	clearUserInteractListener();
+	await context.resume();
 }
 
 function setUserInteractListener(): void {
