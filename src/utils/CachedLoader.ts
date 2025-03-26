@@ -25,7 +25,7 @@ export class CachedLoader<K, T> {
 	}
 
 	load(key: K): Promise<CachedResource<T>> {
-		this._updatePriorities(key);
+		this._maximizePriority(key);
 		const entry = this.table.get(key);
 		if (entry) {
 			return entry.promise;
@@ -33,7 +33,7 @@ export class CachedLoader<K, T> {
 
 		const promise = this.loaderImpl(key).then(({ value, size }) => {
 			this.table.set(key, { size, promise });
-			this._checkCache(size);
+			this._cleanupCache(size);
 			return { value, size };
 		}).catch(e => {
 			this._deleteCache(key);
@@ -51,7 +51,7 @@ export class CachedLoader<K, T> {
 	}
 
 	// キャッシュの整理。指定したサイズを合計サイズに加算して、合計サイズが上限を超えている場合は優先度が低い順に削除される
-	private _checkCache(size: number): void {
+	private _cleanupCache(size: number): void {
 		this.totalSize += size;
 		if (this.totalSize <= this.limitSize) {
 			return;
@@ -78,8 +78,8 @@ export class CachedLoader<K, T> {
 		this.priorities.delete(key);
 	}
 
-	// 優先度マップの更新
-	private _updatePriorities(key: K): void {
+	// 指定したキーの優先度を最大にする
+	private _maximizePriority(key: K): void {
 		this.totalUseCount++;
 		this.priorities.set(key, this.totalUseCount);
 	}

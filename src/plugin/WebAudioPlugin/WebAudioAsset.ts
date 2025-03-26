@@ -26,6 +26,7 @@ export class WebAudioAsset extends AudioAsset {
 		}
 
 		WebAudioAsset._loader.load(this.path).then(data => {
+			// aac読み込み失敗時に代わりにmp4が読み込まれるなど、パスの拡張子が変わるケースがある
 			if (this.path !== data.value.url) {
 				this.path = data.value.url;
 			}
@@ -58,6 +59,8 @@ export class WebAudioAsset extends AudioAsset {
 		try {
 			return await WebAudioAsset._loadArrayBuffer(url);
 		} catch (e) {
+			// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
+			// この対応を止める際には、WebAudioPluginのsupportedExtensionsからaacを除外する必要がある。
 			const delIndex = url.indexOf("?");
 			const basePath = delIndex >= 0 ? url.substring(0, delIndex) : url;
 			if (basePath.slice(-4) === ".aac") {
@@ -77,7 +80,7 @@ export class WebAudioAsset extends AudioAsset {
 					return reject(err);
 				}
 				if (!result) {
-					return reject(`respone is undefined: ${url}`);
+					return reject(`response is undefined: ${url}`);
 				}
 				const audioContext = helper.getAudioContext();
 				audioContext.decodeAudioData(
