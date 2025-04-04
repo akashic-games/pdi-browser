@@ -23,4 +23,6 @@ export interface AudioPlugin {
 	) => AudioAsset;
 
 	createPlayer: (system: pdi.AudioSystem, manager: AudioManager) => AudioPlayer;
+
+	clear: () => void;
 }

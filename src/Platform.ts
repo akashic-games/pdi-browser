@@ -7,8 +7,6 @@ import { ContainerController } from "./ContainerController";
 import { AudioPluginManager } from "./plugin/AudioPluginManager";
 import { AudioPluginRegistry } from "./plugin/AudioPluginRegistry";
 import type { AudioPluginStatic } from "./plugin/AudioPluginStatic";
-import { HTMLAudioAsset } from "./plugin/HTMLAudioPlugin/HTMLAudioAsset";
-import { WebAudioAsset } from "./plugin/WebAudioPlugin/WebAudioAsset";
 import { RafLooper } from "./RafLooper";
 import { ResourceFactory } from "./ResourceFactory";
 
@@ -191,7 +189,6 @@ export class Platform implements pdi.Platform {
 		this.setRendererRequirement(undefined);
 		this.setMasterVolume(0);
 		// 各ローダーのキャッシュ削除
-		HTMLAudioAsset.clearCache();
-		WebAudioAsset.clearCache();
+		this.audioPluginManager.clear();
 	}
 }

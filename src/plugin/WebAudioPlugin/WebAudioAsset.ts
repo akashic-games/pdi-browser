@@ -1,6 +1,6 @@
 import type * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
-import { CachedLoader } from "../../utils/CachedLoader";
+import type { CachedLoader } from "../../utils/CachedLoader";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
 import { XHRLoader } from "../../utils/XHRLoader";
 import { addExtname, resolveExtname } from "../audioUtil";
@@ -9,12 +9,23 @@ import * as helper from "./WebAudioHelper";
 export class WebAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[] = [];
-	// 保存可能容量としてファイルサイズの合計値を利用。100MBを上限とする
-	private static _loader: CachedLoader<string, { audio: AudioBuffer; url: string }> =
-		new CachedLoader<string, { audio: AudioBuffer; url: string }>(WebAudioAsset._loadImpl, { limitSize: 100000000 });
+	_cachedLoader: CachedLoader<string, { audio: AudioBuffer; url: string }> | null = null;
 
-	static clearCache(): void {
-		WebAudioAsset._loader.reset();
+	static async _loadImpl(url: string): Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> {
+		try {
+			return await WebAudioAsset._loadArrayBuffer(url);
+		} catch (e) {
+			// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
+			// この対応を止める際には、WebAudioPluginのsupportedExtensionsからaacを除外する必要がある。
+			const delIndex = url.indexOf("?");
+			const basePath = delIndex >= 0 ? url.substring(0, delIndex) : url;
+			if (basePath.slice(-4) === ".aac") {
+				const newUrl = url.substring(0, delIndex - 4) + ".mp4";
+				const query = delIndex >= 0 ? url.substring(delIndex, url.length) : "";
+				return await WebAudioAsset._loadArrayBuffer(newUrl + query);
+			}
+			throw e;
+		}
 	}
 
 	_load(loader: pdi.AssetLoadHandler): void {
@@ -25,7 +36,8 @@ export class WebAudioAsset extends AudioAsset {
 			return;
 		}
 
-		WebAudioAsset._loader.load(this.path).then(data => {
+		const load = this._cachedLoader ? this._cachedLoader.load.bind(this._cachedLoader) : WebAudioAsset._loadImpl;
+		load(this.path).then(data => {
 			// aac読み込み失敗時に代わりにmp4が読み込まれるなど、パスの拡張子が変わるケースがある
 			if (this.path !== data.value.url) {
 				this.path = data.value.url;
@@ -53,23 +65,6 @@ export class WebAudioAsset extends AudioAsset {
 	_modifyPath(path: string): string {
 		const ext = resolveExtname(this.hint?.extensions, WebAudioAsset.supportedFormats);
 		return ext ? addExtname(this.originalPath, ext) : path;
-	}
-
-	private static async _loadImpl(url: string): Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> {
-		try {
-			return await WebAudioAsset._loadArrayBuffer(url);
-		} catch (e) {
-			// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
-			// この対応を止める際には、WebAudioPluginのsupportedExtensionsからaacを除外する必要がある。
-			const delIndex = url.indexOf("?");
-			const basePath = delIndex >= 0 ? url.substring(0, delIndex) : url;
-			if (basePath.slice(-4) === ".aac") {
-				const newUrl = url.substring(0, delIndex - 4) + ".mp4";
-				const query = delIndex >= 0 ? url.substring(delIndex, url.length) : "";
-				return await WebAudioAsset._loadArrayBuffer(newUrl + query);
-			}
-			throw e;
-		}
 	}
 
 	private static _loadArrayBuffer(url: string): Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> {
