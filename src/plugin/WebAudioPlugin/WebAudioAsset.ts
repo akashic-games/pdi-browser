@@ -11,6 +11,8 @@ export class WebAudioAsset extends AudioAsset {
 	static supportedFormats: string[] = [];
 	_cachedLoader: CachedLoader<string, { audio: AudioBuffer; url: string }> | null = null;
 
+	// リソースのロード処理
+	// CachedLoader 経由でロードを行う(他アセットと共通のキャッシュを利用する)想定もあるため、staticにしている
 	static async _loadImpl(url: string): Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> {
 		try {
 			return await WebAudioAsset._loadArrayBuffer(url);
