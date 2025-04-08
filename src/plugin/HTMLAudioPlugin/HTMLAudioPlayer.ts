@@ -58,10 +58,10 @@ export class HTMLAudioPlayer extends AudioPlayer {
 						}
 					}
 				};
-				audio.onended = () => {
+				audio.onended = async () => {
 					if (asset.loop) {
 						audio.currentTime = offsetSec;
-						audio.play();
+						await audio.play();
 					}
 				};
 			}

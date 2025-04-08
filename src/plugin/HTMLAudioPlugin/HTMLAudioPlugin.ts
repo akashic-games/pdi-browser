@@ -22,7 +22,7 @@ export class HTMLAudioPlugin implements AudioPlugin {
 		let result = false;
 		try {
 			result = (audioElement.canPlayType !== undefined);
-		} catch (e) {
+		} catch (_e) {
 			// ignore Error
 		}
 

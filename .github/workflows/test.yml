@@ -10,7 +10,7 @@ jobs:
       matrix:
         # ubuntu-latest(24.04.2)の場合、puppeteerのバージョンの関係でe2eテストに失敗してしまうため、ubuntuを一旦22.04にダウングレード
         os: [ubuntu-22.04, windows-latest]
-        node: [16.x, 18.x]
+        node: [18.x, 20.x]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
