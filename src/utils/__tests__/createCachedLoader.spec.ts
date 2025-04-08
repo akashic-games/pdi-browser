@@ -75,6 +75,8 @@ describe("CachedLoader", () => {
 				expect(resource.value).toBe("success");
 				expect(resource.size).toBe(10);
 				done();
+			}).catch((_e) => {
+				// このパスを通る想定はないが、 eslint のルールに従っているので catch 節を設けている
 			});
 		});
 	});

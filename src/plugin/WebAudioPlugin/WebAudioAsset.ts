@@ -84,7 +84,9 @@ export class WebAudioAsset extends AudioAsset {
 					result,
 					(audio) => resolve({ value: { audio, url }, size: result.byteLength ?? 0 }),
 					reject
-				);
+				).catch((e) => {
+					reject(e);
+				});
 			});
 		});
 	}
