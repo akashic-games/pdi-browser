@@ -188,5 +188,7 @@ export class Platform implements pdi.Platform {
 	destroy(): void {
 		this.setRendererRequirement(undefined);
 		this.setMasterVolume(0);
+		// 各ローダーのキャッシュ削除
+		this.audioPluginManager.clear();
 	}
 }

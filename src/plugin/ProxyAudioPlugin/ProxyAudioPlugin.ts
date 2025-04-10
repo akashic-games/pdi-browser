@@ -35,4 +35,8 @@ export class ProxyAudioPlugin implements AudioPlugin {
 	createPlayer(system: pdi.AudioSystem, manager: AudioManager): AudioPlayer {
 		return new ProxyAudioPlayer(this._handlerSet, system, manager);
 	}
+
+	clear(): void {
+		// このクラスで初期化が必要なプロパティはないため、このメソッドでは何もしない
+	}
 }
