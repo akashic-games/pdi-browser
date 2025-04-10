@@ -1,33 +1,66 @@
 import type * as pdi from "@akashic/pdi-types";
 import { AudioAsset } from "../../asset/AudioAsset";
-import type { CachedLoader } from "../../utils/CachedLoader";
 import { ExceptionFactory } from "../../utils/ExceptionFactory";
 import { XHRLoader } from "../../utils/XHRLoader";
 import { addExtname, resolveExtname } from "../audioUtil";
 import * as helper from "./WebAudioHelper";
 
+export async function loadArrayBuffer(url: string): Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> {
+	function _loadArrayBuffer(url: string): Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> {
+		const l = new XHRLoader();
+		return new Promise((resolve, reject) => {
+			l.getArrayBuffer(url, (err, result) => {
+				if (err) {
+					return reject(err);
+				}
+				if (!result) {
+					return reject(`response is undefined: ${url}`);
+				}
+				const audioContext = helper.getAudioContext();
+				audioContext.decodeAudioData(
+					result,
+					(audio) => resolve({ value: { audio, url }, size: result.byteLength ?? 0 }),
+					reject
+				).catch((e) => {
+					reject(e);
+				});
+			});
+		});
+	}
+
+	try {
+		return await _loadArrayBuffer(url);
+	} catch (e) {
+		// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
+		// この対応を止める際には、WebAudioPluginのsupportedExtensionsからaacを除外する必要がある。
+		const delIndex = url.indexOf("?");
+		const basePath = delIndex >= 0 ? url.substring(0, delIndex) : url;
+		if (basePath.slice(-4) === ".aac") {
+			const newUrl = url.substring(0, delIndex - 4) + ".mp4";
+			const query = delIndex >= 0 ? url.substring(delIndex, url.length) : "";
+			return await _loadArrayBuffer(newUrl + query);
+		}
+		throw e;
+	}
+}
+
 export class WebAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[] = [];
-	_cachedLoader: CachedLoader<string, { audio: AudioBuffer; url: string }> | null = null;
+	private _loadFun: ((url: string) => Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> ) | undefined;
 
-	// リソースのロード処理
-	// CachedLoader 経由でロードを行う(他アセットと共通のキャッシュを利用する)想定もあるため、staticにしている
-	static async _loadImpl(url: string): Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> {
-		try {
-			return await WebAudioAsset._loadArrayBuffer(url);
-		} catch (e) {
-			// 暫定対応：後方互換性のため、aacファイルが無い場合はmp4へのフォールバックを試みる。
-			// この対応を止める際には、WebAudioPluginのsupportedExtensionsからaacを除外する必要がある。
-			const delIndex = url.indexOf("?");
-			const basePath = delIndex >= 0 ? url.substring(0, delIndex) : url;
-			if (basePath.slice(-4) === ".aac") {
-				const newUrl = url.substring(0, delIndex - 4) + ".mp4";
-				const query = delIndex >= 0 ? url.substring(delIndex, url.length) : "";
-				return await WebAudioAsset._loadArrayBuffer(newUrl + query);
-			}
-			throw e;
-		}
+	constructor(
+		id: string,
+		path: string,
+		duration: number,
+		system: pdi.AudioSystem,
+		loop: boolean,
+		hint: pdi.AudioAssetHint,
+		offset: number,
+		loadFun?: (url: string) => Promise<{ value: { audio: AudioBuffer; url: string }; size: number }>
+	) {
+		super(id, path, duration, system, loop, hint, offset);
+		this._loadFun = loadFun;
 	}
 
 	_load(loader: pdi.AssetLoadHandler): void {
@@ -38,7 +71,7 @@ export class WebAudioAsset extends AudioAsset {
 			return;
 		}
 
-		const load = this._cachedLoader ? this._cachedLoader.load.bind(this._cachedLoader) : WebAudioAsset._loadImpl;
+		const load = this._loadFun ? this._loadFun : loadArrayBuffer;
 		load(this.path).then(data => {
 			// aac読み込み失敗時に代わりにmp4が読み込まれるなど、パスの拡張子が変わるケースがある
 			if (this.path !== data.value.url) {
@@ -67,27 +100,5 @@ export class WebAudioAsset extends AudioAsset {
 	_modifyPath(path: string): string {
 		const ext = resolveExtname(this.hint?.extensions, WebAudioAsset.supportedFormats);
 		return ext ? addExtname(this.originalPath, ext) : path;
-	}
-
-	private static _loadArrayBuffer(url: string): Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> {
-		const l = new XHRLoader();
-		return new Promise((resolve, reject) => {
-			l.getArrayBuffer(url, (err, result) => {
-				if (err) {
-					return reject(err);
-				}
-				if (!result) {
-					return reject(`response is undefined: ${url}`);
-				}
-				const audioContext = helper.getAudioContext();
-				audioContext.decodeAudioData(
-					result,
-					(audio) => resolve({ value: { audio, url }, size: result.byteLength ?? 0 }),
-					reject
-				).catch((e) => {
-					reject(e);
-				});
-			});
-		});
 	}
 }

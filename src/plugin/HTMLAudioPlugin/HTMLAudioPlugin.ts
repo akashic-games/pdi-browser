@@ -6,7 +6,7 @@ import { CachedLoader } from "../../utils/CachedLoader";
 import type { AudioPlayer } from "../AudioPlayer";
 import type { AudioPlugin } from "../AudioPlugin";
 import { detectSupportedFormats } from "../audioUtil";
-import { HTMLAudioAsset } from "./HTMLAudioAsset";
+import { HTMLAudioAsset, loadAudioElement } from "./HTMLAudioAsset";
 import { HTMLAudioPlayer } from "./HTMLAudioPlayer";
 
 export class HTMLAudioPlugin implements AudioPlugin {
@@ -33,7 +33,7 @@ export class HTMLAudioPlugin implements AudioPlugin {
 		this.supportedFormats = detectSupportedFormats();
 		// 音声ファイルのファイルサイズ取得が困難なので、保存可能容量として音声の合計再生時間を利用。100分を上限とする
 		this._cachedLoader =
-			new CachedLoader<string, { audio: HTMLAudioElement; url: string }>(HTMLAudioAsset._loadImpl, { limitSize: 6000000 });
+			new CachedLoader<string, { audio: HTMLAudioElement; url: string }>(loadAudioElement, { limitSize: 6000000 });
 	}
 
 	get supportedFormats(): string[] {
@@ -54,9 +54,9 @@ export class HTMLAudioPlugin implements AudioPlugin {
 		hint: pdi.AudioAssetHint,
 		offset: number
 	): AudioAsset {
-		const asset = new HTMLAudioAsset(id, path, duration, system, loop, hint, offset);
-		asset._cachedLoader = this._cachedLoader;
-		return asset;
+		// 今後、_cachedLoaderをオプション化することも想定している
+		const loadFun = this._cachedLoader ? this._cachedLoader.load.bind(this._cachedLoader) : undefined;
+		return new HTMLAudioAsset(id, path, duration, system, loop, hint, offset, loadFun);
 	}
 
 	createPlayer(system: pdi.AudioSystem, manager: AudioManager): AudioPlayer {
