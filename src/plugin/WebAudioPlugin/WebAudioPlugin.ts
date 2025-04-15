@@ -13,6 +13,7 @@ import { WebAudioPlayer } from "./WebAudioPlayer";
 export class WebAudioPlugin implements AudioPlugin {
 	private _supportedFormats: string[] = [];
 	// 音声アセットのリソースのキャッシュ付きローダー
+	// TODO: 不要なケースでは使用しない
 	private _cachedLoader: CachedLoader<string, { audio: AudioBuffer; url: string }>;
 
 	// AudioContextが存在するかどうかで判定する
@@ -40,8 +41,7 @@ export class WebAudioPlugin implements AudioPlugin {
 	constructor() {
 		this.supportedFormats = detectSupportedFormats();
 		// 保存可能容量としてファイルサイズの合計値を利用。100MBを上限とする
-		this._cachedLoader =
-			new CachedLoader<string, { audio: AudioBuffer; url: string }>(loadArrayBuffer, { limitSize: 100000000 });
+		this._cachedLoader = new CachedLoader(loadArrayBuffer, { limitSize: 100000000 });
 		autoPlayHelper.setupChromeMEIWorkaround();
 	}
 
@@ -54,9 +54,9 @@ export class WebAudioPlugin implements AudioPlugin {
 		hint: pdi.AudioAssetHint,
 		offset: number
 	): AudioAsset {
-		// 今後、_cachedLoaderをオプション化することも想定している
-		const loadFun = this._cachedLoader ? this._cachedLoader.load.bind(this._cachedLoader) : undefined;
-		return new WebAudioAsset(id, assetPath, duration, system, loop, hint, offset, loadFun);
+		const asset = new WebAudioAsset(id, assetPath, duration, system, loop, hint, offset);
+		asset._loadFun = this._cachedLoader.load.bind(this._cachedLoader);
+		return asset;
 	}
 
 	createPlayer(system: pdi.AudioSystem, manager: AudioManager): AudioPlayer {

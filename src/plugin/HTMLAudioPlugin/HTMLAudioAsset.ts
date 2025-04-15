@@ -109,21 +109,7 @@ export async function loadAudioElement(url: string): Promise<{ value: { audio: H
 export class HTMLAudioAsset extends AudioAsset {
 	// _assetPathFilterの判定処理を小さくするため、予めサポートしてる拡張子一覧を持つ
 	static supportedFormats: string[];
-	private _loadFun: ((url: string) => Promise<{ value: { audio: HTMLAudioElement; url: string }; size: number }>) | undefined;
-
-	constructor(
-		id: string,
-		path: string,
-		duration: number,
-		system: pdi.AudioSystem,
-		loop: boolean,
-		hint: pdi.AudioAssetHint,
-		offset: number,
-		loadFun?: (url: string) => Promise<{ value: { audio: HTMLAudioElement; url: string }; size: number }>
-	) {
-		super(id, path, duration, system, loop, hint, offset);
-		this._loadFun = loadFun;
-	}
+	_loadFun: ((url: string) => Promise<{ value: { audio: HTMLAudioElement; url: string }; size: number }>) | undefined;
 
 	_load(loader: pdi.AssetLoadHandler): void {
 		if (this.path == null) {

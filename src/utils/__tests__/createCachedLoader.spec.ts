@@ -36,7 +36,7 @@ const loaderImpl = (key: string): Promise<{ value: string; size: number }> => {
 
 describe("CachedLoader", () => {
 	it("リソース・キャッシュを取得できる", async () => {
-		const loader = new CachedLoader<string, string>(loaderImpl, { limitSize: 1000 });
+		const loader = new CachedLoader(loaderImpl, { limitSize: 1000 });
 
 		// リソースをロードして取得できるか確認
 		const resource = await loader.load("id1");
@@ -65,7 +65,7 @@ describe("CachedLoader", () => {
 				}
 			});
 		};
-		const loader = new CachedLoader<string, string>(loaderImpl, { limitSize: 1000 });
+		const loader = new CachedLoader(loaderImpl, { limitSize: 1000 });
 		const key = "key";
 
 		loader.load(key).then(() => {
@@ -81,7 +81,7 @@ describe("CachedLoader", () => {
 		});
 	});
 	it("キャッシュの上限を超えた場合、最も利用日時が古いリソースからキャッシュから削除される", async () => {
-		const loader = new CachedLoader<string, string>(loaderImpl, { limitSize: 1000 });
+		const loader = new CachedLoader(loaderImpl, { limitSize: 1000 });
 
 		await loader.load("id3");
 		await loader.load("id1");
@@ -102,7 +102,7 @@ describe("CachedLoader", () => {
 	});
 
 	it("キャッシュの初期化ができる", async () => {
-		const loader = new CachedLoader<string, string>(loaderImpl, { limitSize: 1000 });
+		const loader = new CachedLoader(loaderImpl, { limitSize: 1000 });
 
 		await loader.load("id1");
 		await loader.load("id2");
