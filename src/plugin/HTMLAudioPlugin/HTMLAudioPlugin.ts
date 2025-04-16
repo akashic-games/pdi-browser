@@ -2,14 +2,18 @@
 import type * as pdi from "@akashic/pdi-types";
 import type { AudioAsset } from "../../asset/AudioAsset";
 import type { AudioManager } from "../../AudioManager";
+import { CachedLoader } from "../../utils/CachedLoader";
 import type { AudioPlayer } from "../AudioPlayer";
 import type { AudioPlugin } from "../AudioPlugin";
 import { detectSupportedFormats } from "../audioUtil";
-import { HTMLAudioAsset } from "./HTMLAudioAsset";
+import { HTMLAudioAsset, loadAudioElement } from "./HTMLAudioAsset";
 import { HTMLAudioPlayer } from "./HTMLAudioPlayer";
 
 export class HTMLAudioPlugin implements AudioPlugin {
 	private _supportedFormats: string[] = [];
+	// 音声アセットのリソースのキャッシュ付きローダー
+	// TODO: 不要なケースでは使用しない
+	private _cachedLoader: CachedLoader<string, { audio: HTMLAudioElement; url: string }>;
 
 	// https://github.com/Modernizr/Modernizr/blob/master/feature-detects/audio.js
 	// https://github.com/CreateJS/SoundJS/blob/master/src/soundjs/htmlaudio/HTMLAudioPlugin.js
@@ -28,6 +32,8 @@ export class HTMLAudioPlugin implements AudioPlugin {
 
 	constructor() {
 		this.supportedFormats = detectSupportedFormats();
+		// 音声ファイルのファイルサイズ取得が困難なので、保存可能容量として音声の合計再生時間を利用。100分を上限とする
+		this._cachedLoader = new CachedLoader(loadAudioElement, { limitSize: 6000000 });
 	}
 
 	get supportedFormats(): string[] {
@@ -48,10 +54,16 @@ export class HTMLAudioPlugin implements AudioPlugin {
 		hint: pdi.AudioAssetHint,
 		offset: number
 	): AudioAsset {
-		return new HTMLAudioAsset(id, path, duration, system, loop, hint, offset);
+		const asset = new HTMLAudioAsset(id, path, duration, system, loop, hint, offset);
+		asset._loadFun = this._cachedLoader.load.bind(this._cachedLoader);
+		return asset;
 	}
 
 	createPlayer(system: pdi.AudioSystem, manager: AudioManager): AudioPlayer {
 		return new HTMLAudioPlayer(system, manager);
+	}
+
+	clear(): void {
+		this._cachedLoader.reset();
 	}
 }

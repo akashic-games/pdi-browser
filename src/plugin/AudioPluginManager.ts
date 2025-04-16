@@ -36,4 +36,8 @@ export class AudioPluginManager {
 		}
 		return false;
 	}
+
+	clear(): void {
+		this._activePlugin?.clear();
+	}
 }

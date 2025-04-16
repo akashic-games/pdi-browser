@@ -10,6 +10,6 @@ module.exports = [
                 project: "tsconfig.jest.json",
             },
         },
-        ignores: ["**/*.js", "src/**/WebAudioAsset.ts"]
+        ignores: ["**/*.js"]
     }
 ];
