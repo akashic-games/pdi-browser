@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/naming-convention */
 
 import type { AssetLoadError, AssetLoadHandler, AudioAsset, AudioPlayer } from "@akashic/pdi-types";

@@ -7,7 +7,7 @@ import { getPortPromise } from "portfinder";
 import type { Browser } from "puppeteer";
 import { launch } from "puppeteer";
 
-const handler = require("serve-handler"); // eslint-disable-line @typescript-eslint/no-var-requires
+const handler = require("serve-handler"); // eslint-disable-line @typescript-eslint/no-require-imports
 
 declare global {
 	// eslint-disable-next-line no-var
