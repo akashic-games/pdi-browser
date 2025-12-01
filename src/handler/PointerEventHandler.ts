@@ -64,6 +64,9 @@ export class PointerEventHandler extends InputEventHandler {
 		this.pointDown(e.pointerId, this.getOffsetPositionFromInputView(e), this.getPlatformButtonType(e, PlatformButtonType.Primary));
 
 		const onPointerMove = (event: PointerEvent): void => {
+			if (e.pointerId !== event.pointerId) {
+				return;
+			}
 			this.pointMove(
 				event.pointerId,
 				this.getOffsetPositionFromInputView(event),
@@ -72,24 +75,27 @@ export class PointerEventHandler extends InputEventHandler {
 		};
 
 		const onPointerUp = (event: PointerEvent): void => {
+			if (e.pointerId !== event.pointerId) {
+				return;
+			}
 			this.pointUp(
 				event.pointerId,
 				this.getOffsetPositionFromInputView(event),
 				this.getPlatformButtonType(event, PlatformButtonType.Primary)
 			);
 
-			if (e.pointerId === event.pointerId) {
-				const handlers = this._eventHandlersMap[event.pointerId];
-				if (!handlers) return;
-				const { onPointerMove, onPointerUp } = handlers;
-				window.removeEventListener("pointermove", onPointerMove, false);
-				window.removeEventListener("pointerup", onPointerUp, false);
-				delete this._eventHandlersMap[event.pointerId];
-			}
+			const handlers = this._eventHandlersMap[event.pointerId];
+			if (!handlers) return;
+			const { onPointerMove, onPointerUp } = handlers;
+			window.removeEventListener("pointermove", onPointerMove, false);
+			window.removeEventListener("pointerup", onPointerUp, false);
+			window.removeEventListener("pointercancel", onPointerUp, false);
+			delete this._eventHandlersMap[event.pointerId];
 		};
 
 		window.addEventListener("pointermove", onPointerMove, false);
 		window.addEventListener("pointerup", onPointerUp, false);
+		window.addEventListener("pointercancel", onPointerUp, false);
 		this._eventHandlersMap[e.pointerId] = { onPointerMove, onPointerUp };
 	};
 }
