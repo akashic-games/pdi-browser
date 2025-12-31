@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-22.04 # latest(24.04.2)の場合、puppeteerのバージョンの関係でe2eテストに失敗してしまうため、一旦22.04にダウングレード
+    runs-on: ubuntu-24.04 # latest(24.04.2)の場合、puppeteerのバージョンの関係でe2eテストに失敗してしまうため、一旦22.04にダウングレード
     name: Publish and Release
     steps:
       - name: Checkout code
