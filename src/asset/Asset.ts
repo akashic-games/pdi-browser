@@ -1,5 +1,6 @@
 import type * as pdi from "@akashic/pdi-types";
 import { Trigger } from "@akashic/trigger";
+import { XHRLoader } from "../utils/XHRLoader";
 
 export abstract class Asset implements pdi.Asset {
 	abstract type: string;
@@ -7,6 +8,8 @@ export abstract class Asset implements pdi.Asset {
 	path: string;
 	originalPath: string;
 	onDestroyed: Trigger<pdi.Asset> = new Trigger();
+
+	_withCredentials: boolean | RegExp = false;
 
 	constructor(id: string, path: string) {
 		this.id = id;
@@ -36,5 +39,12 @@ export abstract class Asset implements pdi.Asset {
 	_assetPathFilter(path: string): string {
 		// 拡張子の補完・読み替えが必要なassetはこれをオーバーライドすればよい。(対応形式が限定されるaudioなどの場合)
 		return path;
+	}
+
+	_createLoader(): XHRLoader {
+		const withCredentials = this._withCredentials instanceof RegExp
+			? this._withCredentials.test(this.path)
+			: this._withCredentials;
+		return new XHRLoader({ withCredentials });
 	}
 }

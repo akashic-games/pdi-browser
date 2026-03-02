@@ -48,6 +48,7 @@ export class ResourceFactory implements pdi.ResourceFactory {
 			throw new Error("ResourceFactory#createAudioAsset(): could not initialize ActivePlugin");
 		}
 		const audioAsset = activePlugin.createAsset(id, assetPath, duration, system, loop, hint, offset);
+		audioAsset._withCredentials = this._platform.usingWithCredentials;
 		this._audioManager.registerAudioAsset(audioAsset);
 		audioAsset.onDestroyed.addOnce(this._onAudioAssetDestroyed, this);
 		return audioAsset;
@@ -78,11 +79,15 @@ export class ResourceFactory implements pdi.ResourceFactory {
 	}
 
 	createTextAsset(id: string, assetPath: string): pdi.TextAsset {
-		return new XHRTextAsset(id, assetPath);
+		const asset = new XHRTextAsset(id, assetPath);
+		asset._withCredentials = this._platform.usingWithCredentials;
+		return asset;
 	}
 
 	createScriptAsset(id: string, assetPath: string, exports?: string[]): pdi.ScriptAsset {
-		return new XHRScriptAsset(id, assetPath, exports);
+		const asset = new XHRScriptAsset(id, assetPath, exports);
+		asset._withCredentials = this._platform.usingWithCredentials;
+		return asset;
 	}
 
 	createPrimarySurface(width: number, height: number): CanvasSurface {
@@ -115,7 +120,9 @@ export class ResourceFactory implements pdi.ResourceFactory {
 	}
 
 	createBinaryAsset(id: string, assetPath: string): BinaryAsset {
-		return new BinaryAsset(id, assetPath);
+		const asset = new BinaryAsset(id, assetPath);
+		asset._withCredentials = this._platform.usingWithCredentials;
+		return asset;
 	}
 
 	_onAudioAssetDestroyed(asset: pdi.Asset): void {

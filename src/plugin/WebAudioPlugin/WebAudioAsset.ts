@@ -5,9 +5,11 @@ import { XHRLoader } from "../../utils/XHRLoader";
 import { addExtname, resolveExtname } from "../audioUtil";
 import * as helper from "./WebAudioHelper";
 
-export async function loadArrayBuffer(url: string): Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> {
+export async function loadArrayBuffer(
+	url: string, withCredentials: boolean = false
+): Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> {
 	function _loadArrayBuffer(url: string): Promise<{ value: { audio: AudioBuffer; url: string }; size: number }> {
-		const l = new XHRLoader();
+		const l = new XHRLoader({ withCredentials: withCredentials });
 		return new Promise((resolve, reject) => {
 			l.getArrayBuffer(url, (err, result) => {
 				if (err) {
@@ -57,7 +59,10 @@ export class WebAudioAsset extends AudioAsset {
 			return;
 		}
 
-		const load = this._loadFun ? this._loadFun : loadArrayBuffer;
+		const withCredentials = this._withCredentials instanceof RegExp
+			? this._withCredentials.test(this.path)
+			: this._withCredentials;
+		const load = this._loadFun ? this._loadFun : (url: string) => loadArrayBuffer(url, withCredentials);
 		load(this.path).then(data => {
 			// aac読み込み失敗時に代わりにmp4が読み込まれるなど、パスの拡張子が変わるケースがある
 			if (this.path !== data.value.url) {
