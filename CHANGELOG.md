@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.10.5
+* `Platform#usingWithCredentials` を追加
+
 ## 2.10.4
 * ブラウザ上でタッチ操作がネイティブジェスチャー判定された時も `pointUp` イベントを発生させるように
 
