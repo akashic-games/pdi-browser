@@ -2,6 +2,7 @@
 import type * as pdi from "@akashic/pdi-types";
 import { ExceptionFactory } from "./ExceptionFactory";
 import type { XHRLoaderOption } from "./XHRLoaderOption";
+
 export interface XHRRequestObject {
 	url: string;
 	responseType: XMLHttpRequestResponseType;
@@ -9,11 +10,13 @@ export interface XHRRequestObject {
 
 export class XHRLoader {
 	timeout: number;
+	withCredentials: boolean;
 
 	constructor(options: XHRLoaderOption = {}) {
 		// デフォルトのタイムアウトは15秒
 		// TODO: タイムアウト値はこれが妥当であるか後日詳細を検討する
 		this.timeout = options.timeout || 15000;
+		this.withCredentials = options.withCredentials ?? false;
 	}
 
 	get(url: string, callback: (error: pdi.AssetLoadError | null, data?: string) => void): void {
@@ -35,6 +38,7 @@ export class XHRLoader {
 		request.open("GET", requestObject.url, true);
 		request.responseType = requestObject.responseType;
 		request.timeout = this.timeout;
+		request.withCredentials = this.withCredentials;
 		request.addEventListener("timeout", () => {
 			callback(ExceptionFactory.createAssetLoadError("loading timeout"));
 		}, false);

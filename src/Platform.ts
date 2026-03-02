@@ -57,6 +57,12 @@ export class Platform implements pdi.Platform {
 	 */
 	readonly usingPointerEvents: boolean = true;
 
+	/**
+	 * XHRLoader の利用時に withCredentials を有効にするかどうか。
+	 * 正規表現を指定した場合、対象の URL と一致した場合のみ有効にする。
+	 */
+	usingWithCredentials: boolean | RegExp = false;
+
 	_platformEventHandler: pdi.PlatformEventHandler | null;
 	_resourceFactory: ResourceFactory;
 	_rendererReq: pdi.RendererRequirement | null;

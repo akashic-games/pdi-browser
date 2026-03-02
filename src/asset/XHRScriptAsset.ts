@@ -1,5 +1,4 @@
 import type * as pdi from "@akashic/pdi-types";
-import { XHRLoader } from "../utils/XHRLoader";
 import { Asset } from "./Asset";
 
 export class XHRScriptAsset extends Asset implements pdi.ScriptAsset {
@@ -13,7 +12,7 @@ export class XHRScriptAsset extends Asset implements pdi.ScriptAsset {
 	}
 
 	_load(handler: pdi.AssetLoadHandler): void {
-		const loader = new XHRLoader();
+		const loader = this._createLoader();
 		loader.get(this.path, (error, responseText) => {
 			if (error) {
 				handler._onAssetError(this, error);

@@ -1,5 +1,4 @@
 import type * as pdi from "@akashic/pdi-types";
-import { XHRLoader } from "../utils/XHRLoader";
 import { Asset } from "./Asset";
 
 export class BinaryAsset extends Asset implements pdi.BinaryAsset {
@@ -17,7 +16,7 @@ export class BinaryAsset extends Asset implements pdi.BinaryAsset {
 	}
 
 	_load(handler: pdi.AssetLoadHandler): void {
-		const loader = new XHRLoader();
+		const loader = this._createLoader();
 		loader.getArrayBuffer(this.path, (error, responseData) => {
 			if (error) {
 				handler._onAssetError(this, error);
