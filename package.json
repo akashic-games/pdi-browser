@@ -59,5 +59,12 @@
   "publishConfig": {
     "@akashic:registry": "https://registry.npmjs.org/",
     "tag": "for_ae1x"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "npm",
+      "version": ">=11.11.0",
+      "onFail": "error"
+    }
   }
 }
