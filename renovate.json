@@ -3,5 +3,10 @@
     "github>akashic-games/renovate-config",
     "github>akashic-games/renovate-config:groupPatchMinor",
     "github>akashic-games/renovate-config:bumpAkashicPatch"
-  ]
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "minimumReleaseAge": null,
+    "prPriority": 10
+  }
 }
